@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CCVD — Centro de Capacitación Valenzuela Delarze</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f2f3f5;
+  --bg2: #ffffff;
+  --bg3: #f8f9fa;
+  --bg4: #eef0f3;
+  --accent: #CC0000;
+  --accent-dark: #a80000;
+  --header-bg: #111111;
+  --text: #1a1a1a;
+  --text2: #6b7280;
+  --border: #e2e4e8;
+  --radius: 10px;
+  --danger: #dc2626;
+  --success: #16a34a;
+  --brand-color: #CC0000;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Montserrat','Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+input,button,select{font-family:inherit}
+
+/* ── SCROLL ── */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg3)}
+::-webkit-scrollbar-thumb{background:#cccccc;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#aaaaaa}
+
+/* ══════════════════════════════════
+   LOGIN
+══════════════════════════════════ */
+#login-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;
+  background:linear-gradient(135deg,#1a0000 0%,#111111 55%,#0d0d0d 100%);
+}
+.login-card{
+  background:#ffffff;border:none;border-radius:16px;
+  padding:2.5rem 2rem;width:100%;max-width:380px;
+  box-shadow:0 24px 64px rgba(0,0,0,.55);
+}
+.login-logo{text-align:center;margin-bottom:2rem}
+.login-badge{
+  display:inline-block;background:var(--accent);color:#fff;
+  font-weight:900;font-size:22px;padding:8px 18px;border-radius:10px;
+  letter-spacing:2px;margin-bottom:.75rem
+}
+.login-title{font-size:18px;font-weight:700;color:#1a1a1a}
+.login-subtitle{font-size:13px;color:#6b7280;margin-top:4px}
+.login-form{display:flex;flex-direction:column;gap:1rem}
+.field label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:#6b7280;margin-bottom:6px;font-weight:600}
+.field input{
+  width:100%;background:#f8f9fa;border:1px solid #e2e4e8;
+  color:#1a1a1a;padding:11px 14px;border-radius:8px;font-size:15px;outline:none;
+  transition:border-color .2s
+}
+.field input:focus{border-color:var(--accent)}
+.btn-login{
+  background:var(--accent);color:#fff;border:none;padding:13px;
+  border-radius:8px;font-weight:800;font-size:16px;cursor:pointer;
+  transition:background .2s;letter-spacing:.5px
+}
+.btn-login:hover{background:var(--accent-dark)}
+.login-error{
+  background:#fee2e2;border:1px solid #fca5a5;color:#dc2626;
+  padding:10px 14px;border-radius:8px;font-size:14px;display:none
+}
+
+/* ══════════════════════════════════
+   APP SHELL
+══════════════════════════════════ */
+#app{display:none}
+header{
+  background:#111111;border-bottom:3px solid var(--accent);
+  padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;
+  height:64px;position:sticky;top:0;z-index:100
+}
+.h-left{display:flex;align-items:center;gap:12px;cursor:pointer}
+.h-badge{
+  background:var(--accent);color:#fff;font-weight:900;font-size:13px;
+  padding:4px 10px;border-radius:6px;letter-spacing:1px
+}
+.h-name{font-size:14px;font-weight:600;color:#aaaaaa;display:none}
+@media(min-width:600px){.h-name{display:block}}
+.h-right{display:flex;align-items:center;gap:.75rem}
+.user-chip{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+  padding:6px 12px;border-radius:20px;font-size:13px;color:#f0f0f0
+}
+.user-chip .dot{
+  width:8px;height:8px;border-radius:50%;background:var(--success);flex-shrink:0
+}
+.btn-sm{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:#d0d0d0;
+  padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;
+  transition:all .2s
+}
+.btn-sm:hover{background:rgba(255,255,255,.15);color:#fff}
+.btn-sm.admin{border-color:rgba(204,0,0,.5);color:#ff8888}
+.btn-sm.admin:hover{background:rgba(204,0,0,.2);color:#ffaaaa}
+.breadcrumb{font-size:13px;color:#aaaaaa;display:flex;align-items:center;gap:6px}
+.breadcrumb .bc-link{cursor:pointer;transition:color .2s}
+.breadcrumb .bc-link:hover{color:#ffffff}
+.breadcrumb .bc-sep{opacity:.4}
+
+main{max-width:1200px;margin:0 auto;padding:1.5rem}
+
+/* ── VIEWS ── */
+.view{display:none}.view.active{display:block}
+
+/* ── SECTION HEADER ── */
+.sec-title{font-size:26px;font-weight:800;margin-bottom:4px}
+.sec-sub{color:var(--text2);font-size:14px;margin-bottom:1.5rem}
+
+/* ── SEARCH ── */
+.search-wrap{margin-bottom:1.5rem}
+.search-input{
+  width:100%;background:var(--bg2);border:1px solid var(--border);
+  color:var(--text);padding:11px 16px;border-radius:10px;font-size:14px;
+  outline:none;transition:border-color .2s
+}
+.search-input:focus{border-color:var(--accent)}
+
+/* ── BRAND GRID ── */
+.brand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.brand-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.25rem;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;gap:1rem;
+  box-shadow:0 2px 8px rgba(0,0,0,.06)
+}
+.brand-card:hover{
+  transform:translateY(-2px);border-color:var(--brand-color,var(--accent));
+  box-shadow:0 8px 24px rgba(0,0,0,.12)
+}
+.b-icon{
+  width:60px;height:60px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;font-size:16px;font-weight:900;color:#fff;flex-shrink:0;
+  letter-spacing:-1px;overflow:hidden
+}
+.b-icon.b-logo{background:#fff;border:1px solid var(--border);padding:6px}
+.b-icon.b-logo img{width:100%;height:100%;object-fit:contain}
+.b-info h3{font-size:17px;font-weight:700}
+.b-info p{font-size:13px;color:var(--text2);margin-top:2px}
+.brand-card.brand-card-solo{justify-content:center;padding:1.5rem}
+.b-icon.b-logo-solo{width:120px;height:80px;border:none;background:transparent;color:var(--text);font-size:18px}
+
+/* ── BACK BTN ── */
+.back-btn{
+  display:inline-flex;align-items:center;gap:6px;background:var(--bg2);
+  border:1px solid var(--border);color:var(--text);padding:7px 14px;
+  border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:1.25rem;
+  transition:all .2s;font-family:inherit;box-shadow:0 1px 4px rgba(0,0,0,.06)
+}
+.back-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ── BRAND HEADER BAR ── */
+.brand-bar{
+  display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;
+  padding:1.25rem;background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:0 2px 8px rgba(0,0,0,.06)
+}
+.brand-bar .big-icon{
+  width:60px;height:60px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:22px;font-weight:900;color:#fff;flex-shrink:0;
+  letter-spacing:-1px
+}
+.brand-bar h2{font-size:22px;font-weight:800}
+.brand-bar p{color:var(--text2);font-size:13px;margin-top:2px}
+
+/* ── MODEL GRID ── */
+.model-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.model-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;cursor:pointer;transition:all .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.06)
+}
+.model-card:hover{
+  transform:translateY(-2px);border-color:var(--brand-color,var(--accent));
+  box-shadow:0 8px 24px rgba(0,0,0,.12)
+}
+.m-thumb{
+  height:140px;display:flex;align-items:center;justify-content:center;font-size:44px;
+  overflow:hidden;background:var(--bg3)
+}
+.m-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.model-card:hover .m-thumb img{transform:scale(1.05)}
+.m-info{padding:.9rem}
+.m-info h4{font-size:15px;font-weight:700}
+.m-info .m-brand{font-size:12px;color:var(--text2);margin-top:1px}
+.m-badge{
+  display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;
+  margin-top:6px;font-weight:600
+}
+
+/* ── MODEL DETAIL ── */
+.model-header{
+  display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:1.5rem;
+  background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06)
+}
+.model-header-icon{font-size:60px;flex-shrink:0}
+.model-header-img{width:200px;height:130px;object-fit:cover;border-radius:10px;flex-shrink:0}
+@media(max-width:500px){.model-header-img{width:100%;height:160px}}
+.model-header-info h2{font-size:26px;font-weight:800}
+.model-header-info .brand-label{font-size:15px;color:var(--text2);margin-top:3px}
+.model-tags{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.tag{
+  background:var(--bg3);border:1px solid var(--border);padding:3px 10px;
+  border-radius:20px;font-size:12px;color:var(--text2)
+}
+@media(max-width:500px){.model-header{flex-direction:column;gap:.75rem}}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:1.25rem;overflow-x:auto}
+.tab-btn{
+  background:none;border:none;color:var(--text2);padding:10px 18px;
+  font-size:14px;font-weight:600;cursor:pointer;
+  border-bottom:3px solid transparent;margin-bottom:-2px;
+  transition:all .2s;white-space:nowrap;font-family:inherit
+}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--brand-color,var(--accent))}
+.tab-btn:hover:not(.active){color:var(--text)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* ── SPECS GRID ── */
+.specs-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:var(--border);border-radius:var(--radius);overflow:hidden
+}
+@media(max-width:500px){.specs-grid{grid-template-columns:1fr}}
+.spec-item{background:var(--bg2);padding:13px 16px;display:flex;flex-direction:column;gap:3px}
+.spec-label{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--text2);font-weight:600}
+.spec-value{font-size:14px;font-weight:600}
+
+/* ── ARGUMENTOS ── */
+.arg-list{display:flex;flex-direction:column;gap:10px}
+.arg-item{
+  background:var(--bg2);border:1px solid var(--border);
+  border-left:4px solid var(--brand-color,var(--accent));
+  border-radius:0 var(--radius) var(--radius) 0;padding:14px 18px;font-size:14px;line-height:1.6
+}
+.arg-item strong{
+  display:block;margin-bottom:4px;font-size:12px;text-transform:uppercase;
+  letter-spacing:.5px;color:var(--brand-color,var(--accent))
+}
+
+/* ── VIDEO ── */
+.video-placeholder{
+  background:var(--bg3);border:2px dashed var(--border);border-radius:var(--radius);
+  padding:3rem 2rem;text-align:center;color:var(--text2)
+}
+.video-placeholder .v-icon{font-size:48px;margin-bottom:.75rem}
+.video-placeholder p{font-size:14px;line-height:1.6}
+.video-embed{position:relative;padding-bottom:56.25%;height:0;border-radius:var(--radius);overflow:hidden}
+.video-embed iframe{position:absolute;top:0;left:0;width:100%;height:100%}
+
+/* ══════════════════════════════════
+   ADMIN PANEL
+══════════════════════════════════ */
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:700px){.admin-grid{grid-template-columns:1fr}}
+.admin-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.admin-card h3{font-size:16px;font-weight:700;margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.user-list{display:flex;flex-direction:column;gap:.5rem;max-height:400px;overflow-y:auto}
+.user-row{
+  display:flex;align-items:center;gap:.75rem;background:var(--bg3);
+  border:1px solid var(--border);border-radius:8px;padding:10px 12px
+}
+.user-avatar{
+  width:34px;height:34px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-weight:700;font-size:14px;flex-shrink:0
+}
+.user-row-info{flex:1;min-width:0}
+.user-row-info strong{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-row-info span{font-size:12px;color:var(--text2)}
+.role-badge{
+  font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600;
+  white-space:nowrap;flex-shrink:0
+}
+.role-badge.admin{background:#dbeafe;color:#1d4ed8}
+
+/* ── RESULTADOS ── */
+.res-toolbar{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
+.res-toolbar .btn-export{margin:0}
+.res-table{width:100%;border-collapse:collapse;font-size:14px}
+.res-table th{text-align:left;padding:10px 14px;background:var(--bg3,rgba(0,0,0,.04));font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);border-bottom:2px solid var(--border)}
+.res-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.res-table tr:last-child td{border-bottom:none}
+.res-nota{font-weight:800;padding:2px 10px;border-radius:20px;display:inline-block}
+.res-nota.pass{background:#dcfce7;color:#15803d}
+.res-nota.fail{background:#fee2e2;color:#b91c1c}
+.res-empty{padding:2.5rem;text-align:center;color:var(--text2)}
+.role-badge.vendedor{background:#dcfce7;color:#15803d}
+.btn-del{
+  background:none;border:1px solid var(--border);color:var(--text2);
+  width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:all .2s
+}
+.btn-del:hover{background:var(--danger);border-color:var(--danger);color:#fff}
+
+/* ── ADD USER FORM ── */
+.add-form{display:flex;flex-direction:column;gap:.75rem}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+.f-field label{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:var(--text2);font-weight:600;display:block;margin-bottom:5px}
+.f-field input,.f-field select{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  color:var(--text);padding:9px 12px;border-radius:8px;font-size:14px;outline:none;
+  transition:border-color .2s
+}
+.f-field input:focus,.f-field select:focus{border-color:var(--accent)}
+.f-field select option{background:var(--bg3)}
+.brand-checks{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem}
+.brand-check{
+  display:flex;align-items:center;gap:5px;background:var(--bg3);
+  border:1px solid var(--border);border-radius:6px;padding:5px 10px;
+  cursor:pointer;font-size:13px;transition:all .2s;user-select:none
+}
+.brand-check.on{border-color:var(--accent);background:#cc000011;color:var(--accent);font-weight:600}
+.brand-check input{display:none}
+.btn-add{
+  background:var(--accent);color:#fff;border:none;padding:10px;
+  border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;
+  transition:background .2s
+}
+.btn-add:hover{background:var(--accent-dark)}
+.form-msg{font-size:13px;padding:8px 12px;border-radius:6px;display:none}
+.form-msg.ok{background:#dcfce7;border:1px solid #86efac;color:#15803d}
+.form-msg.err{background:#fee2e2;border:1px solid #fca5a5;color:#dc2626}
+
+/* ── EXPORT/IMPORT ── */
+.export-area{
+  background:var(--bg3);border:1px solid var(--border);border-radius:8px;
+  padding:.75rem;font-size:12px;font-family:monospace;color:var(--text2);
+  max-height:120px;overflow-y:auto;word-break:break-all;display:none
+}
+.btn-export{
+  background:var(--bg3);border:1px solid var(--border);color:var(--text);
+  padding:8px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;
+  width:100%;margin-top:.5rem;transition:all .2s
+}
+.btn-export:hover{border-color:var(--accent);color:var(--accent)}
+.notice{
+  background:#dbeafe;border:1px solid #93c5fd;color:#1d4ed8;
+  border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:1rem;line-height:1.5
+}
+
+/* ── EMPTY STATE ── */
+.empty{
+  text-align:center;padding:4rem 2rem;color:var(--text2)
+}
+.empty .e-icon{font-size:48px;margin-bottom:.75rem}
+.empty p{font-size:15px}
+
+/* ══════════════════════════════════
+   INFO TAB
+══════════════════════════════════ */
+.info-section{margin-bottom:1.25rem}
+.info-section h4{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--brand-color,var(--accent));font-weight:700;margin-bottom:.6rem}
+.info-text{font-size:14px;line-height:1.75;color:var(--text);background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem}
+.objecion-item{background:var(--bg2);border:1px solid var(--border);border-left:4px solid var(--danger);border-radius:0 var(--radius) var(--radius) 0;padding:12px 16px;margin-bottom:.5rem}
+.objecion-q{font-size:13px;font-weight:700;color:var(--danger);margin-bottom:6px}
+.objecion-r{font-size:13px;color:var(--text);line-height:1.6}
+
+/* ══════════════════════════════════
+   QUIZ TAB
+══════════════════════════════════ */
+.quiz-start{text-align:center;padding:3rem 1rem}
+.quiz-start p{font-size:14px;color:var(--text2);margin-bottom:1.5rem;line-height:1.7}
+.btn-start-quiz{background:var(--brand-color,var(--accent));color:#fff;border:none;padding:13px 32px;border-radius:10px;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:.3px;transition:opacity .2s}
+.btn-start-quiz:hover{opacity:.85}
+.quiz-no-content{text-align:center;padding:3rem;color:var(--text2);font-size:14px}
+.quiz-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:1.25rem;overflow:hidden}
+.quiz-bar-fill{height:100%;background:var(--brand-color,var(--accent));border-radius:2px;transition:width .3s}
+.quiz-progress{font-size:12px;text-transform:uppercase;letter-spacing:.7px;color:var(--text2);margin-bottom:.4rem;font-weight:600}
+.quiz-question{font-size:17px;font-weight:700;line-height:1.5;margin-bottom:1.25rem;color:var(--text)}
+.quiz-options{display:flex;flex-direction:column;gap:.6rem}
+.quiz-letter{display:inline-flex;width:24px;height:24px;background:var(--bg4);border-radius:50%;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-right:10px;flex-shrink:0;transition:background .15s,color .15s}
+.quiz-option{display:flex;align-items:center;background:var(--bg2);border:1.5px solid var(--border);color:var(--text);padding:11px 16px;border-radius:10px;text-align:left;cursor:pointer;font-size:14px;font-weight:500;font-family:inherit;transition:border-color .15s,background .15s}
+.quiz-option:hover:not(:disabled){border-color:var(--brand-color,var(--accent));background:var(--bg3)}
+.quiz-option:disabled{cursor:default}
+.quiz-option.correct{background:#dcfce7!important;border-color:#16a34a!important;color:#15803d!important;font-weight:700}
+.quiz-option.correct .quiz-letter{background:#16a34a;color:#fff}
+.quiz-option.wrong{background:#fee2e2!important;border-color:#dc2626!important;color:#dc2626!important;font-weight:700}
+.quiz-option.wrong .quiz-letter{background:#dc2626;color:#fff}
+.quiz-result{text-align:center;padding:2rem .5rem}
+.nota-badge{display:inline-block;font-size:72px;font-weight:900;line-height:1;padding:.3rem .9rem;border-radius:16px;margin-bottom:.75rem;letter-spacing:-2px}
+.nota-badge.pass{background:#dcfce7;color:#15803d}
+.nota-badge.fail{background:#fee2e2;color:#dc2626}
+.quiz-score{font-size:24px;font-weight:800;margin-bottom:.35rem}
+.quiz-verdict{font-size:15px;font-weight:700;margin-bottom:.25rem}
+.pass-text{color:#15803d}.fail-text{color:#dc2626}
+.quiz-percent{font-size:13px;color:var(--text2);margin-bottom:1.5rem}
+.btn-quiz-retry{background:var(--brand-color,var(--accent));color:#fff;border:none;padding:11px 26px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .2s}
+.btn-quiz-retry:hover{opacity:.85}
+#quiz-content{padding:.25rem 0}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     LOGIN SCREEN
+══════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-badge">CCVD</div>
+      <div class="login-title">Centro de Capacitación</div>
+      <div class="login-subtitle">Valenzuela Delarze</div>
+    </div>
+    <p style="font-size:11px;color:#6b7280;text-align:center;margin:-1rem 0 1rem">Admin: <strong style="color:#CC0000">admin</strong> / <strong style="color:#CC0000">ccvd2024</strong></p>
+    <div class="login-form">
+      <div class="field">
+        <label>Usuario</label>
+        <input type="text" id="inp-user" placeholder="Ingresa tu usuario" autocomplete="username" autocapitalize="none">
+      </div>
+      <div class="field">
+        <label>Contraseña</label>
+        <input type="password" id="inp-pass" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div class="login-error" id="login-error">Usuario o contraseña incorrectos.</div>
+      <button class="btn-login" onclick="doLogin()">Ingresar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     APP
+══════════════════════════════════ -->
+<div id="app">
+  <header>
+    <div class="h-left" onclick="goHome()">
+      <div class="h-badge">CCVD</div>
+      <span class="h-name">Centro de Capacitación</span>
+    </div>
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <div class="h-right">
+      <div class="user-chip">
+        <div class="dot"></div>
+        <span id="header-username">—</span>
+      </div>
+      <button class="btn-sm" id="btn-resultados" onclick="goResultados()">📊 Resultados</button>
+      <button class="btn-sm admin" id="btn-admin" onclick="goAdmin()" style="display:none">⚙ Admin</button>
+      <button class="btn-sm" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <div class="view active" id="view-home">
+      <div class="sec-title">Capacitación de Ventas</div>
+      <div class="sec-sub">Selecciona una marca para ver modelos y fichas técnicas</div>
+      <div class="search-wrap">
+        <input class="search-input" type="text" id="global-search" placeholder="🔍  Buscar marca o modelo..." oninput="globalSearch(this.value)">
+      </div>
+      <div class="brand-grid" id="brand-grid"></div>
+      <div id="search-results" style="display:none">
+        <div class="sec-sub" style="margin-bottom:.75rem">Resultados de búsqueda</div>
+        <div class="model-grid" id="search-results-grid"></div>
+      </div>
+    </div>
+
+    <!-- BRAND -->
+    <div class="view" id="view-brand">
+      <button class="back-btn" onclick="goHome()">← Volver a marcas</button>
+      <div id="brand-detail-header"></div>
+      <div class="model-grid" id="model-grid"></div>
+    </div>
+
+    <!-- MODEL -->
+    <div class="view" id="view-model">
+      <button class="back-btn" id="model-back-btn">← Volver a modelos</button>
+      <div id="model-detail"></div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="view" id="view-admin">
+      <button class="back-btn" onclick="goHome()">← Volver al inicio</button>
+      <div class="sec-title">⚙ Administración de Usuarios</div>
+      <div class="sec-sub">Gestiona los accesos al sistema CCVD</div>
+      <div class="notice" id="admin-notice"></div>
+      <div class="admin-grid">
+        <!-- USER LIST -->
+        <div class="admin-card">
+          <h3>👥 Usuarios activos (<span id="user-count">0</span>)</h3>
+          <div class="user-list" id="user-list"></div>
+          <div style="margin-top:1rem">
+            <button class="btn-export" onclick="toggleExport()">📥 Exportar lista de usuarios</button>
+            <div class="export-area" id="export-area"></div>
+          </div>
+        </div>
+        <!-- ADD USER -->
+        <div class="admin-card">
+          <h3>➕ Agregar usuario</h3>
+          <div class="add-form">
+            <div class="f-row">
+              <div class="f-field">
+                <label>Nombre completo</label>
+                <input type="text" id="nu-name" placeholder="Juan Pérez">
+              </div>
+              <div class="f-field">
+                <label>Usuario (login)</label>
+                <input type="text" id="nu-user" placeholder="jperez" autocapitalize="none">
+              </div>
+            </div>
+            <div class="f-row">
+              <div class="f-field">
+                <label>Contraseña</label>
+                <input type="text" id="nu-pass" placeholder="contraseña">
+              </div>
+              <div class="f-field">
+                <label>Rol</label>
+                <select id="nu-role">
+                  <option value="vendedor">Vendedor</option>
+                  <option value="admin">Administrador</option>
+                </select>
+              </div>
+            </div>
+            <div class="f-field">
+              <label>Marcas asignadas</label>
+              <div class="brand-checks" id="brand-checks"></div>
+            </div>
+            <div class="form-msg" id="add-msg"></div>
+            <button class="btn-add" onclick="addUser()">Agregar usuario</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="view" id="view-resultados">
+      <button class="back-btn" onclick="goHome()">← Volver al inicio</button>
+      <div class="sec-title">📊 Registro de Resultados</div>
+      <div class="sec-sub" id="res-sub"></div>
+      <div class="notice" id="res-notice" style="display:none"></div>
+      <div class="res-toolbar" id="res-toolbar"></div>
+      <div class="admin-card" style="overflow-x:auto;padding:0">
+        <table class="res-table" id="res-table"></table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// USUARIOS POR DEFECTO — edita esta lista para agregar usuarios
+// sin necesidad del panel de administración
+// ══════════════════════════════════════════════════════════
+const DEFAULT_USERS = [
+  {
+    username: "admin",
+    name: "Administrador CCVD",
+    password: "ccvd2024",
+    role: "admin",
+    brands: ["all"]
+  }
+  // Aquí puedes agregar más usuarios por defecto:
+  // {username:"jperez", name:"Juan Pérez", password:"pass123", role:"vendedor", brands:["honda","ford","kia"]},
+];
+
+// ══════════════════════════════════════════════════════════
+// DATOS DE MARCAS Y MODELOS
+// ══════════════════════════════════════════════════════════
+const DATA = {
+  honda: {
+    name:"Honda", color:"#CC0000", icon:"H", emoji:"🔴",
+    models:{
+      "CR-V":{tipo:"SUV Mediano",specs:{"Motor":"1.5L VTEC Turbo","Potencia":"188 hp","Torque":"243 Nm","Transmisión":"CVT con Step Shift","Tracción":"FWD / AWD","Combustible":"Gasolina","Consumo mixto":"13.0 km/l","Consumo ciudad":"10.4 km/l","Consumo carretera":"15.3 km/l","Maletero":"589 L","Pasajeros":"5","Airbags":"10","Garantía":"3 años / 100.000 km"},argumentos:[{t:"Espacio de clase superior",c:"589L de maletero — uno de los más grandes del segmento, ideal para familias."},{t:"Honda SENSING de serie",c:"Frenado autónomo, alerta de carril y crucero adaptativo incluidos — tecnología que otros cobran como extra."},{t:"Confiabilidad comprobada",c:"Honda lidera estudios de confiabilidad consistentemente. Bajos costos de mantención a largo plazo."},{t:"Tracción a elección",c:"FWD para ciudad o AWD para mayor seguridad en caminos variados — el cliente elige según su necesidad."}],video:"",preguntas:[{p:"¿Cuál es el volumen del maletero del Honda CR-V?",op:["589 L","519 L","437 L","540 L"],r:0},{p:"¿Qué motor equipa el Honda CR-V estándar?",op:["1.5L VTEC Turbo","2.0L i-VTEC NA","1.8L Atkinson","2.0L Hybrid"],r:0},{p:"¿Qué sistema de seguridad activa incluye el CR-V de serie?",op:["Honda SENSING","Ford Co-Pilot 360","Kia DriveWise","Hyundai SmartSense"],r:0},{p:"¿Cuál es la garantía del Honda CR-V en Chile?",op:["3 años / 100.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 60.000 km"],r:0},{p:"¿Qué tracción está disponible en el Honda CR-V?",op:["FWD y AWD a elección","Solo FWD","Solo AWD","4x4 permanente"],r:0},{p:"¿Cuál es la principal ventaja del CR-V sobre el Kia Sportage en espacio de maletero?",op:["CR-V tiene 589 L vs 540 L del Sportage","CR-V tiene 437 L vs 380 L del Sportage","CR-V tiene 519 L vs 440 L del Sportage","Ambos tienen igual capacidad de maletero"],r:0},{p:"¿Con cuál de estos modelos compite directamente el Honda CR-V?",op:["Toyota RAV4","Toyota Hilux","Honda Pilot","Ford Ranger"],r:0},{p:"¿Qué tipo de transmisión usa el Honda CR-V gasolina?",op:["CVT","6AT","7DCT","8AT"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Honda CR-V en Valenzuela & Delarze?","op":["$39.990.000","$35.990.000","$43.990.000","$44.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Honda CR-V con Autofin con 50% de pie a 48 cuotas?","op":["$435.710","$350.000","$567.437","$280.000"],"r":0}]},
+      "CR-V Advanced Hybrid":{tipo:"SUV Híbrido",specs:{"Motor":"2.0L i-MMD Hybrid (e:HEV)","Potencia sistema":"184 hp","Transmisión":"e-CVT","Tracción":"AWD eléctrico","Combustible":"Híbrido auto-recargable","Eficiencia":"~5.5 L/100km","Maletero":"561 L","Pasajeros":"5","Airbags":"6","Garantía":"3 años / 100.000 km"},argumentos:[{t:"Hasta 30% menos combustible en ciudad",c:"El modo EV activa automáticamente a baja velocidad — ahorro real sin cambiar hábitos de manejo."},{t:"Argumento financiero",c:"El ahorro en bencina compensa la diferencia de precio frente a versiones convencionales en 2-3 años."},{t:"AWD eléctrico sin diferencial",c:"Menor peso y mantención que AWD mecánico convencional — más respuesta, menos costo."}],video:"",preguntas:[{p:"¿Qué sistema de propulsión usa el Honda CR-V Advanced Hybrid?",op:["Motor eléctrico mueve ruedas; gasolina actúa como generador","Motor gasolina mueve ruedas; eléctrico asiste en arranque","Motor gasolina y eléctrico mueven ruedas simultáneamente","Solo motor eléctrico, gasolina solo en emergencias"],r:0},{p:"¿Cuánto ahorro de combustible ofrece el CR-V Hybrid vs gasolina en ciudad?",op:["Hasta 30% menos","Hasta 10% menos","Hasta 50% menos","Igual consumo"],r:0},{p:"¿Qué tracción tiene el CR-V Advanced Hybrid?",op:["AWD eléctrico trasero","4WD mecánico permanente","Solo FWD","FWD con bloqueo diferencial"],r:0},{p:"¿Cuál es el consumo aproximado del CR-V Hybrid?",op:["~5.5 L/100km","~8.0 L/100km","~3.0 L/100km","~7.0 L/100km"],r:0},{p:"¿Qué argumento financiero se usa para justificar el precio del CR-V Hybrid?",op:["El ahorro en bencina compensa la diferencia en 2-3 años","El precio es igual al CR-V gasolina","Se financia igual que el gasolina","La mantención es 50% más barata"],r:0},{p:"¿Cuánto mide el maletero del CR-V Advanced Hybrid?",op:["561 L","589 L","437 L","519 L"],r:0},{p:"¿Por qué el AWD eléctrico es superior al AWD mecánico convencional?",op:["Reacciona más rápido y pesa menos — sin diferencial que mantener","Tiene mayor tracción en terreno extremo","Es más barato de fabricar","Solo funciona en pavimento"],r:0},{p:"¿En qué contexto urbano tiene ventaja adicional el CR-V Hybrid en Chile?",op:["Puede circular en días de restricción ambiental en Santiago","Tiene acceso a estacionamientos preferenciales","No paga peaje en autopistas","Tiene descuento en seguro obligatorio"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Honda CR-V Advanced Hybrid en Valenzuela & Delarze?","op":["$46.990.000","$39.990.000","$52.990.000","$43.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Honda CR-V Advanced Hybrid con Autofin con 50% de pie a 48 cuotas?","op":["$510.925","$435.710","$620.000","$380.000"],"r":0}]},
+      "Civic":{tipo:"Sedán Compacto",specs:{"Motor":"1.5L Turbo DOHC I-VTEC","Potencia":"176 hp","Transmisión":"CVT con Step Shift","Tracción":"FWD","Consumo mixto":"15.6 km/l","Consumo ciudad":"11.9 km/l","Consumo carretera":"19.0 km/l","Maletero":"510 L","Pasajeros":"5","Garantía":"3 años / 100.000 km"},argumentos:[{t:"182 hp turbo en sedán compacto",c:"Conducción ágil que el cliente nota desde la primera prueba — muy por sobre rivales directos."},{t:"Maletero líder de segmento",c:"519L en un sedán compacto — más que muchos SUV de entrada."},{t:"Valor de reventa",c:"El Civic mantiene excelente valor de reventa — el cliente protege su inversión."}],video:"",preguntas:[{p:"¿Cuál es el volumen del maletero del Honda Civic?",op:["519 L","371 L","437 L","589 L"],r:0},{p:"¿Qué motor equipa el Honda Civic?",op:["1.5L VTEC Turbo","1.8L i-VTEC NA","2.0L VTEC Turbo","1.6T-GDI"],r:0},{p:"¿Qué tipo de transmisión usa el Honda Civic?",op:["CVT","6AT","7DCT","6MT"],r:0},{p:"¿Con qué rival compite directamente el Honda Civic?",op:["Toyota Corolla","Toyota RAV4","Honda CR-V","Kia Sportage"],r:0},{p:"¿Cuál es la garantía del Honda Civic?",op:["3 años / 100.000 km","5 años / 100.000 km","2 años / 60.000 km","4 años / 100.000 km"],r:0},{p:"¿Cuál es el argumento más fuerte del Civic frente a quien prefiere SUV?",op:["519 L de maletero — más que varios SUV de entrada — con menor consumo","Menor precio que cualquier SUV del mercado","Motor más potente que todos los SUV compactos","Garantía más larga que cualquier SUV"],r:0},{p:"¿Qué tiempo realiza el Honda Civic de 0-100 km/h?",op:["8.2 s","6.5 s","10.1 s","7.0 s"],r:0},{p:"¿En qué generación está actualmente el Honda Civic?",op:["11ª generación","9ª generación","10ª generación","12ª generación"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Honda Civic en Valenzuela & Delarze?","op":["$29.990.000","$25.990.000","$33.990.000","$26.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Honda Civic con Autofin con 50% de pie a 48 cuotas?","op":["$355.390","$280.000","$435.710","$220.000"],"r":0}]},
+      "ZR-V":{tipo:"SUV Coupé",specs:{"Motor":"2.0L i-VTEC","Potencia":"155 hp","Torque":"185 Nm a 4.200 rpm","Transmisión":"CVT con Step Shift","Tracción":"FWD","Maletero":"389 L","Airbags":"8","Pantalla":"9\" táctil","Garantía":"3 años / 100.000 km"},argumentos:[{t:"Único SUV coupé Honda",c:"Para el cliente que quiere diferenciarse — diseño fastback que no se ve en cada esquina."},{t:"8 airbags de serie",c:"Más airbags que el HR-V (6) — mayor protección pasiva en el SUV coupé de Honda."},{t:"Honda SENSING de serie",c:"Frenado autónomo, alerta de carril y crucero adaptativo incluidos en todas las versiones."}],video:"",preguntas:[{p:"¿Qué tipo de SUV es el Honda ZR-V?",op:["SUV Coupé (diseño fastback)","SUV Mediano estándar","SUV Grande 7 plazas","SUV Compacto de entrada"],r:0},{p:"¿Cuánto mide el maletero del Honda ZR-V?",op:["389 L","589 L","437 L","519 L"],r:0},{p:"¿Qué motor lleva el Honda ZR-V según su ficha técnica oficial?",op:["2.0L i-VTEC NA (155 hp)","1.5L VTEC Turbo (188 hp)","1.0L Turbo (120 hp)","2.0L Hybrid i-MMD"],r:0},{p:"¿Cuál es el largo total del Honda ZR-V?",op:["4.568 mm","4.710 mm","4.385 mm","4.060 mm"],r:0},{p:"¿Qué diferencia al ZR-V del HR-V en seguridad pasiva?",op:["ZR-V tiene 8 airbags vs 6 del HR-V","ZR-V tiene tracción AWD que el HR-V no tiene","ZR-V tiene mayor maletero que el HR-V","ZR-V tiene motor más potente que el HR-V"],r:0},{p:"¿Qué transmisión usa el Honda ZR-V?",op:["CVT con Step Shift","7DCT","6AT","8AT"],r:0},{p:"¿Cuántos airbags tiene el Honda ZR-V de serie?",op:["8 airbags","6 airbags","4 airbags","10 airbags"],r:0},{p:"¿Qué sistema de asistencia activa incluye el ZR-V?",op:["Honda SENSING (frenado autónomo, crucero adaptativo, alerta carril)","Solo ABS y control de estabilidad","Solo cámara de reversa","Sistema básico sin ADAS"],r:0},{p:"¿Cuál es la garantía del Honda ZR-V?",op:["3 años / 100.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 60.000 km"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Honda ZR-V en Valenzuela & Delarze?","op":["$29.490.000","$25.990.000","$33.990.000","$36.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Honda ZR-V con Autofin con 50% de pie a 48 cuotas?","op":["$349.569","$280.000","$435.710","$220.000"],"r":0}]},
+      "HR-V":{tipo:"SUV Compacto",specs:{"Motor":"1.5L i-VTEC","Potencia":"119 hp","Transmisión":"CVT con Sport Mode","Tracción":"FWD","Consumo":"14.0 km/l aprox.","Maletero":"437 L","Magic Seat":"Sí — múltiples posiciones","Airbags":"6","Pantalla":"8\" táctil","Garantía":"3 años / 100.000 km"},argumentos:[{t:"Magic Seat — exclusivo Honda",c:"Asientos traseros con múltiples configuraciones para transportar objetos altos sin bajar el vidrio."},{t:"Precio de entrada al mundo Honda SUV",c:"Confiabilidad Honda en formato SUV al presupuesto más accesible de la línea."}],video:"",preguntas:[{p:"¿Cuál es la característica exclusiva más importante del Honda HR-V?",op:["Magic Seat — asientos traseros con múltiples posiciones","Motor turbo más potente del segmento","Mayor maletero del segmento","Sistema de tracción AWD estándar"],r:0},{p:"¿Qué motor lleva el Honda HR-V?",op:["1.5L i-VTEC 121 hp","1.5L VTEC Turbo 190 hp","1.0L Turbo 120 hp","1.6L MPI 128 hp"],r:0},{p:"¿Qué permite el sistema Magic Seat del HR-V?",op:["Transportar objetos altos con asientos en múltiples posiciones","Plegar el asiento del copiloto completamente","Girar los asientos traseros hacia atrás","Quitar los asientos traseros"],r:0},{p:"¿Cuánto mide el maletero del Honda HR-V?",op:["437 L","589 L","380 L","363 L"],r:0},{p:"¿Cuál es el largo total del Honda HR-V?",op:["4.385 mm","4.568 mm","4.060 mm","4.710 mm"],r:0},{p:"¿Con cuál de estos modelos compite el Honda HR-V?",op:["Kia Seltos","Kia Tasman","Honda Pilot","Ford Ranger"],r:0},{p:"¿Qué tipo de transmisión usa el Honda HR-V?",op:["CVT","6AT","7DCT","5MT"],r:0},{p:"¿Cuál es la garantía del Honda HR-V?",op:["3 años / 100.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 60.000 km"],r:0},{p:"¿Para qué perfil de cliente es ideal el Honda HR-V?",op:["Adulto joven, primer SUV, busca practicidad a precio accesible","Familia grande que necesita 7 plazas","Cliente que requiere tracción AWD para la cordillera","Conductor que prioriza potencia máxima"],r:0},{p:"¿Qué argumento diferencia al HR-V del Kia Sonet?",op:["Magic Seat: versatilidad de carga que ningún rival iguala","Mayor potencia de motor","Mayor garantía","Precio más bajo"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Honda HR-V en Valenzuela & Delarze?","op":["$25.990.000","$20.990.000","$29.990.000","$22.990.000"],"r":0},{"p":"¿Cuantos cuota tiene el plan Auto Renuevate de Autofin para Honda?","op":["48 cuotas mensuales + cuota VFMG final","24 cuotas fijas","36 cuotas mensuales","12 cuotas con globo al final"],"r":0}]},
+      "Pilot":{tipo:"SUV Grande 8p",specs:{"Motor":"V6 3.5L i-VTEC","Potencia":"285 hp","Transmisión":"9AT automática","Tracción":"AWD i-VTM4","Modos conducción":"7: Normal, ECON, Sport, Snow, Trail, Sand, Tow","Pasajeros":"7 u 8 (SEAT ON DEMAND)","Remolque":"hasta 2.268 kg","Airbags":"8","Audio":"Bose 12 parlantes + subwoofer","Pantalla":"9\" táctil","Garantía":"3 años / 100.000 km"},argumentos:[{t:"8 pasajeros con dignidad",c:"El único Honda de 8 plazas — para familias grandes que no quieren renunciar al confort premium."},{t:"V6 285 hp + AWD",c:"Potencia real para llevar 8 personas, remolcar y enfrentar la cordillera sin esfuerzo."}],video:"",preguntas:[{p:"¿Cuántos pasajeros puede transportar el Honda Pilot?",op:["8 pasajeros (con asiento central plegable)","7 pasajeros fijos","9 pasajeros","5 pasajeros"],r:0},{p:"¿Qué motor lleva el Honda Pilot?",op:["V6 3.5L i-VTEC 285 hp","V8 5.0L 400 hp","4 cilindros 2.0T 245 hp","V6 3.6L 293 hp"],r:0},{p:"¿Cuántos modos de conducción tiene el Honda Pilot?",op:["7 modos (Normal, Sport, Snow, Trail, Sand, Tow, ECON)","3 modos (Normal, Sport, ECON)","5 modos","2 modos (Normal y 4x4)"],r:0},{p:"¿Cuánto mide el maletero del Pilot con la tercera fila plegada?",op:["1.274 L","589 L","850 L","1.800 L"],r:0},{p:"¿Qué transmisión usa el Honda Pilot?",op:["9AT automática","CVT","7DCT","8AT"],r:0},{p:"¿Qué tracción tiene el Honda Pilot?",op:["AWD permanente","Solo FWD","4x4 con reducción","Solo RWD"],r:0},{p:"¿Qué característica permite al Pilot alternar entre 7 y 8 plazas?",op:["Asiento central de segunda fila plegable (SEAT ON DEMAND)","Tercera fila retráctil eléctrica","Asientos giratorios traseros","Asientos extraíbles"],r:0},{p:"¿Con cuál de estos modelos compite directamente el Honda Pilot?",op:["Ford Explorer","Ford Ranger","Honda CR-V","Jeep Compass"],r:0},{p:"¿Cuánto mide de largo el Honda Pilot?",op:["5.007 mm","4.710 mm","4.568 mm","5.200 mm"],r:0},{p:"¿Por qué el Pilot es superior al Kia Sorento para familias grandes?",op:["El Pilot ofrece 8 plazas reales vs 7 del Sorento, con mayor potencia (285 vs 202 hp)","El Pilot tiene mayor garantía","El Pilot es más económico en combustible","El Pilot tiene menor precio de venta"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Honda Pilot en Valenzuela & Delarze?","op":["$56.990.000","$46.990.000","$62.990.000","$49.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Honda Pilot con Autofin con 50% de pie a 48 cuotas?","op":["$567.437","$435.710","$680.000","$350.000"],"r":0}]},
+      "WR-V":{tipo:"SUV Entrada",specs:{"Motor":"1.5L i-VTEC","Potencia":"121 hp","Transmisión":"CVT con paddle shift","Tracción":"FWD","Maletero":"458 L","Airbags":"6","Pantalla":"10\" táctil","Cluster digital":"7\" TFT","Garantía":"3 años / 100.000 km"},argumentos:[{t:"La entrada más accesible a Honda",c:"Primer auto o bajada de cuota — confiabilidad Honda al precio más bajo de la línea."},{t:"Postura SUV con consumo de hatchback",c:"Mayor visibilidad y acceso al subir, sin el consumo de un SUV mediano."}],video:"",preguntas:[{p:"¿Qué posición ocupa el WR-V en la línea Honda?",op:["SUV de entrada — el más accesible de la línea","SUV Mediano — entre HR-V y CR-V","SUV Grande de 7 plazas","SUV deportivo Coupé"],r:0},{p:"¿Qué motor equipa el Honda WR-V?",op:["1.5L i-VTEC 121 hp","1.5L VTEC Turbo 190 hp","1.0L Turbo 110 hp","1.6T-GDI 180 hp"],r:0},{p:"¿Cuánto mide el maletero del Honda WR-V?",op:["363 L","437 L","380 L","519 L"],r:0},{p:"¿Cuánto mide de largo el Honda WR-V?",op:["4.060 mm","4.385 mm","4.568 mm","4.710 mm"],r:0},{p:"¿Cuál es la garantía del Honda WR-V?",op:["3 años / 100.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 60.000 km"],r:0},{p:"¿Qué ventaja práctica tiene el WR-V sobre un hatchback del mismo precio?",op:["Mayor visibilidad y acceso al subir — postura SUV real","Motor más potente que todos los hatchbacks","Maletero mayor que cualquier hatchback","Mayor velocidad máxima"],r:0},{p:"¿Con cuál de estos modelos compite el Honda WR-V?",op:["Kia Sonet","Kia Tasman","Honda Pilot","Ford Explorer"],r:0},{p:"¿Qué tipo de transmisión usa el Honda WR-V?",op:["CVT automática","6AT","7DCT","5MT"],r:0},{p:"¿Qué argumento de consumo se usa para el WR-V vs rivales más grandes?",op:["Postura SUV con consumo similar a un hatchback — sin penalización de consumo","Es el más barato en mantención de toda la gama","Usa gasolina de 87 octanos","Tiene menor consumo que todos los híbridos"],r:0},{p:"¿Incluye el Honda WR-V sistema de seguridad activa?",op:["Sí, Honda SENSING en versiones superiores","No, ninguna versión incluye ADAS","Sí, en todas las versiones de serie","Solo en la versión más cara como extra"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Honda WR-V en Valenzuela & Delarze?","op":["$20.990.000","$17.990.000","$25.990.000","$23.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Honda WR-V con Autofin con 50% de pie a 48 cuotas?","op":["$250.622","$180.000","$355.390","$320.000"],"r":0}]}
+    }
+  },
+  ford: {
+    name:"Ford", color:"#003369", icon:"F", emoji:"🔵",
+    models:{
+      "Ranger":{tipo:"Pickup Mediana",specs:{"Motores diesel":"2.0L Turbo 170 CV / 2.0L Bi-Turbo 205 CV","Torque":"405 Nm / 500 Nm","Transmisión":"6MT o 10AT secuencial","Tracción":"4×2 / 4×4 H / 4×4 L / 4×4 A","Vadeo":"800 mm a 7 km/h","Carga útil":"hasta 1.000 kg","Remolque":"hasta 3.500 kg","Airbags":"7","Pantalla":"12\" SYNC 4","Cámara":"360° (delantera, trasera y laterales)","Garantía":"3 años / 100.000 km"},argumentos:[{t:"La pickup más vendida de Chile",c:"El Ranger lidera ventas de pickup consistentemente — la opción probada del mercado."},{t:"Motor gasolina EcoBoost disponible",c:"293 hp turbo sin diesel — ideal para quienes prefieren gasolina con potencia real."},{t:"Red de servicio más amplia",c:"Ford tiene una de las redes de servicio más grandes del país — tranquilidad donde esté el cliente."},{t:"4 veces ganadora del International Pickup Award",c:"El reconocimiento más importante del sector de pickups a nivel mundial, ganado en 2013, 2020 y 2024 — el historial de premios más largo de cualquier rival."},{t:"#1 en Europa por más de 10 años",c:"Liderazgo sostenido en el mercado más exigente del mundo — credibilidad global que ninguna pickup asiática puede igualar."}],video:"",preguntas:[{p:"¿Cuántas veces ha ganado la Ford Ranger el International Pickup Award?",op:["4 veces (2013, 2020, 2024 y más)","1 vez","2 veces","Nunca ha ganado ese premio"],r:0},{p:"¿Cuántos mm de vadeo tiene la Ford Ranger?",op:["800 mm","500 mm","600 mm","1.000 mm"],r:0},{p:"¿Qué transmisión automática usa la Ford Ranger?",op:["10 velocidades","6 velocidades","8 velocidades","CVT"],r:0},{p:"¿Cuánto puede remolcar la Ford Ranger?",op:["3.500 kg","2.000 kg","5.000 kg","1.500 kg"],r:0},{p:"¿Cuál es la carga útil de la Ford Ranger?",op:["1.000 kg","800 kg","650 kg","1.300 kg"],r:0},{p:"¿Cuál es la garantía de la Ford Ranger?",op:["3 años / 100.000 km","5 años / 100.000 km","2 años / 60.000 km","7 años / 150.000 km"],r:0},{p:"¿Por qué la Ranger puede argumentarse mejor que la Hilux ante el cliente?",op:["4 premios International Pickup Award y liderazgo en Europa por 10+ años — hechos verificables vs percepción","La Ranger es más barata que la Hilux","La Ranger tiene mayor garantía que la Hilux","La Hilux no tiene versión automática"],r:0},{p:"¿En cuánto creció la producción de Ranger en 2025?",op:["15%","5%","30%","50%"],r:0},{p:"¿Cuántos modos de tracción tiene la Ranger?",op:["4x2, 4x4H, 4x4L y 4x4A","Solo 4x4 permanente","Solo 4x2 y 4x4H","Tracción AWD automática sin modos"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Ford Ranger XL en Valenzuela & Delarze?","op":["$31.880.100","$28.990.000","$35.990.000","$39.615.100"],"r":0},{"p":"¿Cuál es la cuota mensual del Ford Ranger XL con Forum con 50% de pie a 48 cuotas?","op":["$373.990","$280.000","$460.990","$550.000"],"r":0}]},
+      "Ranger Raptor":{tipo:"Pickup Performance",specs:{"Motor":"3.0L EcoBoost V6 Biturbo","Potencia":"397 hp","Torque":"583 Nm","Transmisión":"10AT con levas al volante","Tracción":"4×2 / 4×4 H / 4×4 L / 4×4 A","Suspensión":"Fox Racing 2.5","Despeje suelo":"283 mm","Airbags":"7","Garantía":"3 años / 100.000 km"},argumentos:[{t:"Lista para el desierto desde la concesionaria",c:"Suspensión Fox Racing, planchas de protección, tracción avanzada — no necesita modificaciones."},{t:"397 hp — la pickup más potente del segmento",c:"Para el cliente que quiere lo máximo sin compromisos ni tuning."}],video:"",preguntas:[{p:"¿Qué marca de suspensión usa la Ranger Raptor?",op:["Fox Racing 2.5","Bilstein","KYB","Monroe"],r:0},{p:"¿Cuántos mm de despeje al suelo tiene la Ranger Raptor?",op:["283 mm","226 mm","235 mm","200 mm"],r:0},{p:"¿Qué motor lleva la Ford Ranger Raptor?",op:["V6 3.0L EcoBoost biturbo","V8 5.0L gasolina","2.3L EcoBoost 4 cilindros","3.0L TDI diésel"],r:0},{p:"¿Cuántos airbags tiene la Ranger Raptor?",op:["7 airbags","4 airbags","6 airbags","10 airbags"],r:0},{p:"¿Cuál es la garantía de la Ford Ranger Raptor?",op:["3 años / 100.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 60.000 km"],r:0},{p:"¿Qué transmisión usa la Ranger Raptor?",op:["10AT automática con levas al volante","6MT manual","8AT automática","CVT"],r:0},{p:"¿Cuál es el argumento de valor de la Ranger Raptor?",op:["Listo para el desierto desde la concesionaria — sin modificaciones ni inversión extra","Es la pickup más barata del segmento","Tiene la mayor garantía del segmento","Consume menos que cualquier pickup del mercado"],r:0},{p:"¿Cuántos modos de tracción tiene la Ranger Raptor?",op:["4x2, 4x4H, 4x4L y 4x4A","Solo 4x4 permanente","Solo 4x2 y 4x4H","Tracción AWD electrónica sin modos manuales"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Ford Ranger Raptor en Valenzuela & Delarze?","op":["$60.440.100","$52.990.000","$67.990.000","$55.990.000"],"r":0},{"p":"¿Cuanto cuesta el Ford F-150 Raptor desde en Valenzuela & Delarze?","op":["$100.424.100","$60.440.100","$80.990.000","$71.990.000"],"r":0}]},
+      "Explorer":{tipo:"SUV Grande 7p",specs:{"Motor":"3.0L EcoBoost V6 Hybrid","Potencia":"457 hp (sistema híbrido)","Torque":"825 Nm","Transmisión":"10AT","Tracción":"RWD / AWD","Pasajeros":"7","Pantalla":"13.2\" SYNC 4","Audio":"B&O con subwoofer","Seguridad":"Ford Co-Pilot 360™","Garantía":"3 años / 60.000 km"},argumentos:[{t:"457 hp híbrido — el más potente del segmento",c:"Sistema híbrido que entrega potencia brutal con eficiencia — mejor de ambos mundos."},{t:"Plataforma RWD premium",c:"A diferencia de los SUV FWD, el Explorer en plataforma trasera da sensación de auto premium europeo."}],video:"",preguntas:[{p:"¿Qué tipo de plataforma usa el Ford Explorer?",op:["RWD (tracción trasera) — diferenciador premium","FWD (tracción delantera)","4x4 con reducción permanente","AWD electrónico sin RWD base"],r:0},{p:"¿Cuántos pasajeros tiene el Ford Explorer?",op:["7 pasajeros en 3 filas","5 pasajeros","8 pasajeros","6 pasajeros fijos"],r:0},{p:"¿Qué tamaño de pantalla tiene el Ford Explorer 2025?",op:["13.2\" SYNC 4","12.3\" táctil","10.1\" Uconnect","15.6\" central"],r:0},{p:"¿Qué sistema de audio incluye el Explorer?",op:["B&O con subwoofer","Bose 12 parlantes","Meridian 14 parlantes","JBL básico"],r:0},{p:"¿Cuál es la garantía del Ford Explorer?",op:["3 años / 60.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 100.000 km"],r:0},{p:"¿Qué motor lleva el Ford Explorer 2025?",op:["3.0L EcoBoost V6 Hybrid","3.5L V6 NA","2.7L EcoBoost V6","5.0L V8"],r:0},{p:"¿Cuál es el argumento diferenciador del Explorer vs Kia Sorento?",op:["Mayor potencia (457 vs 268 hp) y plataforma RWD premium","Mayor garantía que el Sorento","Mayor maletero que el Sorento","Menor precio que el Sorento"],r:0},{p:"¿Qué sistema de seguridad activa incluye el Explorer?",op:["Ford Co-Pilot 360 de serie","Honda SENSING","Kia DriveWise","Jeep Selec-Terrain"],r:0},{p:"¿En qué supera el Explorer al Toyota Fortuner?",op:["Mayor potencia (457 vs 204 hp) y mayor tecnología de interior","Mayor garantía que el Fortuner","Menor precio que el Fortuner","Mayor capacidad de remolque que el Fortuner"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Ford Explorer en Valenzuela & Delarze?","op":["$37.990.000","$31.990.000","$45.990.000","$42.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Ford Explorer con Forum con 50% de pie a 48 cuotas?","op":["$442.990","$373.990","$550.000","$300.000"],"r":0}]},
+      "Mustang":{tipo:"Deportivo",specs:{"Motores":"2.3L EcoBoost / 5.0L V8 Coyote","Potencia":"310 hp / 450 hp","Torque":"420 Nm / 556 Nm","Transmisión":"6MT / 10AT","Tracción":"RWD","0-100 km/h":"5.8s / 4.5s","Tipos":"Fastback y Convertible","Audio":"Bang & Olufsen 12 parlantes","Pantalla":"13.2\" SYNC 4","Garantía":"3 años / 60.000 km"},argumentos:[{t:"El deportivo americano más deseado del mundo",c:"El Mustang no necesita presentación — solo mostrarlo ya genera interés."},{t:"V8 5.0L disponible en Chile",c:"Para el cliente que quiere el sonido y emoción del V8 — incomparable en relación precio-experiencia."},{t:"Convertible disponible",c:"Único deportivo descapotable de la línea — para el cliente que quiere sentir el sol y la velocidad."}],video:""},
+      "F-150":{tipo:"Pickup Full Size",specs:{"Motores":"2.7L EcoBoost / 5.0L V8 / 3.5L PowerBoost Hybrid","Potencia":"325 / 400 / 430 hp","Transmisión":"10AT","Tracción":"4×2 / 4×4","Remolque":"hasta 6.300 kg","Pro Power Onboard":"hasta 7.2 kW","Pantalla":"12\" SYNC 4","Seguridad":"Ford Co-Pilot 360®","Garantía":"3 años / 60.000 km"},argumentos:[{t:"El vehículo más vendido del mundo por décadas",c:"La F-150 lleva décadas siendo el más vendido en EE.UU. — estatus y credibilidad garantizados."},{t:"Pro Power Onboard",c:"Genera hasta 7.2 kW de electricidad — es un generador portátil para obras y camping."}],video:""},
+      "F-150 Raptor":{tipo:"Pickup Performance Full Size",specs:{"Motor":"3.5L EcoBoost V6 Biturbo High Output","Potencia":"450 hp","Torque":"691 Nm","Inyección":"Dual GDI e indirecta PFI","Transmisión":"10AT con levas al volante","Suspensión":"FOX Racing SHOX Live Valve","Airbags":"7","Garantía":"3 años / 60.000 km"},argumentos:[{t:"450 hp con suspensión Fox Live Valve",c:"Nivel Baja 1000 de fábrica — la pickup más extrema disponible en Chile."},{t:"Valor de reventa excepcional",c:"La Raptor siempre mantiene valor — los clientes la cuidan porque saben que es especial."}],video:""},
+      "Bronco":{tipo:"SUV Off-Road",specs:{"Motor":"2.3L EcoBoost / 2.7L EcoBoost V6","Potencia":"300 / 330 hp","Tracción":"4x4 avanzada","Vadeado":"851 mm","Descenso suelo":"297 mm","Configuración":"2 o 4 puertas","Garantía":"3 años / 60.000 km"},argumentos:[{t:"Capota y puertas removibles — legalmente",c:"Experiencia de conducción al aire libre única en su categoría."},{t:"Built Wild — off-road desde cero",c:"No es un SUV citadino disfrazado — fue diseñado para el terreno desde la hoja en blanco."}],video:""},
+      "Bronco Sport":{tipo:"SUV Compacto",specs:{"Motor estándar":"1.5L EcoBoost 175 hp","Motor Wildtrak":"2.0L EcoBoost 245 hp / 376 Nm","Transmisión":"8AT (Wildtrak: SelectShift® con paddle shifters)","Tracción":"AWD","Despeje suelo":"214 mm","Maletero":"849 L (plegado)","Seguridad":"Ford Co-Pilot 360","Garantía":"3 años / 60.000 km"},argumentos:[{t:"245 hp en SUV compacto — supera a todos sus rivales",c:"Más potente que la mayoría de SUV de su tamaño — conducción más ágil y segura en autopista."}],video:""},
+      "Territory":{tipo:"SUV Mediano",specs:{"Motor":"1.5L EcoBoost Turbo","Potencia":"160 hp","Transmisión":"7DCT","Tracción":"FWD","Pantalla":"12\" SYNC+","Consumo":"hasta 15.2 km/l","Maletero":"422 L","Seguridad":"Ford Co-Pilot 360","Garantía":"3 años / 60.000 km"},argumentos:[{t:"El SUV Ford más accesible con SYNC avanzado",c:"Pantalla de 12\" y ADAS completo que normalmente aparece en autos de mayor precio."}],video:""},
+      "Expedition":{tipo:"SUV Full Size 8p",specs:{"Motor":"3.5L EcoBoost V6 High Output","Potencia":"440 hp","Torque":"691 Nm","Transmisión":"10AT","Tracción":"RWD / AWD","Pasajeros":"8","Remolque":"hasta 5.000 kg","Largo":"5.204 mm","Airbags":"6","Garantía":"3 años / 60.000 km"},argumentos:[{t:"El SUV más grande de Ford — 8 plazas reales",c:"Para el cliente que no acepta compromisos en espacio ni en potencia."},{t:"5 toneladas de remolque",c:"Puede tirar una lancha, horse trailer o caravana completa — argumento concreto para el cliente de trabajo."}],video:""},
+      "Maverick":{tipo:"Pickup Compacta",specs:{"Motor":"2.0L EcoBoost Gasolina","Potencia":"249 hp","Torque":"380 Nm","Transmisión":"8AT","Tracción":"FWD / AWD","Carga útil":"680 kg","Seguridad":"Ford Co-Pilot 360","Garantía":"3 años / 60.000 km"},argumentos:[{t:"Precio de auto, caja de pickup",c:"El argumento más simple y poderoso del segmento — para el cliente que necesita carga pero no quiere pickup grande."},{t:"Versión Hybrid de serie en base",c:"La base ya viene híbrida — sin pagar extra por la eficiencia."}],video:""},
+      "Transit Custom":{tipo:"Furgón Mediano",specs:{"Motor":"2.0L EcoBlue Diesel","Potencia":"136 hp","Carga útil":"1.300 kg","Volumen":"5.8 m³","Tracción":"FWD"},argumentos:[{t:"Líder absoluto del segmento de furgones",c:"Transit es la referencia del mercado — confiabilidad probada en flotas comerciales de todo Chile."}],video:""},
+      "Transit Furgón":{tipo:"Furgón Grande",specs:{"Motor":"2.0L EcoBlue Diesel","Potencia":"170 hp","Carga útil":"1.700 kg","Volumen":"hasta 15.1 m³","Tracción":"FWD / RWD"},argumentos:[{t:"El mayor volumen de carga del segmento",c:"15 m³ lo hace insuperable para delivery, mudanzas y distribución masiva."}],video:""},
+      "Transit Bus":{tipo:"Bus",specs:{"Motor":"2.0L EcoBlue Diesel","Pasajeros":"hasta 17","Transmisión":"6AT"},argumentos:[{t:"Transporte ejecutivo o turismo",c:"Versatilidad para empresas de traslado, hoteles y operadores de turismo."}],video:""},
+      "Transit Chasis":{tipo:"Chasis Cabinado",specs:{"Motor":"2.0L EcoBlue Diesel","Carga útil":"hasta 2.500 kg"},argumentos:[{t:"Base para carrocería a medida",c:"Adaptable a refrigerado, ambulancia, caja seca, plataforma — el cliente elige su carrocería."}],video:""}
+    }
+  },
+  kia: {
+    name:"Kia", color:"#BB162B", icon:"K", emoji:"🚗",
+    models:{
+      "Sportage":{tipo:"SUV Mediano",specs:{"Motor gasolina 2.0L":"177 hp — 265 Nm","Motor gasolina 1.6T":"177 hp — 265 Nm","Motor diésel 2.0T":"183 hp — 417 Nm","Motor HEV 1.6T":"232 hp — 367 Nm","Transmisión":"6MT / 6AT / 8AT","Tracción":"FWD / AWD","Maletero":"544 L / 1.830 L (abatidos)","Pantalla":"Panorámica digital 25\"","Airbags":"6","Latin NCAP":"5 estrellas","Garantía":"5 años / 100.000 km"},argumentos:[{t:"Garantía 5 años — la mejor del segmento",c:"Kia ofrece 5 años vs 3 de la competencia — argumento diferenciador inmediato y verificable."},{t:"Pantalla dual curvo premium",c:"Factor wow que el cliente nota al primer contacto — asociado a autos de mayor precio."},{t:"540 L de maletero",c:"El más grande de su segmento — argumento concreto y medible para familias."},{t:"AWD con torque vectoring",c:"Distribuye fuerza entre ruedas para máxima tracción — tecnología de segmento superior."},{t:"5 estrellas Latin NCAP",c:"La máxima calificación de seguridad en pruebas realizadas en la región — argumento externo e independiente verificable por cualquier cliente."}],video:"",preguntas:[{p:"¿Cuántos años de garantía tiene el Kia Sportage?",op:["5 años / 100.000 km","3 años / 100.000 km","7 años / 150.000 km","2 años / 60.000 km"],r:0},{p:"¿Qué tamaño tiene el maletero del Kia Sportage?",op:["544 L","589 L","437 L","380 L"],r:0},{p:"¿Cuánto mide la pantalla panorámica del Kia Sportage?",op:["25\" (clúster + táctil)","12.3\" simple","14.8\" central","21\" panorámica"],r:0},{p:"¿Cuál es la calificación Latin NCAP del Kia Sportage?",op:["5 estrellas — máxima calificación","4 estrellas","3 estrellas","No ha sido evaluado"],r:0},{p:"¿En qué aventaja el Sportage al Toyota RAV4 en garantía?",op:["Kia ofrece 5 años vs 3 del RAV4 — el doble de cobertura","Kia ofrece 7 años vs 5 del RAV4","Kia ofrece 3 años vs 2 del RAV4","Ambos tienen la misma garantía"],r:0},{p:"¿Qué tecnología AWD diferencia al Sportage en tracción?",op:["AWD con torque vectoring entre ruedas traseras","4x4 con reducción mecánica","AWD eléctrico sin diferencial","Solo FWD disponible en todas las versiones"],r:0},{p:"¿Cuál fue la actualización más importante del Sportage en 2025?",op:["Midlife update con nuevo diseño interior y exterior","Motor completamente nuevo","Cambio de plataforma","Incorporación de versión eléctrica"],r:0},{p:"¿Cuál es la ventaja del Sportage sobre el Honda CR-V en garantía?",op:["Sportage tiene 5 años vs 3 del CR-V — dos años más de cobertura","Sportage tiene mayor maletero que el CR-V","Sportage es más barato que el CR-V","Sportage tiene mayor potencia que el CR-V en todas las versiones"],r:0},{p:"¿Qué motorizaciones ofrece el Kia Sportage en Chile?",op:["Gasolina 1.6T, Hybrid HEV y Diésel 2.0T","Solo gasolina y diésel","Solo gasolina y eléctrico","Una sola motorización gasolina"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Kia Sportage en Valenzuela & Delarze?","op":["$22.990.000","$19.990.000","$27.990.000","$25.990.000"],"r":0},{"p":"¿Cuanto cuesta el Kia EV6 desde en Valenzuela & Delarze?","op":["$67.990.000","$29.990.000","$99.990.000","$46.990.000"],"r":0}]},
+      "Tasman":{tipo:"Pickup Mediana",specs:{"Motor":"2.2L Turbo Diésel CRDi","Potencia":"207 hp a 3.800 rpm","Torque":"440 Nm a 1.750–2.750 rpm","Consumo":"hasta 13.6 km/l","Tanque":"80 L + 14 L urea","Transmisión":"6MT o 8AT","Tracción":"4×4 — modos 2H, 4A, 4H, 4L","Carga útil":"1.137 kg","Volumen caja":"1.173 L","Remolque":"3.500 kg","Inmersión":"800 mm","Pantalla":"Panorámica 30\" (12.3\"+12.3\")","Airbags":"6","Garantía":"5 años / 100.000 km"},argumentos:[{t:"Primera pickup Kia — lanzamiento histórico",c:"La novedad genera expectativa y tráfico a la concesionaria."},{t:"Garantía 5 años en pickup",c:"Ninguna otra pickup del segmento ofrece 5 años — argumento único y imbatible."},{t:"Motor gasolina 281 hp",c:"Supera en potencia a todos los diesel del segmento."},{t:"Motor Euro 6c — norma de emisiones más estricta del mundo",c:"El turbodiésel 2.2L cumple Euro 6c, la norma ambiental más exigente vigente — tecnología que protege al cliente de restricciones de circulación futuras."},{t:"Pantalla panorámica 30\" — la mayor en pickup mediana",c:"Arco continuo de 12.3\" clúster + 12.3\" táctil — impacto visual en la prueba de manejo que ningún rival de su segmento puede igualar."}],video:"",preguntas:[{p:"¿Qué motor lleva la Kia Tasman diésel?",op:["2.2L CRDi Turbo Diésel 207 hp","3.0L V6 Diésel 210 hp","2.5L T-GDI Gasolina 281 hp","1.5T Gasolina 207 hp"],r:0},{p:"¿Cuántos años de garantía tiene la Kia Tasman?",op:["5 años / 100.000 km","3 años / 100.000 km","7 años / 150.000 km","2 años / 60.000 km"],r:0},{p:"¿Qué tamaño tiene el sistema de pantallas panorámico de la Tasman?",op:["30\" (dos pantallas de 12.3\" en arco)","12\" pantalla simple","15.6\" pantalla central","21\" pantalla única"],r:0},{p:"¿Qué norma de emisiones cumple el motor de la Kia Tasman?",op:["Euro 6c — la más estricta vigente","Euro 5","Euro 4","Sin certificación de emisiones"],r:0},{p:"¿Cuánto es la carga útil de la Kia Tasman?",op:["1.137 kg","800 kg","650 kg","1.500 kg"],r:0},{p:"¿Cuánto puede remolcar la Kia Tasman?",op:["3.500 kg","2.000 kg","5.000 kg","1.500 kg"],r:0},{p:"¿Qué modos de tracción tiene la Kia Tasman?",op:["2H, 4A, 4H y 4L","Solo 4x4 permanente","Solo 4x2 y 4x4H","Tracción AWD automática sin modos"],r:0},{p:"¿Por qué la Tasman supera en garantía a la Ford Ranger?",op:["Tasman: 5 años vs Ranger: 3 años — el doble de cobertura","Tasman tiene 7 años vs 5 de Ranger","Ambas tienen la misma garantía","Ranger tiene mayor garantía que la Tasman"],r:0},{p:"¿Cuál es la profundidad de inmersión (vadeo) de la Kia Tasman?",op:["800 mm","500 mm","600 mm","1.000 mm"],r:0},{p:"¿Qué hace histórica a la Kia Tasman?",op:["Es la primera pickup mediana Kia en el mundo, lanzada en Chile 2025","Es la pickup con mayor carga del segmento","Es la primera pickup con motor eléctrico de Kia","Es la pickup más barata del segmento"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Kia Tasman en Valenzuela & Delarze?","op":["$25.990.000","$22.990.000","$29.990.000","$31.990.000"],"r":0},{"p":"¿Cuanto cuesta el Kia Carnival desde en Valenzuela & Delarze?","op":["$39.990.000","$29.990.000","$46.990.000","$32.990.000"],"r":0}]},
+      "Sorento":{tipo:"SUV Grande 7p",specs:{"Motor gasolina 3.5L":"268 hp — 331 Nm (8AT)","Motor gasolina 2.5L":"178 hp — 232 Nm","Motor diésel 2.2L":"199 hp — 440 Nm (8AT)","Motor HEV 1.6T":"238 hp — 367 Nm","Tracción":"AWD disponible","Pasajeros":"7","Pantalla":"Panorámica 24.6\" (12.3\"+12.3\")","Audio":"Bose 12 parlantes","Airbags":"6","Cámara":"360°","Garantía":"5 años / 100.000 km"},argumentos:[{t:"7 plazas con interior que compite con europeos",c:"El Sorento combina 7 plazas con un acabado que supera lo que su precio haría esperar."},{t:"Versión híbrida enchufable disponible",c:"Eficiencia excepcional para el cliente que recorre mucha ciudad."}],video:"",preguntas:[{p:"¿Cuántas plazas tiene el Kia Sorento?",op:["7 plazas","5 plazas","8 plazas","6 plazas"],r:0},{p:"¿Cuántos años de garantía tiene el Kia Sorento?",op:["5 años / 100.000 km","3 años / 60.000 km","7 años / 150.000 km","2 años / 100.000 km"],r:0},{p:"¿Qué tamaño tiene la pantalla panorámica dual del Sorento?",op:["24.6\" (12.3\" + 12.3\")","12.3\" simple","14.8\" central","21\" única"],r:0},{p:"¿Qué sistema de audio incluye el Sorento en versiones superiores?",op:["Bose 12 parlantes","Meridian 14 parlantes","Harman Kardon 8 parlantes","JBL 10 parlantes"],r:0},{p:"¿Cuánto consume el Sorento HEV?",op:["hasta 17.6 km/l","hasta 11.0 km/l","hasta 22.0 km/l","hasta 8.5 km/l"],r:0},{p:"¿Qué motorización HEV tiene el Kia Sorento?",op:["1.6T Hybrid 238 hp del sistema","2.0T Hybrid 280 hp","2.5L Hybrid 200 hp","3.0L Hybrid 300 hp"],r:0},{p:"¿Cuál es la ventaja del Sorento sobre el Ford Explorer en garantía?",op:["Sorento: 5 años vs Explorer: 3 años — mayor cobertura","Sorento tiene mayor potencia que el Explorer","Sorento es más económico que el Explorer","Sorento tiene mayor maletero que el Explorer"],r:0},{p:"¿Qué incluye el Sorento de serie en versiones superiores?",op:["Cámara 360°, audio Bose, climatizador dual y pantalla 24.6\"","Solo climatizador y radio básica","Solo pantalla táctil sin audio premium","Radio y cámara trasera básica"],r:0},{p:"¿Con cuál de estos modelos compite el Kia Sorento?",op:["Toyota Fortuner","Toyota Yaris","Kia Sonet","Ford Maverick"],r:0},{p:"¿Cuántas motorizaciones ofrece el Kia Sorento en Chile?",op:["4 (Diésel, Gasolina 2.5L, Gasolina 3.5L y HEV)","2 (Diésel y Gasolina)","1 (Solo Gasolina)","3 (Gasolina, Diésel y Eléctrico)"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Kia Sorento en Valenzuela & Delarze?","op":["$39.990.000","$29.990.000","$46.990.000","$35.990.000"],"r":0},{"p":"¿Cuanto cuesta el Kia Tasman desde en Valenzuela & Delarze?","op":["$25.990.000","$22.990.000","$29.990.000","$31.990.000"],"r":0}]},
+      "Carnival":{tipo:"Van Premium",specs:{"Motor gasolina 3.5L":"268 hp — 332 Nm","Motor diésel 2.2T":"199 hp — 440 Nm","Motor HEV 1.6T":"242 hp — 367 Nm (+47% eficiencia)","Transmisión":"8AT con E-Shift y paddle shifters","Pasajeros":"7 a 9","Maletero":"627 L / 2.827 L (expandido)","Consumo HEV":"hasta 17.6 km/l","Pantalla":"Panorámica 25\" (12.3\"+12.3\")","Audio":"Bose 12 parlantes","Airbags":"8","Garantía":"5 años / 100.000 km"},argumentos:[{t:"El minivan más elegante del mercado",c:"Presencia de SUV con capacidad de van — el cliente no siente que compra un furgón familiar."},{t:"8 pasajeros con lujo real",c:"Asientos reclinables, ventanas independientes, pantallas traseras opcionales."},{t:"Garantía 5 años — única en su segmento",c:"El Carnival combina la mayor capacidad de pasajeros de la línea Kia con los 5 años de garantía de la marca — nadie más ofrece esa combinación en Chile."},{t:"Versión híbrida hasta 47% más eficiente en ciudad",c:"El motor 1.6T HEV del Carnival logra hasta 17.6 km/l — en flotas o uso intenso, el ahorro en combustible es un argumento financiero concreto mes a mes."}],video:"",preguntas:[{p:"¿Cuántos pasajeros puede llevar el Kia Carnival?",op:["hasta 9 pasajeros","7 pasajeros fijos","8 pasajeros fijos","5 pasajeros"],r:0},{p:"¿Cuánto mide el maletero del Carnival con todos los asientos ocupados?",op:["627 L","2.827 L","380 L","519 L"],r:0},{p:"¿Cuánto mide de largo el Kia Carnival?",op:["5.115 mm","4.810 mm","4.568 mm","5.400 mm"],r:0},{p:"¿Cuánto consume el Kia Carnival HEV?",op:["hasta 17.6 km/l","hasta 8.5 km/l","hasta 22.0 km/l","hasta 11.0 km/l"],r:0},{p:"¿Cuántos años de garantía tiene el Kia Carnival?",op:["5 años / 100.000 km","3 años / 60.000 km","7 años / 150.000 km","2 años / 100.000 km"],r:0},{p:"¿Qué sistema de audio incluye el Carnival?",op:["Bose 12 parlantes","Meridian 14 parlantes","JBL 8 parlantes","Sistema básico 4 parlantes"],r:0},{p:"¿Cuál es la pantalla del Kia Carnival?",op:["Panorámica 25\" (12.3\" clúster + 12.3\" táctil)","12\" táctil simple","14.8\" central","21\" única"],r:0},{p:"¿Qué transmisión usa el Kia Carnival?",op:["8AT con E-Shift y paddle shifters","CVT","7DCT","6MT"],r:0},{p:"¿Cuál es la ventaja del Carnival sobre un SUV de 7 plazas como el Sorento?",op:["Mayor capacidad (hasta 9 plazas) y maletero expansible (2.827 L)","Mayor potencia de motor","Menor precio de compra","Mayor garantía"],r:0},{p:"¿Cuál es el argumento diferenciador del Carnival frente a quien lo ve como un 'furgón'?",op:["Diseño de SUV por fuera — líneas angulares, llantas grandes — nada de furgón convencional","Tiene el mismo precio que un furgón comercial","Usa el mismo chasis que un furgón Transit","Su carrocería es idéntica a la de una van de pasajeros"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Kia Carnival en Valenzuela & Delarze?","op":["$39.990.000","$34.990.000","$46.990.000","$29.990.000"],"r":0},{"p":"¿Cuanto cuesta el Kia EV6 desde en Valenzuela & Delarze?","op":["$67.990.000","$29.990.000","$99.990.000","$46.990.000"],"r":0}]},
+      "EV6":{tipo:"Crossover Eléctrico",specs:{"Motor":"Eléctrico AWD","Potencia":"321 hp","Torque":"605 Nm","Batería":"84 kWh","Autonomía":"hasta 522 km","Carga ultra-rápida 800V":"10→80% en 18 min (350 kW)","0-100 km/h":"5.3 s","Pantalla":"Doble curva panorámica 12.3\"+12.3\"","Audio":"Meridian premium","Llantas":"Aro 20\"","Incluye":"Cargador domiciliario + 3 mantenciones","Garantía":"5 años / 100.000 km"},argumentos:[{t:"Carga ultrarrápida 800V — 18 min al 80%",c:"Tecnología de hypercar en un eléctrico de uso diario — supera a cualquier rival en tiempo de carga."},{t:"Premio Auto del Año del Mundo",c:"El galardón más importante del sector — argumento externo que el cliente puede verificar."}],video:"",preguntas:[{p:"¿Cuánto tiempo tarda el EV6 en cargar de 10 a 80% con cargador 350kW?",op:["18 minutos","45 minutos","30 minutos","60 minutos"],r:0},{p:"¿Qué voltaje de arquitectura usa la plataforma E-GMP del EV6?",op:["800V — carga ultrarrápida","400V estándar","240V domiciliario","600V"],r:0},{p:"¿Qué premio ganó el Kia EV6?",op:["Auto del Año del Mundo 2022","Auto del Año Europa 2023","Auto del Año Chile 2022","Ningún premio relevante"],r:0},{p:"¿Cuántos km de autonomía tiene el EV6?",op:["hasta 506 km","hasta 600 km","hasta 400 km","hasta 300 km"],r:0},{p:"¿Cuántos segundos hace el EV6 de 0-100 km/h?",op:["5.2 s","7.0 s","3.5 s","8.0 s"],r:0},{p:"¿Qué sistema de audio incluye el EV6 en versiones superiores?",op:["Meridian premium","Bose","Harman Kardon","Bang & Olufsen"],r:0},{p:"¿Qué tamaño de pantalla dual tiene el EV6?",op:["12.3\" doble curva","14.8\" central","21\" panorámica","10.5\" simple"],r:0},{p:"¿Cuál es la garantía de la batería del EV6?",op:["5 años / 100.000 km (batería garantía separada)","3 años","8 años","10 años"],r:0},{p:"¿Qué incluye Kia con la compra del EV6 en Chile?",op:["Cargador domiciliario + 3 mantenciones gratuitas","Solo el cargador domiciliario","Solo las mantenciones","Ningún adicional"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Kia EV6 en Valenzuela & Delarze?","op":["$67.990.000","$55.990.000","$79.990.000","$46.990.000"],"r":0},{"p":"¿Cuanto cuesta el Kia EV5 desde en Valenzuela & Delarze?","op":["$29.990.000","$39.990.000","$46.990.000","$25.990.000"],"r":0}]},
+      "EV5":{tipo:"SUV Eléctrico",specs:{"Motor Light":"215 hp (160 kW) — 310 Nm — RWD","Motor Wave":"308 hp (230 kW) — 480 Nm — e-AWD","Batería Light":"64.2 kWh — 437 km","Batería Wave":"88.1 kWh — 537 km","Carga rápida DC":"30→80% en 27 min (102–141 kW)","Frunk":"67 L","Airbags":"6","Cámara":"360° 3D","Incluye":"Cargador domiciliario + 3 mantenciones","Garantía batería":"8 años"},argumentos:[{t:"537 km versión Wave — Santiago a Valdivia sin cargar",c:"La batería grande de 88.1 kWh entrega 537 km de autonomía certificada — desmonta el argumento de la autonomía con un recorrido concreto que el cliente chileno reconoce."},{t:"Batería con garantía 8 años",c:"Tranquilidad total para el cliente que duda del eléctrico por durabilidad."},{t:"Carga rápida 30→80% en 27 minutos",c:"El tiempo de una parada de descanso en ruta — convierte la recarga en hábito, no en problema."},{t:"Frunk de 67 L + maletero 513 L — doble espacio de carga",c:"El compartimento frontal es exclusivo de eléctricos — espacio extra que ningún SUV a gasolina puede ofrecer."}],video:"",preguntas:[{p:"¿Cuántos km de autonomía tiene el Kia EV5 versión Wave?",op:["537 km","437 km","600 km","400 km"],r:0},{p:"¿En cuánto tiempo carga la batería del EV5 de 30 a 80% en DC?",op:["27 minutos","60 minutos","15 minutos","45 minutos"],r:0},{p:"¿Cuántos años cubre la garantía de la batería del EV5?",op:["8 años","5 años","3 años","10 años"],r:0},{p:"¿Cuántos litros tiene el frunk (compartimento frontal) del EV5?",op:["67 L","37 L","100 L","No tiene frunk"],r:0},{p:"¿Cuánto mide el maletero trasero del Kia EV5?",op:["513 L","437 L","589 L","380 L"],r:0},{p:"¿Qué ruta puede hacer el EV5 Wave sin parada de carga en Chile?",op:["Santiago a Valdivia (~500 km)","Santiago a La Serena (~470 km)","Santiago a Puerto Montt (~1.000 km)","Solo uso urbano"],r:0},{p:"¿Cuál es el costo operativo aproximado del EV5 vs SUV gasolina?",op:["~$1.500/100km vs ~$6.000/100km gasolina","Igual costo que gasolina","Más caro que gasolina","$500/100km vs $3.000/100km gasolina"],r:0},{p:"¿Qué incluye Kia con la compra del EV5 en Chile?",op:["Cargador domiciliario + 3 mantenciones gratuitas","Solo el cargador domiciliario","Solo las mantenciones gratuitas","Ningún beneficio adicional"],r:0},{p:"¿En qué supera el EV5 al Omoda E5 en autonomía?",op:["EV5 Wave: 537 km vs E5: 430 km","EV5 tiene igual autonomía que el E5","E5 supera al EV5 en autonomía","EV5: 400 km vs E5: 430 km"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Kia EV5 en Valenzuela & Delarze?","op":["$29.990.000","$25.990.000","$39.990.000","$35.990.000"],"r":0},{"p":"¿Cuanto cuesta el Kia EV9 desde en Valenzuela & Delarze?","op":["$99.990.000","$67.990.000","$79.990.000","$89.990.000"],"r":0}]},
+      "EV9":{tipo:"SUV Eléctrico 7p",specs:{"Motor":"Eléctrico AWD","Batería":"99.8 kWh","Autonomía":"hasta 589 km","Carga ultra-rápida":"10→80% en 24 min (350 kW)","Pasajeros":"6 o 7 en tres filas","V2L":"3.6 kW (carga dispositivos externos)","Pantalla táctil":"12.3\"","Audio":"Meridian 14 parlantes","Airbags":"10","Llantas":"Aro 21\"","Sunroof":"Doble panorámico","Incluye":"Wall-box + 3 mantenciones","Garantía":"5 años / 100.000 km"},argumentos:[{t:"Único SUV eléctrico de 7 plazas en Chile",c:"Segmento sin competencia directa — el cliente no tiene otra opción real."},{t:"Carga bidireccional V2L",c:"Es una fuente de energía móvil de 3.6 kW — carga dispositivos externos desde el auto."}],video:"",preguntas:[{p:"¿Cuántos km de autonomía tiene el Kia EV9?",op:["hasta 589 km","hasta 563 km","hasta 500 km","hasta 400 km"],r:0},{p:"¿Cuántos pasajeros transporta el Kia EV9?",op:["6 o 7 pasajeros en 3 filas","5 pasajeros","8 pasajeros","Solo 5 en configuración base"],r:0},{p:"¿En cuánto tiempo carga el EV9 de 10 a 80%?",op:["24 minutos","45 minutos","60 minutos","18 minutos"],r:0},{p:"¿Cuántos kWh tiene la batería del EV9 en versión AWD?",op:["99.8 kWh","76.1 kWh","77.4 kWh","64 kWh"],r:0},{p:"¿Cuántos airbags tiene el Kia EV9?",op:["10 airbags","6 airbags","8 airbags","4 airbags"],r:0},{p:"¿Qué sistema de audio incluye el EV9?",op:["Meridian 14 parlantes","Bose 9 parlantes","Harman Kardon 12 parlantes","Sistema básico 6 parlantes"],r:0},{p:"¿Por qué el EV9 es único en Chile en su segmento?",op:["Es el único SUV eléctrico de 7 plazas disponible en el país","Es el único eléctrico con garantía de 5 años","Es el más barato de su categoría","Es el único con carga rápida en Chile"],r:0},{p:"¿Qué incluye Kia con la compra del EV9?",op:["Wall-box (cargador domiciliario) + 3 mantenciones gratuitas","Solo el Wall-box","Solo las mantenciones","Ningún adicional"],r:0},{p:"¿Cuál es el tamaño de llantas del EV9?",op:["Aro 21\"","Aro 18\"","Aro 20\"","Aro 19\""],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Kia EV9 en Valenzuela & Delarze?","op":["$99.990.000","$79.990.000","$67.990.000","$89.990.000"],"r":0},{"p":"¿Cuanto cuesta el Kia Sorento desde en Valenzuela & Delarze?","op":["$39.990.000","$29.990.000","$46.990.000","$25.990.000"],"r":0}]},
+      "Seltos":{tipo:"SUV Urbano",specs:{"Motor 1.4L Turbo":"138 hp — 242 Nm a 1.500–3.200 rpm","Motor 1.5L Gasolina":"115 hp","Transmisión":"7DCT / 6MT / CVT","Tracción":"FWD / AWD","Consumo":"hasta 18.9 km/l","Maletero":"433 L / 1.389 L (abatidos)","Pantalla":"Dual panorámica 10.25\"","Airbags":"6","Garantía":"5 años / 100.000 km"},argumentos:[{t:"El punto dulce entre Sonet y Sportage",c:"Más capaz que el Sonet, más manejable que el Sportage — SUV completo a precio justo."}],video:""},
+      "Sonet":{tipo:"SUV Compacto",specs:{"Motor":"1.0L T-GDI","Potencia":"120 hp","Transmisión":"6IMT / 7DCT","Tracción":"FWD","Garantía":"5 años / 100.000 km"},argumentos:[{t:"Precio de entrada Kia con garantía 5 años",c:"Accede a la garantía y confiabilidad Kia en el presupuesto más ajustado."}],video:""},
+      "K3":{tipo:"Sedán Compacto",specs:{"Motor":"1.6L MPI / 1.6T-GDI","Potencia":"128/204 hp","Transmisión":"6AT / 7DCT","Garantía":"5 años / 100.000 km"},argumentos:[{t:"Diseño sedán moderno con garantía imbatible",c:"Supera a rivales directos en equipamiento y garantía al mismo precio."}],video:""},
+      "K3 Cross":{tipo:"Sedán Crossover",specs:{"Motor":"1.6L T-GDI","Potencia":"204 hp","Transmisión":"7DCT","Garantía":"5 años / 100.000 km"},argumentos:[{t:"Sedán con estética SUV",c:"Para el cliente que quiere sedán pero con apariencia más aventurera — nicho entre ambos mundos."}],video:""},
+      "Morning":{tipo:"City Car",specs:{"Motor":"1.0L MPI / 1.0T-GDI","Potencia":"76/100 hp","Transmisión":"5MT / 4AT","Garantía":"5 años / 100.000 km"},argumentos:[{t:"El auto más pequeño, manejable y barato de Kia",c:"Para ciudad pura — estacionamiento fácil, bajo consumo, garantía 5 años."}],video:""},
+      "Carens":{tipo:"MPV Familiar 7p",specs:{"Motor":"1.5L T-GDI","Potencia":"160 hp","Pasajeros":"7","Garantía":"5 años / 100.000 km"},argumentos:[{t:"7 plazas con aspecto de SUV moderno",c:"La evolución del furgón familiar — el cliente no siente que compra una van."}],video:""},
+      "Frontier":{tipo:"Pickup Pequeña",specs:{"Motor":"1.5L MPI","Potencia":"99 hp","Transmisión":"5MT","Tracción":"4x2","Carga":"650 kg"},argumentos:[{t:"La pickup Kia más accesible del mercado",c:"Caja de carga al presupuesto más ajustado — para el cliente que necesita funcionalidad sin gasto."}],video:""},
+      "Soluto":{tipo:"Sedán Entrada",specs:{"Motor":"1.4L MPI","Potencia":"100 hp","Transmisión":"4AT","Garantía":"5 años / 100.000 km"},argumentos:[{t:"El sedán Kia más barato con garantía 5 años",c:"Transporte confiable y económico con el respaldo completo de la garantía Kia."}],video:""}
+    }
+  },
+  peugeot: {
+    name:"Peugeot", color:"#0054A6", icon:"P", emoji:"🦁",
+    models:{
+      "New 5008":{tipo:"SUV Grande 7p",specs:{"Motor":"1.2L PureTech Turbo + MHEV 48V","Potencia":"136 hp","Torque":"230 Nm","Transmisión":"6DCT automática","Consumo mixto":"19.6 km/l","Pasajeros":"7 (3 filas)","Largo":"4.791 mm","Ancho":"1.930 mm","Alto":"1.690 mm","Entre ejes":"2.900 mm","Maletero":"348 L / 916 L / 2.232 L","Pantalla":"21\" panorámica curva HD (GT)","i-Cockpit":"Sí","Garantía":"3 años / 100.000 km"},argumentos:[{t:"Pantalla de 21\" — la más grande del segmento",c:"Nadie más ofrece 21\" en un SUV de este precio — el factor wow del 5008 cierra demostraciones."},{t:"i-Cockpit exclusivo Peugeot",c:"Volante pequeño con cuadro elevado — sensación de deportividad que ningún rival tiene."},{t:"7 plazas con diseño europeo premium",c:"Alternativa al SUV japonés o coreano para el cliente que valora el diseño y origen francés."}],video:""},
+      "New 3008":{tipo:"SUV Mediano",specs:{"Motor":"1.2L PureTech Turbo + MHEV 48V","Potencia":"136 hp","Torque":"230 Nm","Transmisión":"6DCT automática","Consumo urbano":"23.5 km/l","Modo eléctrico ciudad":"+50% del tiempo","Pantalla":"21\" panorámica curva HD","i-Cockpit":"Sí","Garantía":"3 años / 100.000 km"},argumentos:[{t:"Gasolina, híbrido o eléctrico — un solo modelo",c:"El 3008 permite elegir la tecnología según el cliente — el SUV más versátil de Peugeot."},{t:"Pantalla de 21\" y diseño galardoneado",c:"Premio de diseño europeo — posicionamiento premium diferenciado de la competencia asiática."},{t:"Red Dot Award 2024 al diseño — el Oscar del diseño industrial",c:"El Peugeot E-3008 ganó el Red Dot 2024, el premio de diseño más prestigioso del mundo — argumento externo que el cliente puede verificar y que diferencia al 3008 de cualquier rival asiático."}],video:"",preguntas:[{p:"¿Cuántas pulgadas tiene la pantalla del Peugeot New 3008?",op:["21\" panorámica","12.3\" dual","14.8\" central","15.6\" única"],r:0},{p:"¿Qué premio de diseño ganó el Peugeot E-3008?",op:["Red Dot Award 2024","Auto del Año Europa 2024","Auto del Año del Mundo 2024","Diseño IF Award 2023"],r:0},{p:"¿Cuántas tecnologías de propulsión ofrece el New 3008?",op:["3: gasolina, hybrid y eléctrico","2: solo gasolina y hybrid","Solo gasolina disponible en Chile","4 motorizaciones diferentes"],r:0},{p:"¿Qué es el i-Cockpit de Peugeot?",op:["Volante pequeño posicionado bajo el cuadro digital — visión directa sin bajar la mirada","Pantalla táctil de 21\" con control por voz","Sistema de asistencia de carril avanzada","Cuadro de instrumentos 3D holográfico"],r:0},{p:"¿Cuál es la garantía del Peugeot New 3008?",op:["3 años / 100.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 60.000 km"],r:0},{p:"¿Por qué el New 3008 gana en pantalla al Kia Sportage?",op:["21\" del 3008 vs 12.3\" del Sportage — 9\" más de pantalla","12.3\" del 3008 vs 10.5\" del Sportage","Ambos tienen pantallas de igual tamaño","Sportage tiene mayor pantalla que el 3008"],r:0},{p:"¿En qué año llegó el New 3008 a Chile?",op:["2026","2024","2025","2023"],r:0},{p:"¿Cuál es el argumento diferenciador del 3008 vs los SUV asiáticos?",op:["Diseño galardoneado con Red Dot Award — distinción verificable que ningún SUV asiático ha ganado","Mayor garantía que los asiáticos","Menor precio que los rivales asiáticos","Mayor potencia que los rivales asiáticos"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Peugeot New 3008 en Valenzuela & Delarze?","op":["$24.490.000","$19.990.000","$29.490.000","$31.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Peugeot New 3008 con Santander con 50% de pie a 24 cuotas mas VFMG (Allure Hybrid)?","op":["$292.990","$223.990","$372.990","$180.000"],"r":0}]},
+      "New 208":{tipo:"Hatchback Premium",specs:{"Motor":"1.2L PureTech 100/130 / Eléctrico","Potencia":"100-130 hp / 136 hp","Transmisión":"5MT / 6AT","Autonomía EV":"hasta 362 km","Pantalla":"10\" i-Cockpit","Garantía":"3 años / 100.000 km"},argumentos:[{t:"El hatchback más elegante de Europa",c:"Diseño que no parece de su precio — entrada al lujo francés sin precio de lujo."},{t:"Eléctrico puro disponible en precio de hatchback",c:"Para el cliente que quiere dar el paso al EV al costo de un auto convencional."}],video:""},
+      "2008":{tipo:"SUV Compacto",specs:{"Motor":"1.2L PureTech 130","Potencia":"130 hp","Transmisión":"6AT","Tracción":"FWD","Garantía":"3 años / 100.000 km"},argumentos:[{t:"La entrada al mundo SUV Peugeot",c:"Diseño francés en formato SUV compacto — diferenciador estético frente a SUV asiáticos."}],video:""},
+      "308":{tipo:"Hatchback/Fastback",specs:{"Motor":"1.2L PureTech 130 / Hybrid","Potencia":"130/180 hp","Transmisión":"8AT","Garantía":"3 años / 100.000 km"},argumentos:[{t:"Auto del Año en Europa",c:"El 308 ganó el premio más importante del sector — credibilidad externa para cerrar la venta."}],video:""},
+      "Rifter":{tipo:"Familiar Versátil",specs:{"Motor":"1.5L BlueHDi / 1.2L PureTech","Pasajeros":"5-7","Transmisión":"5MT / 8AT","Garantía":"3 años"},argumentos:[{t:"Máxima versatilidad familiar a precio razonable",c:"Modular, alto techo, múltiples configuraciones — para la familia que necesita espacio real."}],video:""},
+      "Partner":{tipo:"Furgón Compacto",specs:{"Motor":"1.5L BlueHDi","Carga":"hasta 800 kg","Volumen":"3.3 m³","Tracción":"FWD"},argumentos:[{t:"Líder europeo en furgones compactos",c:"Referente en entregas urbanas — eficiencia probada en flotas de todo el mundo."}],video:""},
+      "Landtrek":{tipo:"Pickup",specs:{"Motor":"1.9L Diesel","Potencia":"163 hp","Tracción":"4x4","Carga":"1.000 kg","Remolque":"3.000 kg"},argumentos:[{t:"Pickup europea a precio competitivo",c:"Diferenciación por origen europeo en un segmento dominado por marcas asiáticas."}],video:""},
+      "Traveller":{tipo:"Van Premium 9p",specs:{"Motor":"2.0L BlueHDi","Pasajeros":"hasta 9","Transmisión":"8AT"},argumentos:[{t:"Transporte ejecutivo europeo",c:"Alternativa premium al Transit para traslados corporativos de alta calidad."}],video:""},
+      "Expert":{tipo:"Furgón Mediano",specs:{"Motor":"2.0L BlueHDi","Volumen":"hasta 6.6 m³","Carga":"hasta 1.400 kg"},argumentos:[{t:"Capacidad media para delivery y distribución",c:"Entre el Partner y el Boxer — ideal para servicios que necesitan más de 3 m³ sin llegar al furgón grande."}],video:""},
+      "Boxer":{tipo:"Furgón Grande",specs:{"Motor":"2.2L BlueHDi","Potencia":"140 hp","Volumen":"hasta 17 m³","Carga":"hasta 1.900 kg"},argumentos:[{t:"El furgón de mayor capacidad Peugeot",c:"Para el cliente que necesita el máximo volumen sin llegar a camión."}],video:""}
+    }
+  },
+  jeep: {
+    name:"Jeep", color:"#2D5F2D", icon:"J", emoji:"🏔️",
+    models:{
+      "Wrangler":{tipo:"Off-Road Icónico",specs:{"Motor":"Pentastar® V6 3.6L Stop/Start","Potencia":"272 hp","Torque":"353 Nm","Transmisión":"8AT automática","Reducción Rock-Trac":"4:1","Vadeado":"762 mm","Despeje suelo":"226 mm","Batería":"700 Amp libre de mantenimiento","Alternador":"240 Amp","Pantalla":"Uconnect® 5 — 12.3\" táctil","Conectividad":"Apple CarPlay® inalámbrico","Capota":"Removible","Puertas":"Removibles","Garantía":"3 años / 60.000 km"},argumentos:[{t:"El 4x4 más icónico del mundo",c:"Decir 'Jeep Wrangler' en cualquier país genera reconocimiento instantáneo — vende solo."},{t:"Único certificado Trail Rated",c:"Desempeño garantizado en rocas, barro, arena, nieve y agua — nadie más ofrece este certificado."},{t:"Capota y puertas removibles legalmente",c:"Experiencia sin igual — el cliente compra una vivencia, no solo un vehículo."},{t:"Comunidad Wrangler activa",c:"Clubs, expediciones, identidad. El cliente compra más que un auto — entra a una comunidad."}],video:"",preguntas:[{p:"¿Qué certificación exclusiva tiene el Jeep Wrangler?",op:["Trail Rated — desempeño garantizado en 5 terrenos","4x4 Plus — tracción certificada en pavimento","Off-Road Gold — certificación europea","No tiene certificación especial"],r:0},{p:"¿Cuántos mm de vadeado tiene el Jeep Wrangler?",op:["762 mm","500 mm","600 mm","851 mm"],r:0},{p:"¿Cuál es la relación de reducción Rock-Trac del Wrangler?",op:["4:1","2:1","6:1","3:1"],r:0},{p:"¿Qué característica visual icónica diferencia al Wrangler?",op:["Capota y puertas removibles legalmente","Motor V8 de serie","Techo panorámico eléctrico","Llantas de aro 22\""],r:0},{p:"¿Qué motor lleva el Wrangler en su versión gasolina estándar?",op:["Pentastar V6 3.6L Stop/Start","4 cilindros 2.0L Turbo","V8 5.7L HEMI","V6 3.0L Diésel"],r:0},{p:"¿Cuántos mm de despeje al suelo tiene el Wrangler?",op:["226 mm","283 mm","200 mm","250 mm"],r:0},{p:"¿Cuál es la garantía del Jeep Wrangler?",op:["3 años / 60.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 100.000 km"],r:0},{p:"¿Qué argumento social/comunidad se usa para vender el Wrangler?",op:["El cliente entra a una comunidad de clubs y expediciones — compra más que un auto","Es el auto más económico de su segmento","Tiene la garantía más larga del mercado","Es el más rápido de 0-100 en su segmento"],r:0},{p:"¿Cuál es el argumento diferenciador del Wrangler frente al Ford Bronco?",op:["Mayor historia, comunidad más grande y certificación Trail Rated exclusiva","Mayor potencia de motor","Mayor garantía de fábrica","Mayor pantalla de infotainment"],r:0},{p:"¿Qué actualización destacó el Wrangler en la versión 2026?",op:["Infotainment adaptativo y conectividad avanzada sin alterar el ADN off-road","Motor V8 de serie","Suspensión neumática electrónica","Puertas y capota eléctricas"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Jeep Wrangler Sport en Valenzuela & Delarze?","op":["$56.990.000","$46.990.000","$62.990.000","$52.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Jeep Wrangler Sport con Santander con 50% de pie a 24 cuotas mas VFMG?","op":["$635.990","$520.990","$750.000","$450.000"],"r":0}]},
+      "Grand Cherokee":{tipo:"SUV Premium Grande",specs:{"Motor":"V6 3.6L 295 hp","Transmisión":"8AT","Tracción":"AWD / 4x4","Pasajeros":"5","Suspensión":"Quadra-Lift neumática","Pantalla":"10.1\" Uconnect 5","Faros":"Bi-Xenón adaptativos","Llantas":"18\"","Garantía":"3 años / 60.000 km"},argumentos:[{t:"Off-road de lujo — categoría propia",c:"Suspensión de altura variable + interiores de cuero italiano — no existe rival directo a este precio."},{t:"4xe: circula 40 km en modo eléctrico",c:"El SUV grande más eficiente en ciudad gracias al híbrido enchufable."}],video:""},
+      "Compass":{tipo:"SUV Compacto",specs:{"Motor T270":"1.3L Turbo 175 CV","Motor Hurricane":"2.0L Turbo 272 CV","Transmisión":"6AT / 9AT","Tracción":"FWD / AWD","Pantalla":"10.1\" Uconnect 5","Seguridad":"Frenado autónomo, punto ciego","Iluminación":"Full LED","Garantía":"3 años / 60.000 km"},argumentos:[{t:"La entrada más accesible al mundo Jeep",c:"Para el cliente que quiere la marca y la garantía sin el precio del Wrangler."},{t:"Uconnect 5 — mejor sistema del segmento",c:"Múltiples pruebas de medios especializados lo posicionan como líder en infoentretenimiento."}],video:""},
+      "Commander":{tipo:"SUV 7 plazas",specs:{"Motor T270 gasolina":"175 CV — 270 Nm (6AT)","Motor Hurricane 272 CV":"272 CV (9AT)","Tracción":"FWD / AWD","Pasajeros":"7","Carrocería":"79% aceros ultra-resistencia","Iluminación":"Bi-LED en todas las versiones","Garantía":"3 años / 60.000 km"},argumentos:[{t:"7 plazas con ADN Jeep real",c:"Las familias que quieren off-road y 7 plazas tienen pocas opciones — el Commander es la respuesta."}],video:""},
+      "Avenger":{tipo:"SUV Compacto / EV",specs:{"Motor gasolina":"1.2L Turbo 100 hp","Motor eléctrico":"156 hp — hasta 400 km","Transmisión":"Automática","Tracción":"FWD","Largo":"4.084 mm","Ancho":"1.776 mm","Alto":"1.526 mm","Garantía":"3 años / 60.000 km"},argumentos:[{t:"Auto del Año en Europa 2023",c:"El premio más importante del sector — el aval externo más fuerte que puede tener un auto."},{t:"Jeep compacto para ciudad",c:"El ADN Jeep en formato pequeño y urbano — para el cliente que ama la marca pero vive en ciudad."}],video:""},
+      "New Renegade":{tipo:"SUV Compacto",specs:{"Motor T270":"1.3L Turbo 175 CV","Motor 4xe":"1.3T + eléctrico 190 CV AWD","Transmisión":"6AT","Iluminación":"Full LED en todas las versiones","Seguridad":"Frenado autónomo, control punto ciego","Garantía":"3 años / 60.000 km"},argumentos:[{t:"El Jeep más joven y carismático",c:"Diseño juguetón y personalidad fuerte — para el cliente joven o que quiere salir de lo ordinario."}],video:""}
+    }
+  },
+  fiat: {
+    name:"Fiat", color:"#C8102E", icon:"FT", emoji:"🇮🇹",
+    models:{
+      "500e":{tipo:"City Car Eléctrico Premium",specs:{"Motor":"Eléctrico 87 kW (118 hp)","Batería":"42 kWh","Autonomía":"hasta 320 km","Carga rápida DC 85kW":"50 km en 5 minutos / 80% en 35 min","Tipo":"Hatchback / Cabrio","Transmisión":"Automática 1 velocidad","Garantía":"2 años"},argumentos:[{t:"Ícono italiano ahora eléctrico",c:"El 500 es uno de los autos más reconocidos del mundo — ahora eléctrico y moderno."},{t:"Único eléctrico convertible accesible",c:"El 500e Cabrio no tiene rival — nicho sin competencia para el cliente que quiere sol y silencio."},{t:"Objeto de diseño, no solo un auto",c:"No es un auto barato — es una pieza de diseño italiano que también es eléctrica."}],video:""},
+      "Fastback":{tipo:"SUV Fastback",specs:{"Motor":"1.3L Turbo 185 hp","Transmisión":"6DCT","Tracción":"FWD","Maletero":"600 L","Largo":"4.550 mm","AEB":"Frenado autónomo con reconocimiento de vehículos","Modo Sport":"Respuestas más ágiles","Garantía":"2 años"},argumentos:[{t:"Silueta coupé única en su segmento",c:"La línea fastback lo diferencia visualmente de todos sus competidores — no pasa desapercibido."},{t:"516 L en SUV coupé — sin sacrificio",c:"Normalmente los diseños coupé sacrifican maletero — el Fastback no lo hace."}],video:""},
+      "Pulse":{tipo:"SUV Compacto",specs:{"Motor":"1.0L Firefly Turbo 130 hp","Transmisión":"CVT automática","Tracción":"FWD","Largo":"4.089 mm","Maletero":"370 L","ADAS":"AEB, mantenimiento carril, luces altas automáticas","Acceso":"Encendido remoto e ingreso sin llave","Garantía":"2 años"},argumentos:[{t:"Diseño italiano a precio de segmento",c:"Para el cliente que quiere diferenciarse de marcas asiáticas con carácter europeo al mismo precio."}],video:""}
+    }
+  },
+  ram: {
+    name:"Ram", color:"#B01C2E", icon:"R", emoji:"🐏",
+    models:{
+      "1500":{tipo:"Pickup Full Size",specs:{"Motor Big Horn":"3.6L V6 Pentastar 305 hp","Motor Laramie":"3.0L Biturbo Diésel 420 hp — 635 Nm","Consumo carretera":"10.6 km/l","Consumo mixto":"8.9 km/l","Consumo ciudad":"7.6 km/l","Transmisión":"8AT automática","Remolque":"hasta 5.800 kg","Pantalla":"14.4\"","Audio":"Harman Kardon 19 parlantes","Suspensión":"Neumática (Laramie)","Pisaderas":"Eléctricas","Garantía":"3 años / 60.000 km"},argumentos:[{t:"HEMI V8 — el sonido que vende solo",c:"El V8 HEMI tiene un sonido y torque que el cliente siente diferente desde la primera conducción."},{t:"Interior Laramie de clase mundial",c:"El Ram 1500 Laramie tiene un interior que compite con pickups de lujo a precio inferior."},{t:"5.8 ton de remolque",c:"Capacidad real para el cliente que trabaja — dato concreto y verificable."},{t:"Suspensión neumática de serie en versión top",c:"Tecnología exclusiva de segmento full-size — el RAM 1500 es la única pickup en Chile con suspensión neumática ajustable incluida de fábrica."}],video:"",preguntas:[{p:"¿Qué motor tiene la Ram 1500 Laramie?",op:["3.0L Biturbo Diesel 420 hp","3.6L V6 Pentastar 305 hp","5.7L HEMI V8 395 hp","2.7L EcoBoost 325 hp"],r:0},{p:"¿Cuánto puede remolcar la Ram 1500?",op:["hasta 5.800 kg","hasta 3.500 kg","hasta 9.000 kg","hasta 2.000 kg"],r:0},{p:"¿Qué tamaño de pantalla tiene la Ram 1500 Laramie?",op:["14.4\"","12.3\"","10.1\"","15.6\""],r:0},{p:"¿Qué sistema de audio tiene la Ram 1500?",op:["Harman Kardon 19 parlantes","Bose 12 parlantes","Meridian 14 parlantes","JBL básico"],r:0},{p:"¿Qué tipo de suspensión tiene la Ram 1500 Laramie?",op:["Suspensión neumática ajustable","Suspensión de resortes convencional","Suspensión Fox Racing","Suspensión de aire importada"],r:0},{p:"¿Cuánto creció RAM en Chile durante 2025?",op:["15%","5%","30%","50%"],r:0},{p:"¿Qué motor tiene la Ram 1500 Big Horn?",op:["3.6L V6 Pentastar 305 hp","3.0L Diesel 420 hp","5.7L HEMI V8 395 hp","2.7L Turbo 280 hp"],r:0},{p:"¿Cuál es la garantía de la Ram 1500?",op:["3 años / 60.000 km","5 años / 100.000 km","2 años / 60.000 km","3 años / 100.000 km"],r:0},{p:"¿Qué hace única la suspensión neumática Laramie en Chile?",op:["Es la única pickup en Chile con suspensión neumática ajustable de fábrica","Es la suspensión más barata del segmento","La tienen también la Ranger y la Hilux","Solo viene en versión 4x2"],r:0},{p:"¿Por qué la Ram 1500 NO compite directamente con la Ranger o la Hilux?",op:["Ram 1500 es full size (mayor tamaño, potencia y lujo) — categoría diferente","No hay diferencia, compiten en el mismo segmento","La Ranger es más cara que la Ram 1500","La Ram 1500 tiene menos capacidad que la Ranger"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Ram 1500 en Valenzuela & Delarze?","op":["$39.990.000","$46.990.000","$56.990.000","$33.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Ram 1500 con Santander con 50% de pie a 24 cuotas mas VFMG (version diesel)?","op":["$520.990","$435.710","$635.990","$350.000"],"r":0}]},
+      "2500":{tipo:"Pickup Heavy Duty",specs:{"Motor":"6.7L Cummins Turbo Diésel","Potencia":"430 hp","Torque":"1.084 Nm","Transmisión":"Aisin 8AT","Tracción":"4×4","Carga útil":"1.287 kg","Remolque":"hasta 9.072 kg","Llantas":"18\" o 20\" aluminio","Sistema almacenamiento":"Rambox","Enganche":"Clase V","Garantía":"3 años / 60.000 km"},argumentos:[{t:"1.084 Nm de torque — el más alto del segmento",c:"El motor Cummins es legendario en agricultura, minería y construcción — el cliente de trabajo lo conoce."},{t:"9 toneladas de remolque",c:"Para el cliente que trabaja en serio — puede tirar maquinaria, ganado, embarcaciones grandes."}],video:""},
+      "700":{tipo:"Pickup Mediana",specs:{"Motor gasolina":"2.4L Tigershark 178 hp","Motor V6":"3.6L V6 305 hp","Transmisión":"9AT CVT","Tracción":"4×2 / 4×4","Despeje suelo":"hasta 208 mm","Ángulo de entrada":"24°","Carga":"780 kg","Garantía":"3 años / 60.000 km"},argumentos:[{t:"La entrada a Ram más manejable y eficiente",c:"Para el cliente que quiere pickup americana sin el tamaño y consumo de la 1500."}],video:""},
+      "Rampage":{tipo:"Pickup Compacta Deportiva",specs:{"Motor gasolina R/T":"2.0L Turbo 272 hp — 400 Nm","Motor diésel Bighorn/Laramie":"2.2L 200 hp","Transmisión":"9AT","Tracción":"4×4 con modo Low","Carga útil R/T":"750 kg","Carga útil diesel":"1.015 kg","Volumen caja":"980 L","Pantalla":"12.3\" Android Auto/CarPlay inalámbrico","Cluster digital":"10.3\"","Airbags":"7 (R/T) / 6 (Bighorn)","Garantía":"3 años / 60.000 km"},argumentos:[{t:"La pickup más deportiva de Ram",c:"Líneas coupé y el motor más potente de su segmento — para el cliente que no quiere elegir entre estilo y funcionalidad."},{t:"AWD de alto rendimiento activo",c:"No es 4x4 básico — el sistema gestiona la tracción activamente para cada situación."}],video:""}
+    }
+  },
+  omoda: {
+    name:"Omoda | Jaecoo", color:"#E05F00", icon:"OJ", emoji:"🟠",
+    models:{
+      "C5":{tipo:"SUV Compacto",specs:{"Motor Urban/Comfort/Luxury":"1.5T Gasolina CVT","Motor Prestige":"1.6T GDI DCT-7","Potencia":"197 hp (1.6T)","Torque":"290 Nm (1.6T)","Pantalla":"Panel digital 20\" (dos pantallas 10.25\")","Airbags":"6","Cámara":"360° FHD","ADAS":"Más de 13 sistemas de asistencia","Garantía":"5 años / 150.000 km"},argumentos:[{t:"Garantía 5 años / 150.000 km — la mejor del mercado",c:"Supera a Kia, Toyota, Hyundai — nadie más ofrece 150.000 km. Argumento imbatible."},{t:"197 hp y 14.8\" a precio competitivo",c:"Tecnología de pantalla y potencia que en otras marcas viene en versiones de mayor precio."},{t:"Marca nueva = diferenciación",c:"Para el cliente que no quiere el auto de todos — Omoda ofrece exclusividad relativa con garantía sólida."},{t:"Top 5 SUV más vendido en Chile — 2025",c:"En menos de 2 años en el mercado, el C5 ya es top 5 de ventas en su segmento en Chile — el mercado lo validó antes que el cliente tomara su decisión."},{t:"Versión híbrida en camino — plataforma con futuro",c:"El OMODA C5 SHS-H híbrido (5.3L/100km) llega a Chile en 2026 — el cliente que compra hoy invierte en una familia de modelos con desarrollo activo."}],video:"",preguntas:[{p:"¿Cuál es la garantía del Omoda C5?",op:["5 años / 150.000 km","5 años / 100.000 km","3 años / 100.000 km","7 años / 200.000 km"],r:0},{p:"¿Qué tamaño tiene la pantalla central del Omoda C5?",op:["14.8\"","12.3\"","10.5\"","15.6\""],r:0},{p:"¿Cuántos sistemas ADAS incluye el Omoda C5?",op:["Más de 13","Solo 5","Solo 3","No incluye ADAS"],r:0},{p:"¿Cuál es el motor del Omoda C5?",op:["1.6T con 290 Nm de torque","1.5T con 200 Nm","2.0T con 350 Nm","1.8T con 270 Nm"],r:0},{p:"¿En qué posición quedó el Omoda C5 en ventas SUV en Chile durante 2025?",op:["Top 5 SUV más vendido","Top 10 pero fuera del Top 5","Primer lugar","Fuera del Top 20"],r:0},{p:"¿Cuál es el maletero del Omoda C5?",op:["440 L","589 L","380 L","540 L"],r:0},{p:"¿Qué tipo de transmisión usa el Omoda C5?",op:["7DCT","CVT","6AT","8AT"],r:0},{p:"¿Por qué la garantía del C5 supera a la de Kia?",op:["C5: 5 años / 150.000 km vs Kia: 5 años / 100.000 km — 50.000 km más de cobertura","C5 tiene 7 años vs 5 de Kia","C5 tiene 3 años pero sin límite de km","Ambas garantías son idénticas"],r:0},{p:"¿Qué versión híbrida se proyecta del Omoda C5 para Chile?",op:["OMODA C5 SHS-H con 5.3L/100km","OMODA C5 PHEV con 30km eléctrico","OMODA C5 EV con 400km de autonomía","No hay versión híbrida planeada"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Omoda C5 en Valenzuela & Delarze?","op":["$12.490.000","$9.990.000","$15.990.000","$17.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Omoda C5 con Forum con 50% de pie a 48 cuotas mas VFMG?","op":["$224.900","$177.990","$308.900","$350.000"],"r":0}]},
+      "E5":{tipo:"SUV Eléctrico",specs:{"Motor":"Eléctrico 201 hp (150 kW)","Torque":"340 Nm","Batería":"LFP 60 kWh","Autonomía":"430 km (ciclo WLTP)","0-100 km/h":"7.6 s","Carga DC":"80 kW","Pantalla":"14.8\"","Tracción":"FWD","Garantía":"5 años / 150.000 km"},argumentos:[{t:"SUV eléctrico con la garantía más larga del mercado",c:"5 años / 150.000 km — para el cliente que duda del eléctrico por durabilidad, la respuesta es definitiva."},{t:"430 km — supera la barrera psicológica",c:"Muchos clientes exigen 400 km mínimo — el E5 los supera con margen."}],video:""},
+      "J7 SHS":{tipo:"SUV Híbrido Serie",specs:{"Sistema":"Super Hybrid Series (SHS)","Motor gasolina":"1.5T — solo genera electricidad","Potencia sistema":"256 hp","Torque":"525 Nm","Autonomía total":"más de 1.200 km","Modo EV puro":"80 km","Tracción":"4WD","Pantalla":"FHD 14.8\"","Airbags":"7","Garantía":"5 años / 150.000 km"},argumentos:[{t:"1.300 km de autonomía total — el más largo de Chile",c:"La angustia de rango desaparece completamente — nadie se queda varado con 1.300 km disponibles."},{t:"80 km solo eléctrico — sin enchufar",c:"Para el 80% de los días, el cliente no gasta gasolina — ahorro real sin necesidad de cargador."},{t:"Motor a gasolina solo genera electricidad",c:"El sistema serie es más eficiente en ciudad — el eléctrico siempre mueve las ruedas."}],video:"",preguntas:[{p:"¿Cuántos km de autonomía total tiene el Jaecoo J7 SHS?",op:["hasta 1.200 km","hasta 600 km","hasta 800 km","hasta 400 km"],r:0},{p:"¿Cuántos km puede recorrer el J7 SHS en modo solo eléctrico?",op:["80 km","30 km","50 km","100 km"],r:0},{p:"¿Cómo funciona el sistema SHS del Jaecoo J7?",op:["Motor gasolina solo genera electricidad; el eléctrico siempre mueve las ruedas","Motor gasolina y eléctrico mueven las ruedas simultáneamente","Motor gasolina mueve las ruedas; eléctrico solo asiste en arranque","Es un sistema enchufable donde el eléctrico se recarga solo en frenada"],r:0},{p:"¿Cuánto torque tiene el J7 SHS?",op:["525 Nm","290 Nm","400 Nm","240 Nm"],r:0},{p:"¿Cuál es la garantía del Jaecoo J7 SHS?",op:["5 años / 150.000 km","5 años / 100.000 km","3 años / 100.000 km","7 años / 200.000 km"],r:0},{p:"¿Qué tamaño de pantalla tiene el Jaecoo J7 SHS?",op:["FHD 14.8\"","12.3\"","15.6\"","10.5\""],r:0},{p:"¿Por qué el sistema SHS es más eficiente en ciudad que un híbrido paralelo?",op:["El eléctrico siempre controla las ruedas — el gasolina nunca mueve directamente","El gasolina es más pequeño que en hibridos convencionales","Usa batería más grande que los rivales","El sistema SHS no tiene motor de gasolina"],r:0},{p:"¿Cuántos airbags tiene el Jaecoo J7 SHS?",op:["7 airbags","4 airbags","6 airbags","10 airbags"],r:0},{p:"¿Por qué la garantía del J7 SHS supera en km a la del Kia Sportage HEV?",op:["J7 SHS: 5 años / 150.000 km vs Sportage: 5 años / 100.000 km — 50.000 km más","Tienen la misma garantía exacta","Sportage tiene mayor garantía en años","J7 SHS tiene 7 años vs 5 de Sportage"],r:0},{"p":"¿Cuál es el precio de lista con financiamiento del Jaecoo J7 SHS en Valenzuela & Delarze?","op":["$22.990.000","$18.490.000","$26.990.000","$19.990.000"],"r":0},{"p":"¿Cuál es la cuota mensual del Jaecoo J7 SHS con Forum con 50% de pie a 48 cuotas mas VFMG?","op":["$308.900","$224.900","$399.900","$250.000"],"r":0}]},
+      "J8":{tipo:"SUV Grande Premium",specs:{"Motor":"2.0T GDI","Potencia":"261 hp","Transmisión":"8AT","Tracción":"4WD","Pantalla":"15.6\"","Suspensión":"Air Spring neumática","Pasajeros":"5","Garantía":"5 años / 150.000 km"},argumentos:[{t:"Suspensión neumática en este rango de precio",c:"Tecnología de Range Rover — Jaecoo la ofrece a una fracción del precio de la competencia premium."},{t:"261 hp + 8AT + garantía 5 años",c:"Potencia, refinamiento y respaldo — la combinación que justifica la conversación de precio."}],video:""},
+      "J6":{tipo:"SUV Mediano AWD",specs:{"Motor":"1.6T GDI","Potencia":"197 hp","Transmisión":"7DCT","Tracción":"AWD","Pantalla":"14.8\"","Airbags":"6","Garantía":"5 años / 150.000 km"},argumentos:[{t:"AWD + garantía 5 años / 150.000 km",c:"Tracción total con la garantía más larga del mercado — combinación difícil de rebatir."}],video:""},
+      "J7":{tipo:"SUV Mediano",specs:{"Motor":"1.5T / 2.0T GDI","Potencia":"156 / 261 hp","Transmisión":"7DCT / 8AT","Tracción":"FWD / 4WD (ARDIS)","Suspensión trasera":"Multi-link independiente","Pantalla":"15.6\"","Garantía":"5 años / 150.000 km"},argumentos:[{t:"Pantalla de 15.6\" — la más grande del segmento",c:"El J7 tiene la pantalla más grande de cualquier SUV a su precio — impacto visual inmediato en el cliente."}],video:""}
+    }
+  }
+};
+
+// ══════════════════════════════════════════════════════════
+// LOGOS DE MARCA — valenzueladelarze.cl
+// ══════════════════════════════════════════════════════════
+const BRAND_LOGOS = {
+  honda:   "https://www.valenzueladelarze.cl/wp-content/uploads/2023/04/logo-honda-e1683978938763.jpeg",
+  ford:    "https://www.valenzueladelarze.cl/wp-content/uploads/2025/02/logo-ford-1.jpeg",
+  kia:     "https://www.valenzueladelarze.cl/wp-content/uploads/2023/04/logo-kia.jpeg",
+  peugeot: "https://www.valenzueladelarze.cl/wp-content/uploads/2023/04/logo-peugeot.jpeg",
+  jeep:    "https://www.valenzueladelarze.cl/wp-content/uploads/2023/04/logo-jeep.jpeg",
+  fiat:    "https://www.valenzueladelarze.cl/wp-content/uploads/2023/04/logo-fiat.jpeg",
+  ram:     "https://www.valenzueladelarze.cl/wp-content/uploads/2025/02/logo-ram.jpeg",
+  omoda:   "https://www.valenzueladelarze.cl/wp-content/uploads/2026/04/OJLOGO2026_%E7%94%BB%E6%9D%BF-1-4-scaled.png"
+};
+
+// IMÁGENES — valenzueladelarze.cl
+// ══════════════════════════════════════════════════════════
+const IMAGES = {
+  honda: {
+    "CR-V":                  "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/HONDA-CRV.jpg",
+    "CR-V Advanced Hybrid":  "https://www.valenzueladelarze.cl/wp-content/uploads/2025/04/Honda-CRV-H.jpg",
+    "Civic":                 "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/HONDA-CIVIC-1.jpg",
+    "ZR-V":                  "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/HONDA-ZRV.jpeg",
+    "HR-V":                  "https://www.valenzueladelarze.cl/wp-content/uploads/2025/10/HONDA-HRV-1.jpeg",
+    "Pilot":                 "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/HONDA-PILOT-1.jpg",
+    "WR-V":                  "https://www.valenzueladelarze.cl/wp-content/uploads/2026/01/HONDA-WRV-1.jpg"
+  },
+  ford: {
+    "Explorer":              "https://www.valenzueladelarze.cl/wp-content/uploads/2024/11/New-ford-explorer-2025.jpg",
+    "Transit Custom":        "https://www.valenzueladelarze.cl/wp-content/uploads/2024/09/New-Transit-Custom-1-1.jpg",
+    "Bronco":                "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/ford-bronco-nuevo.jpg",
+    "Transit Furgón":        "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/Ford-Furgon.jpg",
+    "Transit Bus":           "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/Ford-Bus.jpg",
+    "Transit Chasis":        "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/Ford-Chasis.jpg",
+    "Territory":             "https://www.valenzueladelarze.cl/wp-content/uploads/2025/09/nueva-ford-territory-1.jpg",
+    "F-150":                 "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/Nueva-FORD-F150.jpg",
+    "Ranger":                "https://www.valenzueladelarze.cl/wp-content/uploads/2023/11/RANGER.jpg",
+    "Expedition":            "https://www.valenzueladelarze.cl/wp-content/uploads/2025/09/expedition-auto.jpg",
+    "Bronco Sport":          "https://www.valenzueladelarze.cl/wp-content/uploads/2026/04/Broncosport-removebg-preview.png",
+    "F-150 Raptor":          "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/F-150-Raptor.jpg",
+    "Ranger Raptor":         "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/Ford-Ranger-Raptor-1.jpg",
+    "Maverick":              "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/maverick-fordjpg.jpg",
+    "Mustang":               "https://www.valenzueladelarze.cl/wp-content/uploads/2024/08/Mustang.jpg"
+  },
+  kia: {
+    "Tasman":   "https://adobe.dynamicmedia.deliver/dm-aid--0357e0e7-8bfc-49bf-a49d-9f016d0c5e5d/banner-web-tasman.jpg?preferwebp=true&quality=85",
+    "Sportage": "https://adobe.dynamicmedia.deliver/dm-aid--00953ab7-2bbf-493d-aeef-8653b62741d6/nuevo-sportage-portada-interior-800.jpg?quality=85&preferwebp=true",
+    "EV5":      "https://www.kia.cl/content/dam/indumotora/kia-ev5-site/EV5_EXT_001-ta-p0OXA.jpg",
+    "Carnival": "https://adobe.dynamicmedia.deliver/dm-aid--bb95e6c0-3393-4fb8-b239-92095a8e98bb/portada-nueva-carnival-v4.jpg?quality=85&preferwebp=true",
+    "Sorento":  "https://adobe.dynamicmedia.com/deliver/dm-aid--29c5997b-6b44-46fc-938f-31ca470f6fae/portada-sorento-sesion-w.jpg?preferwebp=true&quality=85",
+    "Sonet":    "https://adobe.dynamicmedia.com/dm-aid--9cc729f6-b7b8-4f4c-b984-920e0e2c5a1c/portada-nuevo-sonet-w-1920x948.jpg?quality=85&preferwebp=true",
+    "K3 Cross": "https://www.kia.cl/adobe/dynamicmedia/deliver/dm-aid--c7c4be4c-82a9-4864-88f8-14ac73d430c9/portada-k3cross-city.jpg?quality=85&preferwebp=true",
+    "Seltos":   "https://adobe.dynamicmedia.com/deliver/dm-aid--59519553-2882-4402-99ad-f42a6ab4fc47/portada-kia-seltos-w-.jpg?preferwebp=true&quality=85",
+    "K3":       "https://www.kia.cl/adobe/dynamicmedia/deliver/dm-aid--bdaefc15-c4e4-4e68-b5d2-dce32a5848fa/portada-k3-w-1920x948.jpg?quality=85&preferwebp=true",
+    "EV9":      "https://www.kia.cl/adobe/dynamicmedia/deliver/dm-aid--d1209bb1-c606-4711-b766-48db386db6dd/1600x900-ev9-premios.jpg?quality=85&preferwebp=true",
+    "EV6":      "https://www.kia.cl/adobe/dynamicmedia/deliver/dm-aid--93e7dc78-8b80-4f55-8c4e-bd36683e3bc1/1600x900-ev6-premios.jpg?quality=85&preferwebp=true",
+    "Carens":   "https://adobe.dynamicmedia.com/deliver/dm-aid--25a09c89-2c9e-4a0e-8ebb-24ac3f21c312/web-nueva-carens-portada-1920x1080.jpg?preferwebp=true&quality=85",
+    "Frontier": "https://www.kia.cl/adobe/dynamicmedia/deliver/dm-aid--4746461b-1433-4c52-be93-36bbc89a3c16/frontier-cabina-simple-pick-up-2-desktop-1920x948.jpg?quality=85&preferwebp=true",
+    "Soluto":   "https://www.kia.cl/adobe/dynamicmedia/deliver/dm-aid--274fe4d3-a700-4ae1-8f9f-330bce8bafc1/principal-logo-nuevo--manillas-color-carroceri-a-ok-desktop-1920x948.jpg?quality=85&preferwebp=true"
+  },
+  peugeot: {
+    "New 5008": "https://www.valenzueladelarze.cl/wp-content/uploads/2025/05/Peugeot-New-5008.jpg",
+    "New 3008": "https://www.valenzueladelarze.cl/wp-content/uploads/2024/11/PEUGEOT-3008.jpg",
+    "New 208":  "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/NEW-208.-jpg.jpg",
+    "2008":     "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/2008-PEUGEOT-1.jpg",
+    "308":      "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/308-PEUGEOT.jpg",
+    "Rifter":   "https://www.valenzueladelarze.cl/wp-content/uploads/2024/09/Nuevo-Rifter.jpg",
+    "Partner":  "https://www.valenzueladelarze.cl/wp-content/uploads/2025/06/PEUGEOT-PARNERT.jpg",
+    "Landtrek": "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/landtek.jpg",
+    "Traveller":"https://www.valenzueladelarze.cl/wp-content/uploads/2025/12/TRAVELLER-2.jpg",
+    "Expert":   "https://www.valenzueladelarze.cl/wp-content/uploads/2025/12/EXPERT-2.jpeg",
+    "Boxer":    "https://www.valenzueladelarze.cl/wp-content/uploads/2025/12/Peugeot-Boxer-1.jpg"
+  },
+  jeep: {
+    "Wrangler":      "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/JEEP-WRANGLER.jpg",
+    "Grand Cherokee":"https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/GRAND-CHEROKEE.jpg",
+    "Compass":       "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/JEEP-COMPASS.jpg",
+    "Commander":     "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/JEEP-COMMANDER.jpg",
+    "Avenger":       "https://www.valenzueladelarze.cl/wp-content/uploads/2025/04/Jeep-Avenger-2.jpg",
+    "New Renegade":  "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/JEEP-RENEGADE-1.jpg"
+  },
+  fiat: {
+    "500e":    "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/fiat-500e.jpeg",
+    "Fastback":"https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/fastback1.jpg",
+    "Pulse":   "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/pulse3.jpg"
+  },
+  ram: {
+    "1500":   "https://www.valenzueladelarze.cl/wp-content/uploads/2024/10/nueva-ram-1500-2.jpg",
+    "2500":   "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/RAM-2500.jpg",
+    "700":    "https://www.valenzueladelarze.cl/wp-content/uploads/2024/06/ram-700.jpg",
+    "Rampage":"https://www.valenzueladelarze.cl/wp-content/uploads/2026/02/Ram-Rampage-blanco.png"
+  },
+  omoda: {
+    "C5":    "https://www.valenzueladelarze.cl/wp-content/uploads/2024/10/C5-Omoda.jpg",
+    "E5":    "https://www.valenzueladelarze.cl/wp-content/uploads/2024/10/E5.jpg",
+    "J7 SHS":"https://www.valenzueladelarze.cl/wp-content/uploads/2025/04/Jaecoo-J7-SHS.jpg",
+    "J8":    "https://www.valenzueladelarze.cl/wp-content/uploads/2025/03/J8.jpg",
+    "J6":    "https://www.valenzueladelarze.cl/wp-content/uploads/2025/02/J6-Jaecoo.jpg",
+    "J7":    "https://www.valenzueladelarze.cl/wp-content/uploads/2024/10/Jaecoo-J7.jpg"
+  }
+};
+
+// ══════════════════════════════════════════════════════════
+// SPECS REALES — extraídos de valenzueladelarze.cl / kia.cl
+// Sobrescriben los specs del DATA object cuando están disponibles
+// ══════════════════════════════════════════════════════════
+const SPECS = {
+  honda: {
+    "Pilot": {
+      "Motor": "V6", "Potencia": "285 CV",
+      "Transmisión": "Automática de 10 velocidades",
+      "Modos de conducción": "7: Normal, ECON, Sport, Snow, Trail, Sand, Tow",
+      "Airbags": "8", "Seguridad": "Honda Sensing mejorado, carrocería ACE",
+      "Conectividad": "Apple CarPlay® y Android Auto™",
+      "Pasajeros": "7 u 8 (asiento central plegable SEAT ON DEMAND)"
+    },
+    "WR-V": {
+      "Airbags": "6", "Transmisión": "Automática",
+      "Seguridad": "CMBS con detección de vehículos, motos, ciclistas y peatones",
+      "Honda SENSING": "En todas las versiones"
+    }
+  },
+  ford: {
+    "Ranger": {
+      "Motorización": "3 opciones diesel",
+      "Transmisión": "Manual 6 vel. o Automática 10 vel.",
+      "Tracción": "4x2, 4x4 H, 4x4 L, 4x4 A",
+      "Capacidad de vadeo": "800 mm a 7 km/h",
+      "Airbags": "7 (frontales, cortina, laterales, rodilla)",
+      "Anclajes": "ISOFIX en plazas traseras",
+      "Cámara": "360° con vistas delantera, trasera y laterales",
+      "Seguridad": "Frenado post-colisión con luces de emergencia y bocina automática"
+    },
+    "Ranger Raptor": {
+      "Transmisión": "Automática 10 vel. con convertidor de par y levas al volante",
+      "Tracción": "4x2, 4x4 H, 4x4 L, 4x4 A",
+      "Airbags": "7 (frontales, cortina, laterales, rodilla conductor)",
+      "Anclajes": "ISOFIX en plazas traseras",
+      "Caja de carga": "Salidas 220V y 12V, protector Flexbed, tapas acceso lateral",
+      "Seguridad": "Frenado post-colisión automático con luces de emergencia y bocina"
+    },
+    "Explorer": {
+      "Seguridad": "Ford Co-Pilot 360™",
+      "Audio": "Barra de Sonido B&O® con Subwoofer",
+      "Asientos": "Piel con insertos MIKO® (ventilación y tacto suave)"
+    },
+    "Mustang": {
+      "Combustible": "Gasolina", "Transmisión": "Automática",
+      "Conectividad": "SYNC4 con Apple CarPlay® y Android Auto™",
+      "Audio": "Bang & Olufsen® 12 altavoces",
+      "Equipamiento": "Volante fondo plano calefaccionado, asientos cuero ajuste eléctrico y climatización"
+    },
+    "F-150": {
+      "Seguridad": "Ford Co-Pilot 360® (BLIS, pre-colisión peatón, mantenimiento carril, cámara)",
+      "Pantalla central": "12\"",
+      "Diseño": "Rejillas activas electrónicas, deflector de aire automático desde 64 km/h"
+    },
+    "F-150 Raptor": {
+      "Motor": "EcoBoost Bi-Turbo V6 3.5L", "Potencia": "456 CV", "Torque": "691 Nm",
+      "Inyección": "Sistema dual GDI e indirecta PFI",
+      "Transmisión": "Automática 10 vel. con levas al volante",
+      "Suspensión delantera": "Off-Road con brazos de fundición de aluminio",
+      "Amortiguadores": "FOX Racing SHOX con tecnología Live Valve"
+    },
+    "Bronco": {
+      "Motor": "2.7L EcoBoost® V6 BiTurbo con inyección dual",
+      "Pantalla": "12\" multitáctil SYNC 4",
+      "Iluminación": "Faros antiniebla LED", "Seguridad": "Ford Co-Pilot 360°"
+    },
+    "Bronco Sport": {
+      "Motor Estándar": "EcoBoost 1.5L — 175 HP",
+      "Motor Wildtrak": "EcoBoost 2.0L — 240 HP / 376 Nm",
+      "Transmisión": "Automática 8 vel. (Wildtrak: SelectShift® con Paddle Shifters)",
+      "Combustible": "Gasolina",
+      "Seguridad": "Ford Co-Pilot 360, punto ciego lateral, alerta vehículos en reversa"
+    },
+    "Territory": {
+      "Combustible": "Gasolina", "Transmisión": "Automática", "Seguridad": "Ford Co-Pilot 360"
+    },
+    "Expedition": {
+      "Motor": "EcoBoost 3.5L V6 con turbocargadores gemelos",
+      "Potencia": "375 HP", "Transmisión": "Automática 10 vel.",
+      "Airbags": "6 (frontales, laterales, cortina Safety Canopy hasta 3ª fila)",
+      "Seguridad": "Auto High-Beams, BLIS con aviso luminoso en punto ciego"
+    },
+    "Maverick": {
+      "Motor": "EcoBoost 2.0L Gasolina", "Potencia": "249 HP", "Torque": "380 Nm",
+      "Transmisión": "Automática 8 vel. con convertidor de torque",
+      "Seguridad": "Ford Co-Pilot 360"
+    },
+    "Transit Custom": {
+      "Motor": "Diesel 2.0L", "Potencia": "148 HP", "Torque": "360 Nm",
+      "Transmisión": "Manual 6 velocidades", "Volumen de carga": "5.8 m³",
+      "Capacidad de carga": "1.300 kg",
+      "Remolque": "2.800 kg (con freno) / 750 kg (sin freno)",
+      "Modos de conducción": "Normal, Eco, Resbaladizo"
+    },
+    "Transit Furgón": {
+      "Motor": "2.0L", "Potencia": "165 CV", "Transmisión": "Manual 6 velocidades", "Asientos": "3"
+    },
+    "Transit Bus": {
+      "Motor": "2.0L", "Potencia": "165 CV",
+      "Pasajeros": "17 + conductor", "Equipamiento": "Aire acondicionado trasero (Rear Air Comfort)"
+    },
+    "Transit Chasis": {
+      "Motor": "2.0L", "Potencia": "165 CV", "Torque": "39.7 kgf.m", "Asientos": "3"
+    }
+  },
+  kia: {
+    "Tasman": {
+      "Motor": "2.2L Turbo Diesel", "Potencia": "207 HP", "Torque": "440 Nm",
+      "Consumo": "hasta 13.6 km/l", "Tanque": "80 L + 14 L urea",
+      "Transmisión": "Mecánica 6 vel. o Automática 8 vel.",
+      "Carga útil": "1.137 kg", "Remolque": "3.500 kg", "Volumen pick-up": "1.173 L",
+      "Tracción": "4x4 — modos 2H, 4A, 4H, 4L", "Inmersión": "800 mm",
+      "Airbags": "6 (frontales, laterales, cortina)", "Cámara": "360°",
+      "Pantalla": "Panorámica 30\" (12.3\" clúster + 12.3\" táctil)",
+      "Conectividad": "Apple CarPlay y Android Auto inalámbricos", "Climatizador": "Dual"
+    },
+    "Sportage": {
+      "Motor gasolina 2.0L": "177 HP", "Motor turbo 1.6T": "177 HP — 265 Nm",
+      "Motor HEV 1.6T": "232 HP — 367 Nm", "Motor diésel 2.0T": "183 HP — 417 Nm",
+      "Transmisión": "Manual 6 vel. / Automática 6 u 8 vel.",
+      "Maletero": "544 L / 1.830 L (asientos abatidos)", "Tracción": "AWD disponible",
+      "Airbags": "6", "Latin NCAP": "5 estrellas",
+      "Pantalla": "Panorámica digital 25\"",
+      "Conectividad": "Apple CarPlay y Android Auto inalámbricos",
+      "Audio": "Harman/Kardon premium (opcional)"
+    },
+    "Sorento": {
+      "Motor diesel 2.2L": "199 HP — 440 Nm (8AT)",
+      "Motor gasolina 2.5L": "178 HP — 232 Nm",
+      "Motor gasolina 3.5L": "268 HP — 331 Nm (8AT)",
+      "Motor HEV 1.6T": "238 HP — 367 Nm (batería 1.49 kWh, +28% eficiencia)",
+      "Pasajeros": "7", "Airbags": "6", "Cámara": "360°",
+      "Pantalla": "Panorámica 24.6\" (12.3\" clúster + 12.3\" táctil)",
+      "Audio": "Bose premium 12 parlantes", "Climatizador": "Dual"
+    },
+    "Carnival": {
+      "Motor gasolina 3.5L": "268 HP — 332 Nm",
+      "Motor diesel 2.2T": "199 HP — 440 Nm",
+      "Motor HEV 1.6T": "242 HP — 367 Nm (batería 1.49 kWh, +47% eficiencia)",
+      "Transmisión": "8AT con E-Shift y paddle shifters",
+      "Maletero": "627 L / 2.827 L (expandido)", "Pasajeros": "7 a 9",
+      "Consumo": "hasta 17.6 km/l", "Airbags": "8",
+      "Pantalla": "25\" panorámica (12.3\" clúster + 12.3\" táctil)",
+      "Audio": "Bose premium 12 parlantes", "Climatizador": "Triple zona"
+    },
+    "EV5": {
+      "Motor Light": "160 kW (215 HP) — 310 Nm — RWD",
+      "Motor Wave": "230 kW (308 HP) — 480 Nm — e-AWD",
+      "Batería Light": "64.2 kWh — 437 km de autonomía",
+      "Batería Wave": "88.1 kWh — 537 km de autonomía",
+      "Carga rápida DC": "102-141 kW (30→80% en 27 min)",
+      "Frunk": "67 L", "Airbags": "6", "Cámara": "360° 3D"
+    },
+    "EV6": {
+      "Motor": "Dual eléctrico", "Potencia": "321 HP", "Torque": "605 Nm",
+      "Batería": "77.4 kWh", "Autonomía": "hasta 506 km",
+      "Carga ultra-rápida": "10→80% en 18 min (350 kW)", "0-100 km/h": "5.2 s",
+      "Pantalla": "Doble curva panorámica 12.3\" (clúster + táctil)",
+      "Audio": "Meridian premium", "Climatizador": "Dual interactivo",
+      "Airbags": "6", "Llantas": "Aro 20\"",
+      "Incluye": "Cargador domiciliario + 3 mantenciones gratuitas"
+    },
+    "EV9": {
+      "Tracción": "AWD", "Batería": "99.8 kWh", "Autonomía": "hasta 589 km",
+      "Carga ultra-rápida": "10→80% en 24 min (350 kW)", "Pasajeros": "6 o 7 en tres filas",
+      "Pantalla táctil": "12.3\"", "Audio": "Meridian 14 parlantes",
+      "Asientos": "Calefaccionados, giratorios y reclinables",
+      "Airbags": "10", "Llantas": "Aro 21\"", "Sunroof": "Doble panorámico",
+      "Incluye": "Wall-box + 3 mantenciones gratuitas"
+    },
+    "Seltos": {
+      "Motor": "1.4L Turbo GDI o 1.5L Gasolina", "Potencia": "138 HP a 6.000 rpm",
+      "Torque": "242 Nm (1.500–3.200 rpm)",
+      "Transmisión": "7DCT automática / 6MT manual / IVT",
+      "Consumo": "hasta 18.9 km/l", "Maletero": "433 L / 1.389 L (abatidos)",
+      "Airbags": "6", "Pantalla": "Dual panorámica 10.25\"",
+      "Conectividad": "Apple CarPlay y Android Auto inalámbricos", "Climatizador": "Dual automático"
+    },
+    "Sonet": {
+      "Motor": "1.5L MPI EURO 6", "Potencia": "114 HP", "Torque": "144 Nm",
+      "Transmisión": "Manual 6MT o Automática IVT",
+      "Consumo": "hasta 18.2 km/l", "Modos terreno": "Barro, Arena, Nieve",
+      "Maletero": "385 L", "Airbags": "6",
+      "Radio": "10.25\" con Apple CarPlay y Android Auto inalámbricos",
+      "Climatizador": "Automático"
+    },
+    "K3": {
+      "Motor": "1.4L o 1.6L gasolina", "Potencia 1.6L": "121 HP", "Torque 1.6L": "151 Nm",
+      "Transmisión": "Manual 6MT o Automática 6AT", "Consumo": "hasta 17.1 km/l",
+      "Maletero": "544 L", "Airbags": "6", "Latin NCAP": "5 estrellas",
+      "Radio": "8\" o 10.25\" con Apple CarPlay y Android Auto inalámbrico"
+    },
+    "K3 Cross": {
+      "Motor 1.4L": "98 HP — 133 Nm", "Motor 1.6L": "121 HP — 151 Nm",
+      "Transmisión": "Manual 6MT o Automática 6AT",
+      "Airbags": "6", "Latin NCAP": "5 estrellas",
+      "Barras de techo": "Funcionales", "Llantas": "17\" aleación",
+      "Sunroof": "Delantero (versiones superiores)"
+    },
+    "Morning": {
+      "Motor 1.0L": "3 cilindros — 66 HP — 95 Nm",
+      "Motor 1.2L": "4 cilindros — 83 HP — 115 Nm",
+      "Transmisión": "Mecánica 5 vel. / Automática 4 vel. / AMT 5 vel.",
+      "Consumo carretera": "hasta 20.6 km/l", "Consumo mixto": "17.7 km/l",
+      "Maletero": "255 L", "Airbags": "6",
+      "Radio": "8\" con Apple CarPlay y Android Auto"
+    },
+    "Carens": {
+      "Motor 1.5L Turbo": "158 HP — 253 Nm (7DCT)",
+      "Motor 1.5L NA": "Mecánica 6 vel.",
+      "Consumo carretera": "17.1 km/l", "Tanque": "45 L", "Pasajeros": "7",
+      "Maletero": "216 L / 645 L (3ª abatida) / 1.164 L (2ª y 3ª abatidas)",
+      "Airbags": "6", "Frenos": "Disco en 4 ruedas",
+      "Radio": "12.3\" con Apple CarPlay y Android Auto inalámbricos",
+      "Climatizador": "Tri-zona", "USB": "6 puertos (1 USB + 5 USB-C)"
+    },
+    "Frontier": {
+      "Motor": "2.5L Turbo Diesel K2500",
+      "Potencia": "129 HP (96 kW) a 3.800 rpm",
+      "Torque": "255 Nm a 1.500–3.500 rpm",
+      "Velocidad máxima": "127 km/h", "Transmisión": "Manual 6 velocidades",
+      "Largo caja de carga": "3.1 m", "Volumen caja": "11 m³",
+      "Carga útil": "1.660 kg", "Airbags": "2 frontales",
+      "Garantía": "5 años o 100.000 km"
+    },
+    "Soluto": {
+      "Motor": "1.4L Kappa MPI", "Potencia": "94 HP a 6.000 rpm",
+      "Torque": "13.5 kgf.m a 4.000 rpm", "Transmisión": "Manual 5 velocidades",
+      "Consumo": "hasta 18.8 km/l", "Maletero": "475 L", "Airbags": "2",
+      "Frenos delanteros": "Disco ventilado",
+      "Radio": "7\" con Apple CarPlay, Android Auto y cámara de respaldo",
+      "Sunroof": "Panorámico (versión Full)"
+    }
+  },
+  peugeot: {
+    "New 5008": {
+      "Motor": "Híbrido auto-recargable de alto rendimiento",
+      "Pantalla": "Panorámica curva HD 21\"", "Cámara": "Campo de visión 360°"
+    },
+    "New 3008": {
+      "Motor": "Híbrido auto-recargable", "Potencia": "136 HP (100 kW)",
+      "Consumo urbano": "23.5 km/l", "Emisiones CO2": "105 g/km",
+      "Modo eléctrico": "Más del 50% del tiempo en uso urbano", "Transmisión": "Automática"
+    },
+    "New 208": {
+      "Tecnología": "PEUGEOT i-Cockpit® con volante compacto",
+      "Cuadro instrumentos": "Digital 2D", "Pantalla táctil": "HD 10\"",
+      "Iluminación": "Full LED con DRL de 3 garras (delantera y trasera)"
+    },
+    "308": {
+      "Motor": "PureTech y BlueHDi con Start&Stop",
+      "Descripción": "Última generación de motores de bajas emisiones CO2"
+    },
+    "Landtrek": {
+      "Distancia al suelo": "235 mm", "Carga útil": "hasta 1 tonelada",
+      "Tracción": "2WD o 4WD", "Seguridad": "Hill Descent Control (HDC)",
+      "Caja de carga": "Iluminada con toma 12V"
+    },
+    "Traveller": {
+      "Motor": "Diesel BlueHDi 180 S&S", "Transmisión": "EAT8 automática 8 velocidades",
+      "Cámara trasera": "Visión aérea 180° con zoom automático y guías dinámicas"
+    },
+    "Expert": {
+      "Airbags": "2 frontales (cabeza y tórax)",
+      "Frenos": "ABS con AFU (Auxiliar en Frenada de Emergencia)",
+      "Tracción": "Grip Control (sistema polivalente para distintos terrenos)"
+    }
+  },
+  jeep: {
+    "Wrangler": {
+      "Motor": "Pentastar® V6 3.6L con Stop/Start", "Transmisión": "Automática",
+      "Batería": "700 Amp libre de mantenimiento", "Alternador": "240 Amp",
+      "Enganche": "Receptor Clase II con arnés 7 y 4 pines",
+      "Pantalla": "Uconnect® 5 táctil 12.3\"", "Conectividad": "Apple CarPlay® inalámbrico"
+    },
+    "Grand Cherokee": {
+      "Motor": "V6 3.6L", "Potencia": "295 HP",
+      "Tecnología motor": "Encendido/apagado electrónico",
+      "Llantas": "18\"", "Faros": "Bi-Xenón adaptativos"
+    },
+    "Commander": {
+      "Motor T270 gasolina": "175 CV — 270 Nm (Automática 6 vel.)",
+      "Motor TD 380 4x4 diesel": "170 CV — 380 Nm (Automática 9 vel.)",
+      "Carrocería": "79% aceros ultra-resistencia",
+      "Óptica": "Bi-LED en todas las versiones", "Llantas": "19\" (según versión)"
+    },
+    "Avenger": {
+      "Largo": "4.08 m", "Ancho": "1.72 m", "Alto": "1.53 m",
+      "Combustible": "Gasolina", "Transmisión": "Automática"
+    },
+    "New Renegade": {
+      "Motor": "Turbo T270", "Potencia": "175 CV",
+      "Seguridad": "Frenado de emergencia automático, control punto ciego",
+      "Iluminación": "Full LED en todas las versiones"
+    }
+  },
+  fiat: {
+    "500e": {
+      "Tipo": "100% Eléctrico", "Autonomía": "hasta 330 km",
+      "Carga rápida 85kW": "50 km en 5 minutos",
+      "Carga a 80%": "35 minutos en cargador ultrarrápido 85 kW"
+    },
+    "Fastback": {
+      "Motor": "Turbo de alta eficiencia", "Maletero": "600 L (el más grande de la categoría)",
+      "Seguridad AEB": "Frenado autónomo con reconocimiento de vehículos y cálculo de colisión",
+      "Modo Sport": "Respuestas más ágiles al acelerar"
+    },
+    "Pulse": {
+      "Motor": "Turbo 200",
+      "ADAS": "Frenado autónomo, mantenimiento carril activo, conmutador automático luces altas",
+      "Acceso": "Encendido remoto e ingreso sin llave",
+      "Cámara": "Con sensores delanteros y traseros"
+    }
+  },
+  ram: {
+    "1500": {
+      "Motor Big Horn": "3.6L Gasolina",
+      "Motor Laramie": "3.0L Biturbo Diesel — 420 HP — 635 Nm",
+      "Consumo carretera": "10.6 km/l", "Consumo mixto": "8.9 km/l",
+      "Transmisión": "Automática", "Pantalla": "14.4\"",
+      "Audio": "Harman Kardon 19 parlantes", "Suspensión": "Neumática",
+      "Pisaderas": "Eléctricas",
+      "Seguridad": "Crucero adaptativo, control frenado remolque, frenado emergencia peatones"
+    },
+    "2500": {
+      "Motor": "Diesel 6.7L", "Potencia": "430 HP",
+      "Carga útil": "1.287 kg", "Remolque": "9.072 kg",
+      "Transmisión": "Automática", "Llantas": "18\" o 20\" aluminio",
+      "Seguridad": "Crucero adaptativo Stop&Go, FCA, detección peatones y ciclistas",
+      "Sistema almacenamiento": "Rambox", "Enganche": "Clase V"
+    },
+    "700": {
+      "Despeje suelo": "hasta 208 mm", "Ángulo de entrada": "24°", "Transmisión": "CVT"
+    },
+    "Rampage": {
+      "Motor": "Hurricane 4 — 2.0L Turbodiesel",
+      "Transmisión": "Automática 9 velocidades", "Escape": "Doble",
+      "Pantalla multimedia": "12.3\" con Android Auto y Apple CarPlay inalámbricos",
+      "Panel digital": "10.3\"",
+      "Seguridad": "Monitor punto ciego, ESC, FCA, detección peatones y ciclistas",
+      "Iluminación": "Full LED con proyector y antiniebla LED"
+    }
+  },
+  omoda: {
+    "C5": {
+      "Transmisión": "Automática", "Combustible": "Gasolina", "Techo": "Sunroof eléctrico",
+      "Chasis": "Estructura rígida con aceros de alta y baja resistencia",
+      "ADAS": "Más de 13 asistencias a la conducción"
+    },
+    "E5": {
+      "Tipo": "100% Eléctrico", "Potencia": "201 HP", "Torque": "340 Nm",
+      "Aceleración 0-100": "7.6 s", "Batería": "LFP (Litio-Ferrofosfato) 60 kWh",
+      "Autonomía": "430 km (ciclo WLTP)", "Transmisión": "Automática",
+      "Iluminación": "LED delanteros y traseros completos"
+    },
+    "J7 SHS": {
+      "Sistema": "Super Hybrid System (SHS)", "Torque": "525 Nm",
+      "Autonomía total": "más de 1.200 km", "Airbags": "7",
+      "Pantalla": "FHD 14.8\"", "Conectividad": "Proyección inalámbrica",
+      "Audio": "6 parlantes", "Asientos delanteros": "Ajuste eléctrico"
+    },
+    "J7": {
+      "Combustible": "Gasolina", "Transmisión": "Automática",
+      "Sistema tracción": "ARDIS (múltiples modos de conducción)",
+      "Suspensión trasera": "Independiente Multi-link",
+      "Pantalla": "15.6\"", "Garantía": "5 años / 150.000 km"
+    }
+  }
+};
+
+// ══════════════════════════════════════════════════════════
+// AUTH
+// ══════════════════════════════════════════════════════════
+const STORAGE_USERS = 'ccvd_users_v2';
+const STORAGE_SESSION = 'ccvd_session_v2';
+const STORAGE_RESULTS = 'ccvd_results_v1';
+
+let SESSION = null;
+
+// ── Registro de resultados de evaluaciones ──
+function getResults() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_RESULTS)) || []; }
+  catch(e) { return []; }
+}
+function saveResult(r) {
+  const all = getResults();
+  all.push(r);
+  localStorage.setItem(STORAGE_RESULTS, JSON.stringify(all));
+}
+
+function loadUsers() {
+  // DEFAULT_USERS siempre tienen prioridad (sus credenciales no se pueden sobreescribir desde localStorage)
+  const base = DEFAULT_USERS.map(u => ({ ...u }));
+  const raw = localStorage.getItem(STORAGE_USERS);
+  if (raw) {
+    try {
+      const saved = JSON.parse(raw);
+      // Agrega solo los usuarios que NO están en DEFAULT_USERS
+      saved.forEach(su => {
+        if (!base.find(b => b.username === su.username)) base.push(su);
+      });
+    } catch(e) {}
+  }
+  return base;
+}
+
+function saveUsers(users) {
+  localStorage.setItem(STORAGE_USERS, JSON.stringify(users));
+}
+
+function getUsers() { return loadUsers(); }
+
+function doLogin() {
+  const u = document.getElementById('inp-user').value.trim().toLowerCase();
+  const p = document.getElementById('inp-pass').value;
+  const users = getUsers();
+  const user = users.find(x => x.username.toLowerCase() === u && x.password === p);
+  if (!user) {
+    const el = document.getElementById('login-error');
+    el.style.display = 'block';
+    setTimeout(() => { el.style.display = 'none'; }, 3000);
+    return;
+  }
+  SESSION = { username: user.username, name: user.name, role: user.role, brands: user.brands };
+  localStorage.setItem(STORAGE_SESSION, JSON.stringify(SESSION));
+  startApp();
+}
+
+function doLogout() {
+  SESSION = null;
+  localStorage.removeItem(STORAGE_SESSION);
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('inp-user').value = '';
+  document.getElementById('inp-pass').value = '';
+}
+
+function startApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('header-username').textContent = SESSION.name;
+  if (SESSION.role === 'admin') {
+    document.getElementById('btn-admin').style.display = 'block';
+  }
+  goHome();
+}
+
+// Enter key on login
+document.getElementById('inp-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+document.getElementById('inp-user').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('inp-pass').focus();
+});
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
+let currentBrand = null;
+let currentModel = null;
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+}
+
+function goHome() {
+  currentBrand = null; currentModel = null;
+  const gs = document.getElementById('global-search');
+  if (gs) gs.value = '';
+  document.getElementById('search-results').style.display = 'none';
+  document.getElementById('brand-grid').style.display = 'grid';
+  renderBrands();
+  showView('home');
+  updateBreadcrumb();
+}
+
+function goToBrand(key) {
+  currentBrand = key; currentModel = null;
+  renderBrandDetail(key);
+  showView('brand');
+  updateBreadcrumb();
+}
+
+function goToModel(brandKey, modelName) {
+  currentBrand = brandKey; currentModel = modelName;
+  renderModelDetail(brandKey, modelName);
+  showView('model');
+  updateBreadcrumb();
+  document.getElementById('model-back-btn').onclick = () => goToBrand(brandKey);
+}
+
+function goAdmin() {
+  if (SESSION.role !== 'admin') return;
+  currentBrand = null; currentModel = null;
+  renderAdmin();
+  showView('admin');
+  updateBreadcrumb('admin');
+}
+
+function goResultados() {
+  currentBrand = null; currentModel = null;
+  renderResultados();
+  showView('resultados');
+  updateBreadcrumb('resultados');
+}
+
+function updateBreadcrumb(special) {
+  const bc = document.getElementById('breadcrumb');
+  if (special === 'admin') { bc.innerHTML = '<span>⚙ Administración</span>'; return; }
+  if (special === 'resultados') { bc.innerHTML = '<span>📊 Resultados</span>'; return; }
+  if (!currentBrand) { bc.innerHTML = ''; return; }
+  const brand = DATA[currentBrand];
+  let html = `<span class="bc-link" onclick="goHome()">Inicio</span><span class="bc-sep">/</span>`;
+  html += `<span ${!currentModel ? '' : 'class="bc-link"'} onclick="${!currentModel ? '' : `goToBrand('${currentBrand}')`}">${brand.name}</span>`;
+  if (currentModel) html += `<span class="bc-sep">/</span><span>${currentModel}</span>`;
+  bc.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════════
+// RENDER — BRANDS
+// ══════════════════════════════════════════════════════════
+function userCanSeeBrand(key) {
+  if (!SESSION) return false;
+  if (SESSION.role === 'admin') return true;
+  if (SESSION.brands.includes('all')) return true;
+  return SESSION.brands.includes(key);
+}
+
+function renderBrands() {
+  const grid = document.getElementById('brand-grid');
+  const brands = Object.entries(DATA).filter(([k]) => userCanSeeBrand(k));
+  if (!brands.length) {
+    grid.innerHTML = '<div class="empty"><div class="e-icon">🔒</div><p>No tienes marcas asignadas. Contacta al administrador.</p></div>';
+    return;
+  }
+  grid.innerHTML = brands.map(([key, brand]) => {
+    const logoUrl = BRAND_LOGOS[key];
+    const iconHtml = logoUrl
+      ? `<div class="b-icon b-logo b-logo-solo"><img src="${logoUrl}" alt="${brand.name}"></div>`
+      : `<div class="b-icon b-logo b-logo-solo">${brand.name}</div>`;
+    return `<div class="brand-card brand-card-solo" onclick="goToBrand('${key}')" style="--brand-color:${brand.color}" title="${brand.name}">
+      ${iconHtml}
+    </div>`;
+  }).join('');
+}
+
+function renderBrandDetail(key) {
+  const brand = DATA[key];
+  document.getElementById('brand-detail-header').innerHTML =
+    `<div class="brand-bar" style="border-left:4px solid ${brand.color}">
+      <div class="b-icon b-logo" style="width:60px;height:60px;flex-shrink:0">${BRAND_LOGOS[key] ? `<img src="${BRAND_LOGOS[key]}" alt="${brand.name}">` : ''}</div>
+      <div>
+        <h2>${brand.name}</h2>
+        <p>${Object.keys(brand.models).length} modelos · Selecciona uno para ver la ficha completa</p>
+      </div>
+    </div>`;
+  document.getElementById('model-grid').innerHTML = Object.entries(brand.models).map(([name, model]) => {
+    const img = IMAGES[key]?.[name];
+    const thumb = img
+      ? `<img src="${img}" alt="${name}" loading="lazy" onerror="this.parentElement.innerHTML='${brand.emoji}'">`
+      : brand.emoji;
+    return `<div class="model-card" onclick="goToModel('${key}','${esc(name)}')" style="--brand-color:${brand.color}">
+      <div class="m-thumb" style="background:linear-gradient(135deg,${brand.color}22,${brand.color}55)">${thumb}</div>
+      <div class="m-info">
+        <h4>${name}</h4>
+        <div class="m-brand">${brand.name}</div>
+        <span class="m-badge" style="background:${brand.color}22;color:${brand.color}">${model.tipo}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderModelDetail(brandKey, modelName) {
+  const brand = DATA[brandKey];
+  const model = brand.models[modelName];
+  document.documentElement.style.setProperty('--brand-color', brand.color);
+
+  const specsData = SPECS[brandKey]?.[modelName] || model.specs;
+  const specs = Object.entries(specsData).map(([k,v]) =>
+    `<div class="spec-item"><span class="spec-label">${k}</span><span class="spec-value">${v}</span></div>`).join('');
+
+  const args = model.argumentos.map(a =>
+    `<div class="arg-item"><strong>${a.t}</strong>${a.c}</div>`).join('');
+
+  const video = model.video
+    ? `<div class="video-embed"><iframe src="${model.video}" frameborder="0" allowfullscreen></iframe></div>`
+    : `<div class="video-placeholder">
+        <div class="v-icon">🎬</div>
+        <p><strong>${modelName}</strong> — Video no configurado aún</p>
+        <p style="font-size:13px;margin-top:8px;opacity:.7">El administrador puede agregar la URL de YouTube embed en el campo "video" de este modelo en el código fuente.</p>
+      </div>`;
+
+  const hasInfo = !!model.info;
+  const hasQuiz = model.preguntas && model.preguntas.length >= 5;
+
+  const infoHtml = hasInfo ? `
+    <div class="info-section">
+      <h4>📋 Descripción General</h4>
+      <div class="info-text">${model.info.descripcion}</div>
+    </div>
+    <div class="info-section">
+      <h4>🎯 Cliente Objetivo</h4>
+      <div class="info-text">${model.info.cliente}</div>
+    </div>
+    <div class="info-section">
+      <h4>⚔️ Vs Competencia</h4>
+      <div class="info-text">${model.info.competencia}</div>
+    </div>
+    ${model.info.objeciones && model.info.objeciones.length ? `
+    <div class="info-section">
+      <h4>💬 Objeciones Comunes y Respuestas</h4>
+      ${model.info.objeciones.map(o=>`
+        <div class="objecion-item">
+          <div class="objecion-q">❓ "${o.p}"</div>
+          <div class="objecion-r">✅ ${o.r}</div>
+        </div>`).join('')}
+    </div>` : ''}
+    ${model.info.datos_chile ? `
+    <div class="info-section">
+      <h4>🇨🇱 Mercado Chile</h4>
+      <div class="info-text">${model.info.datos_chile}</div>
+    </div>` : ''}
+  ` : `<div class="empty"><div class="e-icon">📖</div><p>Información detallada no disponible aún para este modelo.</p></div>`;
+
+  const quizHtml = hasQuiz
+    ? `<div class="quiz-start" id="quiz-content">
+        <div style="font-size:48px;margin-bottom:.75rem">📝</div>
+        <p>Demuestra que conoces el <strong>${modelName}</strong>.<br>${model.preguntas.length} preguntas · Escala 1,0–7,0 · Se aprueba con 4,0</p>
+        <button class="btn-start-quiz" onclick="startQuiz('${brandKey}','${esc(modelName)}')">Iniciar Evaluación</button>
+      </div>`
+    : `<div class="quiz-no-content"><div style="font-size:48px;margin-bottom:.75rem">📝</div>Evaluación no disponible para este modelo aún.</div>`;
+
+  const headerImg = IMAGES[brandKey]?.[modelName];
+  document.getElementById('model-detail').innerHTML =
+    `<div class="model-header">
+      ${headerImg
+        ? `<img src="${headerImg}" alt="${modelName}" class="model-header-img" onerror="this.outerHTML='<div class=model-header-icon>${brand.emoji}</div>'">`
+        : `<div class="model-header-icon">${brand.emoji}</div>`}
+      <div class="model-header-info">
+        <h2>${modelName}</h2>
+        <div class="brand-label">${brand.name} · ${model.tipo}</div>
+        <div class="model-tags">
+          ${Object.entries(model.specs).slice(0,4).map(([k,v]) => `<span class="tag">${k}: ${v}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab(this,'tab-specs')">📋 Ficha Técnica</button>
+      <button class="tab-btn" onclick="switchTab(this,'tab-args')">💬 Argumentos</button>
+      ${hasInfo ? `<button class="tab-btn" onclick="switchTab(this,'tab-info')">📖 Información</button>` : ''}
+      ${hasQuiz ? `<button class="tab-btn" onclick="switchTab(this,'tab-quiz')">📝 Evaluación</button>` : ''}
+      ${model.video ? `<button class="tab-btn" onclick="switchTab(this,'tab-video')">🎬 Video</button>` : ''}
+    </div>
+    <div class="tab-content active" id="tab-specs"><div class="specs-grid">${specs}</div></div>
+    <div class="tab-content" id="tab-args"><div class="arg-list">${args}</div></div>
+    ${hasInfo ? `<div class="tab-content" id="tab-info">${infoHtml}</div>` : ''}
+    ${hasQuiz ? `<div class="tab-content" id="tab-quiz">${quizHtml}</div>` : ''}
+    ${model.video ? `<div class="tab-content" id="tab-video">${video}</div>` : ''}`;
+}
+
+// ══════════════════════════════════════════════════════════
+// QUIZ ENGINE
+// ══════════════════════════════════════════════════════════
+let _quiz = null;
+
+function startQuiz(brandKey, modelName) {
+  const model = DATA[brandKey].models[modelName];
+  const pool = (model.preguntas || []).slice().sort(() => Math.random() - 0.5);
+  const questions = pool.slice();
+  _quiz = { brandKey, modelName, questions, current: 0, score: 0 };
+  _renderQuizQ();
+}
+
+function _renderQuizQ() {
+  const { questions, current } = _quiz;
+  const q = questions[current];
+  const total = questions.length;
+  const opts = q.op.map((text, i) => ({ text, ok: i === q.r }));
+  for (let i = opts.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [opts[i], opts[j]] = [opts[j], opts[i]];
+  }
+  const letters = ['A','B','C','D'];
+  document.getElementById('quiz-content').innerHTML =
+    `<div class="quiz-progress">Pregunta ${current + 1} de ${total}</div>
+     <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${(current/total)*100}%"></div></div>
+     <div class="quiz-question">${q.p}</div>
+     <div class="quiz-options">
+       ${opts.map((o,i) =>
+         `<button class="quiz-option" data-ok="${o.ok}" onclick="pickAnswer(this)">
+           <span class="quiz-letter">${letters[i]}</span>${o.text}
+         </button>`).join('')}
+     </div>`;
+}
+
+function pickAnswer(btn) {
+  const ok = btn.dataset.ok === 'true';
+  document.querySelectorAll('.quiz-option').forEach(b => {
+    b.disabled = true;
+    if (b.dataset.ok === 'true') b.classList.add('correct');
+  });
+  if (!ok) btn.classList.add('wrong');
+  if (ok) _quiz.score++;
+  setTimeout(() => {
+    _quiz.current++;
+    if (_quiz.current >= _quiz.questions.length) _renderQuizResult();
+    else _renderQuizQ();
+  }, 900);
+}
+
+function _renderQuizResult() {
+  const { score, questions, brandKey, modelName } = _quiz;
+  const total = questions.length;
+  const nota = (1 + (score / total) * 6).toFixed(1);
+  const pass = score >= Math.ceil(total * 0.6);
+  saveResult({
+    username: SESSION ? SESSION.username : '?',
+    name: SESSION ? SESSION.name : 'Desconocido',
+    brand: DATA[brandKey].name,
+    model: modelName,
+    score, total,
+    nota, pass,
+    fecha: new Date().toISOString()
+  });
+  document.getElementById('quiz-content').innerHTML =
+    `<div class="quiz-result">
+       <div class="nota-badge ${pass?'pass':'fail'}">${nota}</div>
+       <div class="quiz-score">${score} / ${total} correctas</div>
+       <div class="quiz-verdict ${pass?'pass-text':'fail-text'}">${pass ? '✓ Aprobado' : '✗ Reprobado'}</div>
+       <div class="quiz-percent">${Math.round(score/total*100)}% de respuestas correctas</div>
+       <div style="font-size:12px;color:var(--text2);margin-top:8px">✓ Resultado registrado — puedes verlo en 📊 Resultados</div>
+       <button class="btn-quiz-retry" onclick="startQuiz('${brandKey}','${esc(modelName)}')">🔄 Intentar de nuevo</button>
+     </div>`;
+}
+
+function switchTab(btn, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════
+// SEARCH
+// ══════════════════════════════════════════════════════════
+function globalSearch(q) {
+  const brandGrid = document.getElementById('brand-grid');
+  const searchDiv = document.getElementById('search-results');
+  const grid = document.getElementById('search-results-grid');
+  if (!q.trim()) {
+    brandGrid.style.display = 'grid';
+    searchDiv.style.display = 'none';
+    return;
+  }
+  brandGrid.style.display = 'none';
+  searchDiv.style.display = 'block';
+  const ql = q.toLowerCase();
+  const results = [];
+  Object.entries(DATA).forEach(([bk, brand]) => {
+    if (!userCanSeeBrand(bk)) return;
+    Object.entries(brand.models).forEach(([name, model]) => {
+      if (brand.name.toLowerCase().includes(ql) || name.toLowerCase().includes(ql) || model.tipo.toLowerCase().includes(ql))
+        results.push({ bk, brand, name, model });
+    });
+  });
+  grid.innerHTML = results.length === 0
+    ? `<p style="color:var(--text2)">Sin resultados para "${q}"</p>`
+    : results.map(r => {
+        const img = IMAGES[r.bk]?.[r.name];
+        const thumb = img ? `<img src="${img}" alt="${r.name}" loading="lazy" onerror="this.parentElement.innerHTML='${r.brand.emoji}'">` : r.brand.emoji;
+        return `<div class="model-card" onclick="goToModel('${r.bk}','${esc(r.name)}')" style="--brand-color:${r.brand.color}">
+          <div class="m-thumb" style="background:linear-gradient(135deg,${r.brand.color}22,${r.brand.color}55)">${thumb}</div>
+          <div class="m-info">
+            <h4>${r.name}</h4>
+            <div class="m-brand">${r.brand.name}</div>
+            <span class="m-badge" style="background:${r.brand.color}22;color:${r.brand.color}">${r.model.tipo}</span>
+          </div>
+        </div>`;
+      }).join('');
+}
+
+// ══════════════════════════════════════════════════════════
+// ADMIN PANEL
+// ══════════════════════════════════════════════════════════
+function renderAdmin() {
+  const users = getUsers();
+  document.getElementById('user-count').textContent = users.length;
+  // Notice
+  document.getElementById('admin-notice').innerHTML =
+    `⚠️ <strong>Importante:</strong> Los usuarios agregados aquí se guardan en este navegador. Para que funcionen en otros dispositivos, usa el botón <strong>"Exportar lista de usuarios"</strong> y comparte el código con el desarrollador para incrustar en el archivo HTML.`;
+
+  // User list
+  const colors = ['#4c7ae8','#4caf87','#e8c53a','#e85a4f','#9b59b6','#e67e22'];
+  document.getElementById('user-list').innerHTML = users.map((u, i) =>
+    `<div class="user-row">
+      <div class="user-avatar" style="background:${colors[i % colors.length]}22;color:${colors[i % colors.length]}">${u.name.charAt(0).toUpperCase()}</div>
+      <div class="user-row-info">
+        <strong>${u.name}</strong>
+        <span>${u.username} · ${u.brands.includes('all') ? 'Todas las marcas' : u.brands.map(b => DATA[b]?.name || b).join(', ')}</span>
+      </div>
+      <span class="role-badge ${u.role}">${u.role}</span>
+      ${u.username !== 'admin' ? `<button class="btn-del" onclick="deleteUser('${u.username}')" title="Eliminar">✕</button>` : ''}
+    </div>`).join('');
+
+  // Brand checkboxes
+  document.getElementById('brand-checks').innerHTML = Object.entries(DATA).map(([key, brand]) =>
+    `<label class="brand-check" id="bc-${key}" onclick="toggleBrandCheck('${key}')">
+      <input type="checkbox" id="chk-${key}">
+      <span>${brand.name}</span>
+    </label>`).join('');
+}
+
+function toggleBrandCheck(key) {
+  const el = document.getElementById(`bc-${key}`);
+  const chk = document.getElementById(`chk-${key}`);
+  chk.checked = !chk.checked;
+  el.classList.toggle('on', chk.checked);
+}
+
+function addUser() {
+  const name = document.getElementById('nu-name').value.trim();
+  const username = document.getElementById('nu-user').value.trim().toLowerCase();
+  const password = document.getElementById('nu-pass').value.trim();
+  const role = document.getElementById('nu-role').value;
+  const msg = document.getElementById('add-msg');
+
+  const checkedBrands = Object.keys(DATA).filter(k => document.getElementById('chk-'+k)?.checked);
+  const brands = role === 'admin' ? ['all'] : (checkedBrands.length ? checkedBrands : []);
+
+  if (!name || !username || !password) {
+    showMsg(msg, 'Completa nombre, usuario y contraseña.', 'err'); return;
+  }
+  if (brands.length === 0 && role !== 'admin') {
+    showMsg(msg, 'Selecciona al menos una marca.', 'err'); return;
+  }
+
+  const users = getUsers();
+  if (users.find(u => u.username === username)) {
+    showMsg(msg, 'El nombre de usuario ya existe.', 'err'); return;
+  }
+
+  users.push({ username, name, password, role, brands });
+  saveUsers(users);
+  showMsg(msg, `✓ Usuario "${name}" agregado correctamente.`, 'ok');
+
+  // Reset form
+  ['nu-name','nu-user','nu-pass'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('nu-role').value = 'vendedor';
+  Object.keys(DATA).forEach(k => {
+    const el = document.getElementById('bc-'+k);
+    const chk = document.getElementById('chk-'+k);
+    if (el) el.classList.remove('on');
+    if (chk) chk.checked = false;
+  });
+  renderAdmin();
+}
+
+function deleteUser(username) {
+  if (!confirm(`¿Eliminar al usuario "${username}"?`)) return;
+  const users = getUsers().filter(u => u.username !== username);
+  saveUsers(users);
+  renderAdmin();
+}
+
+function toggleExport() {
+  const area = document.getElementById('export-area');
+  if (area.style.display === 'block') { area.style.display = 'none'; return; }
+  const users = getUsers();
+  area.textContent = JSON.stringify(users, null, 2);
+  area.style.display = 'block';
+}
+
+function showMsg(el, text, type) {
+  el.textContent = text;
+  el.className = 'form-msg ' + type;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display = 'none'; }, 4000);
+}
+
+// ══════════════════════════════════════════════════════════
+// RESULTADOS
+// ══════════════════════════════════════════════════════════
+function _fmtFecha(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' })
+    + ' ' + d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
+}
+
+function renderResultados() {
+  const isAdmin = SESSION.role === 'admin';
+  let results = getResults().slice().reverse(); // más recientes primero
+  if (!isAdmin) results = results.filter(r => r.username === SESSION.username);
+
+  document.getElementById('res-sub').textContent = isAdmin
+    ? `Historial de evaluaciones de todos los usuarios (${results.length} registro${results.length !== 1 ? 's' : ''})`
+    : `Tu historial de evaluaciones (${results.length} registro${results.length !== 1 ? 's' : ''})`;
+
+  const notice = document.getElementById('res-notice');
+  if (isAdmin) {
+    notice.style.display = 'block';
+    notice.innerHTML = '⚠️ <strong>Importante:</strong> Los resultados se guardan en el navegador de cada dispositivo. Aquí solo se ven las evaluaciones rendidas en <strong>este equipo</strong>. Pide a los vendedores exportar su CSV para consolidar.';
+  } else {
+    notice.style.display = 'none';
+  }
+
+  document.getElementById('res-toolbar').innerHTML =
+    `<button class="btn-export" onclick="exportResultadosCSV()">📥 Exportar a CSV (Excel)</button>` +
+    (isAdmin ? `<button class="btn-export" onclick="clearResultados()" style="border-color:rgba(204,0,0,.4);color:#b91c1c">🗑 Borrar historial</button>` : '');
+
+  const table = document.getElementById('res-table');
+  if (!results.length) {
+    table.innerHTML = `<tr><td><div class="res-empty">Aún no hay evaluaciones registradas.<br>Las notas aparecerán aquí al completar una evaluación.</div></td></tr>`;
+    return;
+  }
+  table.innerHTML =
+    `<tr><th>Fecha</th>${isAdmin ? '<th>Usuario</th>' : ''}<th>Marca</th><th>Modelo</th><th>Correctas</th><th>Nota</th><th>Resultado</th></tr>` +
+    results.map(r =>
+      `<tr>
+        <td>${_fmtFecha(r.fecha)}</td>
+        ${isAdmin ? `<td><strong>${r.name}</strong></td>` : ''}
+        <td>${r.brand}</td>
+        <td>${r.model}</td>
+        <td>${r.score} / ${r.total}</td>
+        <td><span class="res-nota ${r.pass ? 'pass' : 'fail'}">${r.nota}</span></td>
+        <td>${r.pass ? '✓ Aprobado' : '✗ Reprobado'}</td>
+      </tr>`).join('');
+}
+
+function exportResultadosCSV() {
+  const isAdmin = SESSION.role === 'admin';
+  let results = getResults();
+  if (!isAdmin) results = results.filter(r => r.username === SESSION.username);
+  if (!results.length) { alert('No hay resultados para exportar.'); return; }
+  const rows = [['Fecha','Usuario','Nombre','Marca','Modelo','Correctas','Total','Nota','Resultado']];
+  results.forEach(r => rows.push([
+    _fmtFecha(r.fecha), r.username, r.name, r.brand, r.model, r.score, r.total,
+    String(r.nota).replace('.', ','), r.pass ? 'Aprobado' : 'Reprobado'
+  ]));
+  const csv = '\uFEFF' + rows.map(row => row.map(c => `"${String(c).replace(/"/g,'""')}"`).join(';')).join('\r\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `resultados_ccvd_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function clearResultados() {
+  if (SESSION.role !== 'admin') return;
+  if (!confirm('¿Borrar TODO el historial de resultados de este equipo? Esta acción no se puede deshacer.')) return;
+  localStorage.removeItem(STORAGE_RESULTS);
+  renderResultados();
+}
+
+// ══════════════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════════════
+function esc(s) { return s.replace(/'/g, "\\'"); }
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+(function init() {
+  const saved = localStorage.getItem(STORAGE_SESSION);
+  if (saved) {
+    try {
+      const s = JSON.parse(saved);
+      // Verify user still exists
+      const users = getUsers();
+      const user = users.find(u => u.username === s.username);
+      if (user) {
+        SESSION = { username: user.username, name: user.name, role: user.role, brands: user.brands };
+        startApp();
+        return;
+      }
+    } catch(e) {}
+  }
+  // Show login
+})();
+</script>
+</body>
+</html>
