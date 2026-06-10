@@ -792,6 +792,467 @@ const IMAGES = {
 };
 
 // ══════════════════════════════════════════════════════════
+// ATRIBUTOS DESTACADOS — secciones tal como las presenta la
+// página oficial de cada marca en Chile (lo que el vendedor
+// debe aprender y manejar). fuente = página de origen.
+// ══════════════════════════════════════════════════════════
+const ATRIBUTOS = {
+  honda: {
+    "CR-V": { fuente: "autos.honda.cl/suv/cr-v", items: [
+      {t:"🎨 Diseño", c:"Rediseñado por completo, llega con un estilo osado y sofisticado. Interior con consola central minimalista más grande y mejor distribución de espacio, asientos delanteros estabilizados y doble escape deportivo."},
+      {t:"📱 Tecnología", c:"Pantalla táctil de 9\" y cuadro digital de 7\". Apple CarPlay, Android Auto, encendido por botón (Smart Entry) y audio Premium Bose de 12 parlantes en versión Touring."},
+      {t:"⚙️ Motor / Performance", c:"Motor 1.5 Turbo VTEC de 188 HP con respuesta inmediata. Sistema Honda Real Time All-Wheel Drive (AWD) y consumo mixto de 13 km/l."},
+      {t:"🛡️ Seguridad", c:"10 airbags de serie (frontales, laterales, cortina y de rodilla). Honda SENSING con VSA, RDM, ACC, ABS y TPMS, más asistencia de mantenimiento de carril."},
+      {t:"💰 Precio", c:"Versión EX: $29.990.000 · Versión Touring: $39.990.000 (precios con bonos incluidos, válido hasta 30 de junio de 2026)."}
+    ]},
+    "CR-V Advanced Hybrid": { fuente: "autos.honda.cl/suv/cr-v-hibrido", items: [
+      {t:"⚡ Tecnología híbrida e:HEV", c:"Sistema exclusivo Honda e:HEV con dos motores eléctricos y un motor de combustión eficiente. Autonomía de hasta 1.000 km, priorizando la tracción eléctrica la mayor parte del tiempo."},
+      {t:"🎨 Diseño", c:"Exterior robusto y deportivo con nueva máscara frontal, techo solar panorámico, ópticos Full LED, llantas de aleación 19\" e interior elegante con cuero y apliques tipo madera."},
+      {t:"📱 Tecnología", c:"Pantalla multimedia de 9\" con Android Auto y Apple CarPlay, panel digital TFT de 10,2\", carga inalámbrica de 15W, Smart Entry, audio Bose de 12 altavoces y Head Up Display en el parabrisas."},
+      {t:"🛋️ Confort", c:"Cancelación activa de ruido, climatizador Dual Zone, cámara trasera multivista, asientos con estabilizador corporal y ajuste eléctrico, y maletero automático."},
+      {t:"🛡️ Seguridad", c:"10 airbags, VSA, HSA (arranque en pendiente), tracción integral AWD y Honda SENSING con AHB, ACC, CMBS, LKAS y RDM."},
+      {t:"💰 Precio", c:"Precio final $46.990.000 (incluye bonos, válido hasta 30 de junio de 2026)."}
+    ]},
+    "Civic": { fuente: "autos.honda.cl/sedan/civic", items: [
+      {t:"🎨 Diseño", c:"11ª generación con diseño moderno, elegante y deportivo. Maletero de 510 litros, llantas de 17\" en versión Touring e interior tapizado en cuero con panel minimalista."},
+      {t:"📱 Tecnología", c:"Pantalla táctil de 9\", Apple CarPlay, Android Auto, encendido sin llave y climatizador automático."},
+      {t:"⚙️ Motor", c:"Motor 1.5L Turbo de 176 HP, 4 cilindros, 16 válvulas DOHC i-VTEC. Transmisión automática CVT con tecnología Step Shift. Consumo mixto 15,6 km/l."},
+      {t:"🛡️ Seguridad", c:"Sistema estabilizador VSA, cinturones de tres puntos en todos los asientos y anclajes ISOFIX en segunda fila."},
+      {t:"👁️ Honda SENSING", c:"Frenado con mitigación de colisiones frontales, control crucero adaptativo (ACC), asistencia de cambio de carril y mitigación de salida de ruta con cámara de punto ciego."},
+      {t:"💰 Precio", c:"Versión Touring: $29.990.000 con bono incluido (precio de lista $31.390.000)."}
+    ]},
+    "ZR-V": { fuente: "autos.honda.cl/suv/zr-v", items: [
+      {t:"🎨 Diseño", c:"Diseño deportivo de líneas suaves y fluidas. Soldadura láser en el techo, parrilla en forma de panal y llantas de aleación de 17\"."},
+      {t:"🛋️ Confort", c:"Cabina amplia con asientos de cuero, maletero de 389 litros y asientos plegables 60/40. Soporte lumbar y climatizador digital bi-zona."},
+      {t:"📱 Tecnología", c:"Pantalla digital de 9\" con Apple CarPlay inalámbrico y Android Auto por cable. Audio de 8 parlantes, panel TFT de 7\", cargador inalámbrico (Touring) y cámara trasera multivista."},
+      {t:"⚙️ Performance", c:"Motor 2.0L i-VTEC de 155 HP a 6.500 rpm y 185 Nm de torque. Transmisión CVT con Step Shift y cambios al volante."},
+      {t:"🛡️ Seguridad", c:"8 airbags (2 frontales, 2 laterales, 2 de rodilla y 2 cortina), ABS, EBD, control de descenso HDC y monitoreo de punto ciego. Carrocería ACE que distribuye la energía en colisiones."},
+      {t:"👁️ Honda SENSING", c:"Frenado con mitigación de choque (CMBS), mitigación de salida de carril (RDM), control crucero adaptativo (ACC) y asistencia para mantenerse en el carril."},
+      {t:"💰 Precio", c:"EXL: $29.490.000 · Touring: $30.490.000 (con bonos y crédito AUTOFIN aplicados, válido hasta 30 de junio de 2026)."}
+    ]},
+    "HR-V": { fuente: "autos.honda.cl/suv/hr-v", items: [
+      {t:"🎨 Diseño", c:"Diseño renovado y líneas cautivadoras: parrilla rediseñada, llantas de aleación 17\" bitono, manilla integrada en puertas traseras e iluminación LED frontal y trasera completa."},
+      {t:"🛋️ Confort", c:"Consola central rediseñada, asientos de cuero con estructura estabilizadora, climatizador bi-zona automático, cámara trasera multivista, espejos con función Tilt-Down y maletero de amplia apertura."},
+      {t:"📱 Tecnología", c:"Pantalla multimedia de 8\" con Apple CarPlay inalámbrico y Android Auto por cable, panel digital TFT de 4,2\", carga inalámbrica, Smart Entry, botón Start/Stop y freno de estacionamiento electrónico con Brake-Hold."},
+      {t:"⚙️ Performance", c:"Motor 1.5L i-VTEC con inyección directa de 119 HP. Transmisión CVT con modo Sport, paddle shift al volante y dirección progresiva asistida eléctricamente."},
+      {t:"🛡️ Seguridad", c:"6 airbags, ABS/EBD en las 4 ruedas, sensores de estacionamiento delanteros y traseros, VSA, HSA, HDC, TPMS y luces antiniebla LED."},
+      {t:"👁️ Honda SENSING", c:"CMBS (mitigación de choque), RDM (salida de carril), ACC (crucero adaptativo) y LKAS (mantenimiento de carril)."},
+      {t:"💰 Precio", c:"New HR-V Touring: $25.990.000 (con bono de $1.000.000, válido hasta 30 de junio de 2026, no incluye impuesto verde)."}
+    ]},
+    "Pilot": { fuente: "autos.honda.cl/suv/pilot", items: [
+      {t:"🎨 Diseño", c:"Diseño robusto e interior familiar con asiento central plegable en segunda fila (Seat on Demand) que permite configurar 7 u 8 pasajeros."},
+      {t:"📱 Tecnología", c:"Pantalla táctil de 9\" con Apple CarPlay inalámbrico y Android Auto, cargador inalámbrico hasta 3 veces más rápido que su antecesor, audio Bose de 12 altavoces con subwoofer y Head Up Display en versión Elite."},
+      {t:"⚙️ Motor / Performance", c:"Motor V6 de 285 HP, remolca hasta 2.268 kg. Transmisión automática de 10 velocidades y 7 modos de conducción (Normal, ECON, Sport, Snow, Trail, Sand, Tow)."},
+      {t:"🛡️ Seguridad", c:"Estructura ACE de distribución de energía en choques, 8 airbags y Honda SENSING mejorado con CMBS, RDM, ACC e información de puntos ciegos."},
+      {t:"💰 Precio", c:"Touring 3.5 AUT 4x4: $56.990.000 · Elite 3.5 AUT 4x4: $58.990.000 (precios finales con bonos, válido hasta 30 de junio de 2026)."}
+    ]},
+    "WR-V": { fuente: "autos.honda.cl/suv/wr-v", items: [
+      {t:"🎨 Diseño", c:"Amplio, robusto y seguro: faros LED con DRL, llantas de aleación de 17\", barras de techo, neblineros integrados (Touring), interior con asientos de cuero (Touring) y mayor altura al suelo."},
+      {t:"📱 Tecnología", c:"Pantalla multimedia de 10\" con Apple CarPlay y Android Auto inalámbricos, cargador inalámbrico (Touring), llave inteligente, botón de encendido y panel digital TFT de 7\"."},
+      {t:"🛋️ Confort", c:"Maletero de 458 litros, cabina ancha con gran espacio para piernas, cámara trasera multivista con guías dinámicas, climatizador digital con salidas traseras y espejos con plegado automático."},
+      {t:"⚙️ Performance", c:"Motor 1.5L i-VTEC con transmisión CVT, dirección progresiva eléctrica y paddle shifters."},
+      {t:"🛡️ Seguridad", c:"6 airbags (frontales, laterales y cortina), VSA, HSA, sensores de estacionamiento traseros y Honda SENSING en todas las versiones (CMBS, RDM, LKAS, ACC, AHB)."},
+      {t:"💰 Precio", c:"WR-V EX: $20.990.000 · WR-V Touring: $22.990.000 (con bonos, válido hasta 30 de junio de 2026)."}
+    ]}
+  },
+  kia: {
+    "Sportage": { fuente: "kia.cl/modelos/familiares-suv/kia-sportage.html", items: [
+      {t:"🎨 Diseño exterior", c:"Luces delanteras LED cube projection en disposición vertical que refuerzan el diseño Tiger Nose, sunroof panorámico deslizable y llantas de aleación 17\". Versión X-Line con barras de techo exclusivas y emblemas Black."},
+      {t:"📱 Tecnología interior", c:"Pantalla panorámica digital de 25\" con Apple CarPlay y Android Auto inalámbricos. Audio premium Harman/Kardon de 8 parlantes, climatizador dual touch y asientos calefaccionados/ventilados en versiones superiores."},
+      {t:"⚙️ Performance", c:"Motores 2.0L bencina (6MT/8AT), 1.6L Turbo (8AT, 177 Hp y 265 Nm) y 2.0L diésel (183 Hp y 417 Nm). Tracción AWD opcional, modos de terreno (Barro/Arena/Nieve) y palanca E-Shift."},
+      {t:"🛡️ Seguridad", c:"5 estrellas Latin NCAP. 6 airbags, sensores de proximidad delanteros, laterales y traseros, cámara 360° y suite ADAS Drive Wise (FCA, LKA-LFA, BCA-RCCA, control crucero inteligente)."},
+      {t:"💰 Precio", c:"Consultar versión y precio vigente en la sección Precios y Promociones de kia.cl y en valenzueladelarze.cl."}
+    ]},
+    "Tasman": { fuente: "kia.cl/modelos/pickup/kia-tasman.html", items: [
+      {t:"🎨 Diseño", c:"Diseño que irradia audacia y robustez: faros LED verticales de proyección y frontal imponente. El interior redefine el segmento combinando refinamiento con tecnología inteligente."},
+      {t:"📱 Tecnología e interior", c:"Pantalla táctil panorámica de 30\", cargador inalámbrico dual, climatizador, asientos de eco-cuero con ajuste eléctrico y volante calefaccionado. Apple CarPlay y Android Auto sin cables."},
+      {t:"⚙️ Motor y performance", c:"Motor diésel 2.2T de 207 HP y 440 Nm. Rendimiento hasta 13,6 km/l, transmisión manual 6MT o automática 8AT."},
+      {t:"🏔️ Capacidad off-road", c:"Sistema 4x4 con modos 2H, 4A, 4H y 4L, bloqueo diferencial electrónico, modo X-Trek y capacidad de inmersión de 800 mm. Carga útil de 1.137 kg y remolque hasta 3.500 kg."},
+      {t:"🛡️ Seguridad", c:"6 airbags de serie, cámara 360°, sensores de proximidad, monitor de punto ciego, frenos de disco ventilados y asistencias ADAS."},
+      {t:"💰 Precio", c:"Consultar versión y precio vigente en la sección Precios y Promociones de kia.cl y en valenzueladelarze.cl."}
+    ]},
+    "Sorento": { fuente: "kia.cl/modelos/familiares-suv/kia-sorento.html", items: [
+      {t:"🎨 Diseño exterior", c:"Presencia robusta y estilosa que viene a cautivar el segmento. Luces LED frontales tipo cube, llantas de aleación aro 20\" y sunroof panorámico disponible."},
+      {t:"📱 Tecnología e interior", c:"Pantalla panorámica digital de 24,6\" (cluster 12,3\" + radio touch 12,3\"), asientos de cuero, audio premium Bose de 12 parlantes, climatizador dual y puerta trasera inteligente de serie."},
+      {t:"⚙️ Performance", c:"Tres motores: diésel 2.2L (199 Hp, 440 Nm), bencina 2.5L (178 Hp) y 3.5L (268 Hp, 331 Nm). Modos ECO/Normal/Sport/Smart y paddle shifter disponible. Variante híbrida 1.6 Turbo de 238 Hp con 28% mejor consumo y batería autorrecargable."},
+      {t:"🛡️ Seguridad Drive Wise", c:"ADAS con detección de colisión frontal (FCA), asistente de punto ciego (BCA), mantenimiento de carril (LKA-LFA), control crucero inteligente (SCC), 6 airbags y sensores de proximidad."},
+      {t:"💰 Precio", c:"Consultar versión y precio vigente en la sección Precios y Promociones de kia.cl y en valenzueladelarze.cl."}
+    ]},
+    "Carnival": { fuente: "kia.cl/modelos/familiares-suv/kia-carnival.html", items: [
+      {t:"🎨 Exterior", c:"Familiar, espacioso y de primer nivel con presencia robusta. Luces LED delanteras y traseras, sunroof dual, puertas correderas eléctricas y llantas de aleación aro 19\"."},
+      {t:"📱 Interior", c:"Pantalla panorámica digital de 25\" (cluster 12,3\" + radio touch 12,3\"), Apple CarPlay/Android Auto inalámbricos, asientos de cuero, climatizador trizona y audio premium Bose de 12 parlantes."},
+      {t:"⚙️ Performance", c:"Motor bencina 3.5L (268 Hp, 332 Nm) o diésel 2.2T (199 Hp, 440 Nm) con automática 8AT, E-Shift y paddle shifter. Versión HEV 1.6 Turbo híbrida (242 Hp, 367 Nm) con 47% mejor consumo."},
+      {t:"🛡️ Seguridad", c:"8 airbags de serie, cámara 360°, sensores de proximidad y sistema Drive Wise (FCA, BCA, LKA, SCC, BVM)."},
+      {t:"💰 Precio", c:"Consultar versión y precio vigente en la sección Precios y Promociones de kia.cl y en valenzueladelarze.cl."}
+    ]},
+    "EV6": { fuente: "kia.cl/modelos/hibridos-electricos/Kia EV6.html", items: [
+      {t:"🎨 Diseño exterior", c:"Diseñado para abrir nuevos horizontes: luces full LED, llantas de aleación aro 20\" y variante GT Line en tres colores (Lunar Gray, Winter White, Warm Red)."},
+      {t:"📱 Diseño interior", c:"Radio touch de 12,3\" con Apple CarPlay/Android Auto inalámbricos, climatizador dual, asientos ventilados y calefaccionados, iluminación ambiental, audio Meridian, sunroof panorámico y tapiz eco-cuero con ajuste eléctrico."},
+      {t:"⚡ Performance eléctrica", c:"Doble motor eléctrico de 321 Hp y 605 Nm. Batería de 77,4–84 kWh con hasta 522 km de autonomía. Carga ultrarrápida 10–80% en 18 minutos, 0-100 km/h en 5,3 s y sistema V2L/V2V/V2G."},
+      {t:"🛡️ Seguridad y tecnología", c:"Cámara de estacionamiento 360°, monitor de punto ciego, sensores de proximidad y asistencias avanzadas Drive Wise."},
+      {t:"🎁 Beneficios incluidos", c:"Cargador domiciliario incluido, 3 mantenciones gratuitas y asistencia en ruta."}
+    ]},
+    "EV5": { fuente: "kia.cl/modelos/hibridos-electricos/Kia EV5.html", items: [
+      {t:"🎨 Diseño", c:"Luces LED con firma Star Map, manillas retráctiles automáticas, apertura inteligente de maletero, asientos traseros 100% abatibles y llantas de aleación de 18\" o 19\"."},
+      {t:"📱 Tecnología y conectividad", c:"Múltiples puertos USB-C, adaptador 12V, smartkey con encendido remoto y radio touch con conectividad inalámbrica. ADAS con LKA/LFA, intervención de punto ciego (BCA), crucero inteligente con Stop & Go y cámara 360° con visión 3D."},
+      {t:"🔋 Batería y autonomía", c:"Dos versiones: Light (64,2 kWh, 437 km) y Wave (88,1 kWh, 537 km). La Wave tiene doble motor e-AWD de 308 HP y eficiencia de 6,1 km por kWh. Carga rápida DC 30–80% en ~27 minutos."},
+      {t:"🛡️ Seguridad", c:"6 airbags (frontales, laterales y cortina) y tecnología ADAS integral de asistencia al conductor."},
+      {t:"💰 Ahorro", c:"La página incluye calculadora de ahorro: cargar en casa cuesta desde $24.750/mes versus el gasto en bencina de un motor 2.0L equivalente."}
+    ]},
+    "EV9": { fuente: "kia.cl/modelos/hibridos-electricos/Kia EV9.html", items: [
+      {t:"🎨 Diseño exterior", c:"Diseñado para abrir nuevos horizontes: luces delanteras LED, sunroof dual y llantas de aleación aro 21\"."},
+      {t:"📱 Diseño interior", c:"Cabina moderna y minimalista: radio touch 12,3\" con Apple CarPlay/Android Auto inalámbricos, cluster digital 12,3\", asientos delanteros eléctricos y audio premium Meridian de 14 parlantes. Tres corridas de asientos con función giratoria."},
+      {t:"⚡ Performance eléctrica", c:"Batería de 99,8 kWh con hasta 589 km de autonomía. Carga ultrarrápida 10–80% en 24 minutos. Tracción AWD con E-Shift sobre plataforma E-GMP."},
+      {t:"👨‍👩‍👧‍👦 Capacidad", c:"Hasta 7 pasajeros en tres filas con amplio espacio interior."},
+      {t:"🛡️ Seguridad", c:"10 airbags, cámara 360° (AVM), monitor de punto ciego, sensores de proximidad y Drive Wise con asistencia de colisión frontal, crucero inteligente Stop & Go y tráfico cruzado."},
+      {t:"🎁 Beneficios incluidos", c:"Cargador domiciliario, 3 mantenciones gratuitas y asistencia en ruta."}
+    ]},
+    "Seltos": { fuente: "kia.cl/modelos/familiares-suv/Nuevo Kia Seltos.html", items: [
+      {t:"🎨 Diseño exterior", c:"Llantas aro 17\" con estilo diamantado bitono e iluminación Signature Star-map que maximiza el carácter audaz. Sunroof panorámico eléctrico y neblineros LED verticales."},
+      {t:"📱 Tecnología interior", c:"Pantalla dual panorámica de 10,25\" con Apple CarPlay y Android Auto inalámbricos, cargador inalámbrico, cluster LCD 10,25\", climatizador dual automático y luces ambientales (Mood lamps)."},
+      {t:"⚙️ Performance", c:"Motor 1.4L Turbo GDI de 138 Hp y 242 Nm, transmisión DCT de 7 velocidades, modos ECO/Normal/Sport/Smart y control de tracción con selección de terreno (arena, nieve, barro)."},
+      {t:"🛡️ Seguridad", c:"6 airbags y Drive Wise: asistencia de colisión frontal (FCA), mantenimiento de carril (LKA-LFA), crucero inteligente con Stop & Go, asistente de luces altas (HBA) y alerta de atención del conductor (DAW)."},
+      {t:"🛋️ Confort", c:"Maletero de 433 litros (hasta 1.389L con asientos abatidos 60:40), tapiz eco-cuero en versiones superiores y sensores de proximidad delanteros y traseros."}
+    ]},
+    "Sonet": { fuente: "kia.cl/modelos/familiares-suv/kia-sonet.html", items: [
+      {t:"🎨 Diseño exterior", c:"Estilo único con diseño robusto e imponente: luces diurnas LED, neblineros, luces traseras LED y llantas de aleación aro 16\"."},
+      {t:"📱 Diseño interior", c:"Radio touch 10,25\" con conectividad inalámbrica, smartkey con botón de encendido, cargador inalámbrico, climatizador automático y asientos abatibles 60:40."},
+      {t:"⚙️ Performance", c:"Motor 1.5L MPI EURO 6 de 114 Hp y 144 Nm. Transmisión mecánica o IVT. Rendimiento hasta 18,2 km/l con modos de manejo (ECO, Comfort, Sport, Smart) y de terreno (Barro, Arena, Nieve)."},
+      {t:"🛡️ Seguridad", c:"6 airbags de serie, frenos de disco traseros, sensores de proximidad delanteros y traseros, cámara de retroceso con líneas adaptativas y ADAS Drive Wise (FCA, LKA-LFA, HBA)."},
+      {t:"💰 Precio", c:"Consultar versión y precio vigente en la sección Precios y Promociones de kia.cl y en valenzueladelarze.cl."}
+    ]},
+    "K3": { fuente: "kia.cl/modelos/automoviles/kia-k3.html", items: [
+      {t:"🎨 Diseño", c:"Contornos deportivos y detalles refinados que transmiten fuerza y compostura. Luces LED delanteras y traseras, llantas de aleación aro 17\" y Tiger Nose Digital de Kia."},
+      {t:"📱 Tecnología", c:"Radio panorámica de 10,25\" con Apple CarPlay y Android Auto inalámbricos, cargador inalámbrico, asientos en eco-cuero y climatizador dual."},
+      {t:"⚙️ Performance", c:"Motores 1.4L y 1.6L con transmisión mecánica o automática de 6 velocidades. Rendimiento de hasta 17,1 km/l (ciclo europeo homologado)."},
+      {t:"🛡️ Seguridad", c:"5 estrellas Latin NCAP. 6 airbags, frenos de disco traseros, sensores de proximidad y Drive Wise con ADAS (FCA, LKA, LFA, HBA, BCA/RCCA)."},
+      {t:"🛋️ Confort", c:"Maletero de 544 litros, espacio interior amplio, espejos eléctricos, cámara de retroceso con líneas adaptativas y botón de encendido inteligente."}
+    ]},
+    "K3 Cross": { fuente: "kia.cl/modelos/familiares-suv/kia-k3-cross.html", items: [
+      {t:"🎨 Diseño exterior", c:"Diseño cross que proyecta presencia aventurera con contornos deportivos. Luces LED delanteras y traseras, llantas de aleación aro 17\", beltline cromado y sunroof delantero."},
+      {t:"📱 Tecnología interior", c:"Radio 10,25\" con Apple CarPlay y Android Auto inalámbricos, cargador inalámbrico, asientos eco-cuero, climatizador dual y smartkey con botón de encendido."},
+      {t:"⚙️ Motor y performance", c:"Dos opciones: motor 1.4L de 98 Hp/133 Nm o 1.6L de 121 Hp/151 Nm, con transmisión mecánica de 6 velocidades o automática."},
+      {t:"🛡️ Seguridad", c:"5 estrellas Latin NCAP. 6 airbags de serie, frenos de disco traseros, sensores de proximidad, cámara de retroceso y ADAS (FCA, LKA, LFA, BCA/RCCA)."},
+      {t:"💰 Precio", c:"Consultar versión y precio vigente en la sección Precios y Promociones de kia.cl y en valenzueladelarze.cl."}
+    ]},
+    "Morning": { fuente: "kia.cl/modelos/automoviles/kia-morning.html", items: [
+      {t:"🎨 Exterior", c:"Diseño único y moderno con luces delanteras full LED alineadas a la nueva imagen Kia, luces traseras LED que se extienden hacia el maletero y llantas de aleación de 14\"."},
+      {t:"📱 Interior", c:"Radio touch 8\" con Apple CarPlay y Android Auto, aire acondicionado manual, asientos abatibles 60:40 y cluster digital con información de viaje."},
+      {t:"⚙️ Performance", c:"Motores 1.0L (3 cilindros, 66 Hp) y 1.2L (4 cilindros, 83 Hp). Rendimiento de hasta 20,6 km/l carretera (17,7 mixto / 14,5 ciudad). Transmisiones manual 5V, automática 4V y AMT."},
+      {t:"🛡️ Seguridad", c:"6 airbags de serie, control electrónico de estabilidad con frenos ABS y sensor de proximidad trasero."},
+      {t:"💰 Precio", c:"Consultar versión y precio vigente en la sección Precios y Promociones de kia.cl y en valenzueladelarze.cl."}
+    ]},
+    "Carens": { fuente: "kia.cl/modelos/familiares-suv/kia-nueva-carens.html", items: [
+      {t:"🎨 Diseño exterior", c:"Diseño Tiger Face de Kia con llantas de aleación aro 17\" bi-tono, luces diurnas LED y traseras LED. Estilo moderno unido a la funcionalidad."},
+      {t:"📱 Tecnología e interior", c:"Radio táctil LCD 12,3\" con Apple CarPlay/Android Auto inalámbricos, climatizador digital touch, cargador inalámbrico, USB-C en las tres filas y asientos One Touch en segunda fila."},
+      {t:"⚙️ Motor y performance", c:"Motor 1.5 Turbo de 158 Hp y 253 Nm con transmisión 7DCT. Tres modos de conducción (Sport/Eco/Normal), freno eléctrico con Auto Hold y 15,1 km/l mixto."},
+      {t:"🛡️ Seguridad", c:"6 airbags de serie, estructura de acero de alta resistencia, frenos de disco en las 4 ruedas y ADAS: colisión frontal, punto ciego, mantenimiento de carril y crucero inteligente."},
+      {t:"👨‍👩‍👧‍👦 Capacidad y confort", c:"Hasta 7 pasajeros con configuración flexible, estanque de 45 litros y mesa plegable en el respaldo del copiloto."}
+    ]},
+    "Frontier": { fuente: "kia.cl/modelos/comerciales/kia-frontier-chasis-cabina.html", items: [
+      {t:"🎨 Diseño", c:"Máscara frontal con diseño Nariz de Tigre, espejos abatibles para facilitar el estacionamiento y neblineros delanteros."},
+      {t:"📦 Capacidad de carga", c:"1.600 kg de capacidad sobre el chasis, volumen de carga de 11 m³ y largo carrozable de 3,1 metros, con plataforma próxima al suelo para facilitar carga y descarga."},
+      {t:"⚙️ Motor y performance", c:"Motor diésel turboalimentado 2.5L de 129 Hp a 3.800 rpm y 255 Nm. Transmisión manual de 6 velocidades, velocidad máxima 127 km/h."},
+      {t:"🛡️ Seguridad", c:"2 airbags delanteros (por primera vez en el modelo), frenos ABS, control de estabilidad, cámara de retroceso en radio de 7\" y sensores de proximidad traseros."},
+      {t:"📜 Garantía", c:"5 años o 100.000 km."}
+    ]},
+    "Soluto": { fuente: "kia.cl/modelos/automoviles/kia-soluto.html", items: [
+      {t:"🎨 Diseño exterior", c:"Llantas de aleación aro 14\", neblineros delanteros y luces bifuncionales de apariencia deportiva. Grilla cromada y tomas de aire laterales de look juvenil y moderno."},
+      {t:"📱 Diseño interior", c:"Radio 7\" con Apple CarPlay y Android Auto, aire acondicionado, asiento regulable en altura, computador a bordo LCD 2,8\" y maletero de 475 litros."},
+      {t:"⚙️ Performance", c:"Motor 1.4L Kappa MPI de 94 Hp con transmisión manual de 5 velocidades. Rendimiento de hasta 18,8 km/l (norma europea homologada en MTT)."},
+      {t:"🛡️ Seguridad", c:"Frenos ABS con EBD + control de estabilidad (ESC) en todas las versiones. Cámara de retroceso, sensor trasero de estacionamiento y control de partida en pendiente (HAC) en versión Full."},
+      {t:"💰 Precio", c:"Consultar versión y precio vigente en la sección Precios y Promociones de kia.cl y en valenzueladelarze.cl."}
+    ]}
+  },
+  ford: {
+    "Ranger": { fuente: "ford.cl/pickups/ranger", items: [
+      {t:"💪 Built Tough", c:"\"Que venga lo imposible\". Ranger combina la tecnología en performance más avanzada con el ADN Built Tough: el ícono totalmente renovado cuenta con motor 3.0L Diésel de 241 CV y 600 Nm de torque en su versión Limited."},
+      {t:"📱 Tecnología inteligente", c:"Pantalla LED multitáctil de 12\" en alta definición y panel de instrumentos LED de 12,4\"."},
+      {t:"🎨 Diseño", c:"Diseño completamente renovado, de apariencia moderna y atractiva tanto en el interior como en el exterior."},
+      {t:"🛡️ Sentirse protegido", c:"Ford Co-Pilot 360: conjunto de tecnologías de asistencia al conductor con control crucero adaptativo con Stop&Go y cámara 360°, entre otras."},
+      {t:"📦 Versiones", c:"XL, XLS y XLT con motor 2.0L Diésel (4x2 y 4x4, MT/AT) y Limited AT 3.0L Diésel 4x4."}
+    ]},
+    "Ranger Raptor": { fuente: "ford.cl/performance/ranger-raptor", items: [
+      {t:"🏁 Performance", c:"\"La Ranger Raptor más potente que jamás hayamos diseñado\". Desarrollada por Ford Performance para las más altas prestaciones off-road: robustez, equipamiento tecnológico y performance deportiva."},
+      {t:"⚙️ Motorización", c:"Motor 3.0L V6 EcoBoost a gasolina de 288 Hp y 491 Nm de torque, sobre chasis reforzado de acero altamente resistente."},
+      {t:"💡 Iluminación Matrix LED", c:"Focos delanteros LED con luz de curvas dinámica, luces altas sin encandilamiento, nivelación dinámica automática e iluminación adaptativa."},
+      {t:"📱 Tecnología", c:"Panel de instrumentos 100% digital de 12,4\", pantalla multitáctil de 12\" con SYNC 4, audio B&O Premium de 8 parlantes, cargador inalámbrico y GPS incorporado."}
+    ]},
+    "Explorer": { fuente: "ford.cl/suvs-crossovers/all-new-explorer", items: [
+      {t:"🎨 Diseño", c:"La SUV con el equilibrio perfecto entre confort, seguridad y estilo. Un ícono de la familia Ford que se redefine con un diseño más elegante y juvenil."},
+      {t:"🛋️ Elegancia y comodidad", c:"Asientos de piel con insertos MIKO ventilados de tacto suave, y barra de sonido B&O con potente subwoofer para una experiencia envolvente."},
+      {t:"🚗 Estabilidad", c:"Maniobrabilidad excepcional gracias a su suspensión delantera y trasera independientes; viaje cómodo para todos los pasajeros."},
+      {t:"📱 Tecnología", c:"Panel de instrumentos digital de 12,3\" y conectividad avanzada."},
+      {t:"🛡️ Seguridad", c:"Tecnología Ford Co-Pilot 360 de asistencia a la conducción."},
+      {t:"💰 Precio", c:"Active 2.3L RWD desde $39.490.000 · Active 2.3L 4WD desde $47.390.000 · Platinum 2.3L 4WD desde $51.190.000."}
+    ]},
+    "Mustang": { fuente: "ford.cl/performance/nuevo-mustang", items: [
+      {t:"🏁 7ª Generación", c:"Potencia y performance. La versión Dark Horse es \"la versión de producción en serie más emocionante de conducir jamás creada\"."},
+      {t:"⚙️ Desempeño", c:"Una combinación única que lleva la experiencia de conducción a otro nivel."},
+      {t:"🎨 Diseño", c:"Una reinterpretación moderna del vehículo icónico."},
+      {t:"🛡️ Tecnología y seguridad", c:"Conectividad y tecnologías de seguridad activa en todo momento."}
+    ]},
+    "F-150": { fuente: "ford.cl/pickups/f-150", items: [
+      {t:"⚙️ Motorización", c:"Motores 3.5L EcoBoost V6 y 5.0L TI-VCT V8 con transmisión automática de 10 velocidades."},
+      {t:"📦 Versiones", c:"XLT CC 5.0L 4x4, Lariat Black CC 5.0L 4x4 y Lariat Luxury CC 5.0L 4x4."},
+      {t:"💰 Precio", c:"XLT 5.0L 4x4 desde $55.538.100 (financiado desde $52.348.100) · Lariat Black desde $61.987.100 · Lariat Luxury desde $66.628.100."}
+    ]},
+    "F-150 Raptor": { fuente: "ford.cl/performance/f-150-raptor", items: [
+      {t:"🏁 Desempeño off-road", c:"Diseñada por Ford Performance para hacer frente a todo tipo de desafíos y desempeñarse en los contextos más extremos, para los verdaderos entusiastas del off-road."},
+      {t:"⚙️ Motorización", c:"Motor EcoBoost 3.5L V6 HO con impresionantes 456 CV y 691 Nm de torque."},
+      {t:"📦 Productividad", c:"Pick-up deportiva, moderna, tecnológica y sobre todo productiva."},
+      {t:"🛡️ Sentirse protegido", c:"Gran cantidad de tecnología aplicada a la seguridad para optimizar la conducción off-road de alto impacto y a alta velocidad."}
+    ]},
+    "Bronco": { fuente: "ford.cl/suvs-crossovers/nuevo-bronco", items: [
+      {t:"🏔️ El ícono de la aventura", c:"Capacidad off-road preparada para terrenos exigentes."},
+      {t:"🎨 Diseño aventurero", c:"Diseño icónico tanto por fuera como por dentro."},
+      {t:"📱 Tecnología", c:"Tecnología para conquistar cualquier terreno."},
+      {t:"🛡️ Seguridad", c:"Vive tu aventura protegido."},
+      {t:"💰 Precio", c:"Bronco Badlands desde $62.140.000."}
+    ]},
+    "Bronco Sport": { fuente: "ford.cl/suvs-crossovers/bronco-sport", items: [
+      {t:"🏔️ Espíritu Bronco", c:"\"No es la ruta que tomas, es cómo la tomas\". Conecta con tu espíritu aventurero con capacidades todoterreno que solo Bronco Sport puede brindar."},
+      {t:"⚙️ Desempeño", c:"Desde sus opciones 4x4 avanzadas hasta su paquete de remolque Clase II, Bronco Sport está lista cuando tú lo estés."},
+      {t:"📱 Tecnología", c:"Características tecnológicas centradas en mantenerte conectado y en control en todo momento."},
+      {t:"🛡️ Seguridad", c:"Tecnologías Ford Co-Pilot 360 diseñadas para ayudarte a tener más control detrás del volante."},
+      {t:"💰 Precio", c:"Big Bend desde $31.990.000."}
+    ]},
+    "Territory": { fuente: "ford.cl/suvs-crossovers/territory", items: [
+      {t:"🎨 Diseño", c:"La evolución del diseño y la funcionalidad: impone carácter por fuera y envuelve en confort por dentro, con líneas modernas y amplio espacio interior."},
+      {t:"📱 Tecnología inteligente", c:"Experiencia más conectada y simple: tecnología intuitiva para que todo esté al alcance de la mano, de forma fácil y segura."},
+      {t:"🛡️ Seguridad", c:"Asistente avanzado Ford Co-Pilot 360, conjunto de tecnologías inteligentes que asisten y protegen en cada momento."},
+      {t:"📦 Versiones", c:"Trend, Titanium y Titanium Híbrida."}
+    ]},
+    "Expedition": { fuente: "ford.cl/suvs-crossovers/expedition", items: [
+      {t:"👨‍👩‍👧‍👦 Familiar", c:"El vehículo ideal para tu familia: combinación perfecta de tecnología avanzada, espacio flexible y mejor seguridad."},
+      {t:"⚙️ Desempeño", c:"Potencia y confort necesarios para conquistar terrenos difíciles y abrir nuevos caminos en cada aventura."},
+      {t:"🎨 Diseño", c:"Combina elegancia, innovación y confort con un estilo inconfundible."},
+      {t:"🛡️ Seguridad", c:"Cámara 360° que integra cámaras frontales y traseras para una visión completa del entorno."},
+      {t:"💰 Precio", c:"Expedition Platinum: precio de lista $74.690.000 · precio final con financiamiento Forum $70.990.000 (incluye bonos por $3.700.000)."}
+    ]},
+    "Maverick": { fuente: "ford.cl/pickups/maverick", items: [
+      {t:"💪 Built Ford Tough", c:"Potencia y performance Built Ford Tough. La versión Tremor agrega capacidad para superar los terrenos más exigentes."},
+      {t:"⚙️ Desempeño", c:"Potencia para la vida real."},
+      {t:"🎨 Diseño", c:"Diseñada para los que hacen."},
+      {t:"🛡️ Tecnología y seguridad", c:"De última generación."},
+      {t:"💰 Precio", c:"XLT 2.0 AT AWD desde $31.285.100 · Lariat Black 2.0L AT AWD desde $37.235.100 · Lariat FHEV 2.5L AT AWD (híbrida) desde $39.615.100."}
+    ]},
+    "Transit Custom": { fuente: "ford.cl/comercial/transit-custom", items: [
+      {t:"📦 Versatilidad", c:"Una opción para todas las necesidades del negocio."},
+      {t:"⚙️ Desempeño", c:"Potencia y robustez para tu negocio."},
+      {t:"📱 Tecnología", c:"Tecnología y conectividad para una mayor productividad."},
+      {t:"🛡️ Seguridad", c:"Elementos de seguridad activa en todo momento."},
+      {t:"💰 Precio", c:"Transit Custom Furgón MT desde $35.093.100 · AT desde $39.496.100."}
+    ]},
+    "Transit Furgón": { fuente: "ford.cl/comercial/transit-furgon", items: [
+      {t:"📦 Capacidad", c:"Capacidad y resistencia para las tareas más exigentes."},
+      {t:"⚙️ Desempeño", c:"Potencia y robustez para tu negocio."},
+      {t:"📱 Tecnología", c:"Tecnología y conectividad para una mayor productividad."},
+      {t:"🛡️ Seguridad", c:"Elementos de seguridad activa en todo momento."},
+      {t:"💰 Precio", c:"Furgón Techo Medio MT (L3H2) desde $37.556.400 · Techo Alto MT (L3H3) desde $40.924.100."}
+    ]},
+    "Transit Bus": { fuente: "ford.cl/comercial/nueva-transit-bus", items: [
+      {t:"👥 Capacidad", c:"Versátil, flexible y capaz, con capacidad de hasta 18 pasajeros. Capacidad y resistencia para las tareas más exigentes."},
+      {t:"⚙️ Desempeño", c:"Potencia y robustez para tu negocio."},
+      {t:"📱 Tecnología", c:"Tecnología y conectividad para una mayor productividad."},
+      {t:"🛡️ Seguridad", c:"Elementos de seguridad activa en todo momento."},
+      {t:"💰 Precio", c:"Transit Bus 14+1 MT desde $52.907.400."}
+    ]},
+    "Transit Chasis": { fuente: "ford.cl/comercial/nueva-transit-chasis", items: [
+      {t:"📦 Capacidad", c:"Capacidad y resistencia para las tareas más exigentes."},
+      {t:"⚙️ Desempeño", c:"Potencia y robustez para tu negocio."},
+      {t:"📱 Tecnología", c:"Tecnología y conectividad para una mayor productividad."},
+      {t:"🛡️ Seguridad", c:"Elementos de seguridad activa en todo momento."},
+      {t:"💰 Precio", c:"Transit Chasis L3H1 MT desde $35.093.100."}
+    ]}
+  },
+  peugeot: {
+    "New 5008": { fuente: "peugeot.cl/gama/new-5008.html", items: [
+      {t:"👨‍👩‍👧‍👦 El gran SUV híbrido de 7 asientos", c:"New Peugeot 5008: el gran SUV híbrido auto recargable de 7 asientos, con espacio generoso y confort de alta gama."},
+      {t:"📱 Panoramic i-Cockpit", c:"New Peugeot Panoramic i-Cockpit, el puesto de conducción panorámico característico de la marca."},
+      {t:"🛡️ Conducción segura e intuitiva", c:"Ayudas a la conducción para una experiencia segura e intuitiva."},
+      {t:"⚙️ Motor híbrido", c:"Motor híbrido auto recargable de alto rendimiento de 136 HP con automática de 6 velocidades: ahorro de combustible, eficiencia y carga cero (no se enchufa)."},
+      {t:"📦 Versiones", c:"Allure y GT."}
+    ]},
+    "New 3008": { fuente: "peugeot.cl/gama/suv-peugeot-3008.html", items: [
+      {t:"🎨 Brighter Design", c:"Diseño inspirador: nuevo frontal, nuevos faros delanteros, nuevos focos traseros y molduras de aleta."},
+      {t:"📱 Tecnología", c:"Pantalla táctil 10\" HD, Mirror Screen y tablero digital."},
+      {t:"🧠 Smart High Tech", c:"Tecnologías inteligentes: regulador de velocidad adaptativo, Advanced Grip Control, alerta de cambio involuntario de carril y reconocimiento de señales de limitación de velocidad."}
+    ]},
+    "2008": { fuente: "peugeot.cl/gama/new-peugeot-2008.html", items: [
+      {t:"🎨 SUV ágil y atrevido", c:"El 2008 es el SUV ágil y atrevido de Peugeot, disponible en versiones Active, Allure y GT (incluye New e-2008 First Edition eléctrico)."},
+      {t:"📱 Peugeot i-Cockpit", c:"El incomparable Peugeot i-Cockpit con conectividad a bordo y un interior elegante."},
+      {t:"🛡️ Ayudas a la conducción", c:"Conjunto de asistencias para llegar aún más lejos con confort y bienestar."},
+      {t:"📦 Practicidad", c:"Maletero en dos alturas."},
+      {t:"💰 Precio", c:"Versiones desde $16.990.000 hasta $25.590.000 según equipamiento."}
+    ]},
+    "New 208": { fuente: "peugeot.cl/gama/new-peugeot-208.html", items: [
+      {t:"🎨 Irresistible y divertido", c:"New Peugeot 208 con luces de estilo único y cuidado por el detalle. Versiones Active y Allure."},
+      {t:"📱 Peugeot i-Cockpit", c:"Simplemente extraordinario: i-Cockpit con cuadro de mandos digital."},
+      {t:"🛡️ Seguridad", c:"Conduce con la seguridad óptima."},
+      {t:"💰 Precio", c:"Precios promocionales: desde $13.190.000 · $19.190.000 · $22.590.000 según versión."}
+    ]},
+    "308": { fuente: "peugeot.cl/gama/nuevo-308.html", items: [
+      {t:"🎨 Diseño", c:"Proporciones audaces y seducción intensa: proyectores delanteros y pilotos traseros de nueva firma lumínica."},
+      {t:"📱 Techno Spirit", c:"Diseño y tecnología al servicio de la ergonomía: funciona como un smartphone, nueva consola central y siempre conectado."},
+      {t:"⚙️ Motores", c:"Motores gasolina y diésel. \"Driving pleasure, more than ever\"."},
+      {t:"💰 Precio", c:"Versiones desde $19.990.000 hasta $26.490.000."}
+    ]},
+    "Landtrek": { fuente: "peugeot.cl/gama/landtrek.html", items: [
+      {t:"🎨 Diseño exterior poderoso", c:"New Landtrek MCA con diseño exterior poderoso e interior moderno."},
+      {t:"🏔️ Manejo seguro en todo terreno", c:"Preparada para cruces exigentes con capacidades off-road de cabina doble."},
+      {t:"🛋️ Comodidad y amplitud", c:"Cabina cómoda y amplia con la versatilidad característica de Landtrek."},
+      {t:"📦 Versiones", c:"New Landtrek MCA y Landtrek Active, en gasolina y diésel."}
+    ]},
+    "Traveller": { fuente: "peugeot.cl/gama/new-traveller.html", items: [
+      {t:"💼 Mejora tu negocio", c:"New Traveller, el van de pasajeros Peugeot en versión Allure con excelencia en los detalles."},
+      {t:"🛡️ Ayudas a la conducción mejoradas", c:"Asistencias de conducción reforzadas y puesto de conducción ergonómico."},
+      {t:"📱 Conectividad", c:"Conectividad a bordo y modularidad del espacio interior."},
+      {t:"🧳 Accesorios", c:"Personalizable: barra de techo, enganche de remolque desmontable, portaequipaje y portabicicletas."}
+    ]},
+    "Expert": { fuente: "peugeot.cl/gama/new-expert.html", items: [
+      {t:"💼 Exigente, como tú", c:"New Expert en versión Allure: emoción y excelencia para el trabajo."},
+      {t:"📦 Carga y volumen útil", c:"Carga y volumen útil destacados con dimensiones pensadas para el oficio."},
+      {t:"🛡️ Ayudas a la conducción mejoradas", c:"Asistencias mejoradas y puesto de conducción incomparable."},
+      {t:"🔧 Modularidad", c:"Espacio modular y personalizable: portaequipaje de techo, kit de protección interior, bandas reflectantes y enganche de remolque."}
+    ]},
+    "Partner": { fuente: "peugeot.cl/gama/new-partner.html", items: [
+      {t:"🏙️ Hecho para la ciudad", c:"Partner: el vehículo comercial hecho para la ciudad (disponible también e-Partner eléctrico)."},
+      {t:"📱 Peugeot i-Cockpit optimizado", c:"Puesto de conducción i-Cockpit optimizado."},
+      {t:"📦 Gran modularidad", c:"Gran modularidad de la cabina y del espacio de carga."},
+      {t:"🛡️ Ayudas a la conducción reforzadas", c:"Asistencias de conducción reforzadas para el trabajo diario."}
+    ]}
+  },
+  jeep: {
+    "Wrangler": { fuente: "jeep.com/cl/wrangler.html", items: [
+      {t:"🏔️ Aventuras sin límites", c:"\"Construido para aventuras sin límites\". El SUV más legendario se transforma: el Wrangler más capaz de la historia."},
+      {t:"⚙️ Capacidad", c:"Nuevo eje trasero flotante Dana 44 HD. Perfección en cada detalle, fiel compañero de travesías con motor 2.0 turbo (versión Sahara)."},
+      {t:"📱 Tecnología", c:"Aventura en nueva pantalla de gran tamaño."}
+    ]},
+    "Grand Cherokee": { fuente: "jeep.com/cl/grand-cherokee.html", items: [
+      {t:"🏆 La leyenda, diseñada para el futuro", c:"\"La aventura es parte de tu naturaleza. Vívela\". Potencia y confianza legendaria con estilo dinámico y atemporal."},
+      {t:"🛋️ Confort", c:"Puro confort y funcionalidad. La versión L de tres filas tiene distancia entre ejes ampliada con más espacio para carga y pasajeros."},
+      {t:"📱 Tecnología", c:"Multitud de tecnología intuitiva disponible, equipado para tu tranquilidad."},
+      {t:"⚙️ Motor", c:"Motor V6 Pentastar de 3.6L."},
+      {t:"📦 Versiones", c:"Limited (2 filas de asientos) y Grand Cherokee L (3 filas)."}
+    ]},
+    "Compass": { fuente: "jeep.com/cl/compass.html", items: [
+      {t:"⚙️ Potencia que se adapta a tu estilo", c:"T270 1.3 Turbo: equilibrio ideal entre eficiencia y desempeño. Hurricane 2.0 Turbo: máxima potencia y torque superior. T270 1.3 Turbo PHEV: potencia electrificada de 240 CV que combina motor eléctrico y turbo."},
+      {t:"🎨 Diseño", c:"Impresionante de arriba a abajo: sinergia entre tecnología y elegancia."},
+      {t:"🛡️ Seguridad y tecnología", c:"Cabina sofisticada, capacidad legendaria, última tecnología intuitiva y avanzadas características de seguridad estándar y disponibles."},
+      {t:"📦 Versiones", c:"Sport, Longitude, Limited, Blackhawk y 4xe (híbrido enchufable)."}
+    ]},
+    "Commander": { fuente: "jeep.com/cl/commander.html", items: [
+      {t:"👨‍👩‍👧‍👦 Otra dimensión para tu aventura", c:"New Jeep Commander: hasta 7 pasajeros y versatilidad en cada aventura. Un nuevo nivel en los SUV."},
+      {t:"🎨 Diseño sofisticado", c:"Diseño sofisticado con interiores de lujo."},
+      {t:"🛡️ Seguridad", c:"Seguridad en tu camino."},
+      {t:"📦 Versiones", c:"New Commander Limited."}
+    ]},
+    "Avenger": { fuente: "jeep.com/cl/avenger.html", items: [
+      {t:"🎨 Diseño funcional", c:"Características distintivas: diseño funcional con la última tecnología."},
+      {t:"🏔️ Libertad de movimiento", c:"El espíritu Jeep en formato compacto."},
+      {t:"📦 Versiones", c:"Altitude 1.2T MT6 FWD, Altitude 1.2T Híbrida DDCT6, Summit 1.2T Híbrida DDCT6 y Summit BEV (100% eléctrico)."}
+    ]},
+    "New Renegade": { fuente: "jeep.com/cl/renegade.html", items: [
+      {t:"🏔️ Diseñado para la aventura", c:"Jeep New Renegade: diversión en cuatro ruedas, diseñado para la aventura. Vive la aventura a tu manera."},
+      {t:"🛋️ Comodidad", c:"Comodidad en el camino con la potencia para explorar."},
+      {t:"📱 Tecnología", c:"Tecnología de primera para transformar tu conducción."},
+      {t:"🛡️ Seguridad", c:"Maneja con confianza e ilumina el camino."}
+    ]}
+  },
+  fiat: {
+    "500e": { fuente: "fiat.cl/modelos/500e.html", items: [
+      {t:"⚡ Un ícono electrificado", c:"Sorpréndete con el nuevo Fiat 500e: el ícono de Fiat ahora 100% eléctrico."},
+      {t:"🎨 Diseño que enamora", c:"Diseño que enamora, hecho para la ciudad."},
+      {t:"📱 Siempre conectado", c:"Conectividad permanente y conducción sin estrés."},
+      {t:"🛡️ Seguridad avanzada", c:"Seguridad de alta tecnología en tu 500e."}
+    ]},
+    "Fastback": { fuente: "fiat.cl/modelos/fastback.html", items: [
+      {t:"🎨 Diseño SUV Coupé", c:"El SUV coupé de Fiat, hecho para disfrutar: diseño deportivo, tecnología de vanguardia y el maletero más grande de la categoría."},
+      {t:"⚙️ Performance con actitud", c:"Performance con actitud y espacio que sorprende."},
+      {t:"📱 Tecnología que conecta", c:"Tecnología que conecta y comodidad automática."},
+      {t:"🛡️ Seguridad inteligente", c:"Seguridad inteligente en todas las versiones."},
+      {t:"📦 Versiones", c:"New Fastback Drive Turbo AT y New Fastback Impetus Turbo AT."}
+    ]},
+    "Pulse": { fuente: "fiat.cl/modelos/pulse.html", items: [
+      {t:"🎨 Diseño con carácter", c:"\"Acelera a tu ritmo\": diseño con carácter y energía que se mueve, listo para cualquier camino."},
+      {t:"📱 Tecnología intuitiva", c:"Tecnología intuitiva y comodidad sin esfuerzo."},
+      {t:"🛡️ Seguridad inteligente", c:"Seguridad inteligente en toda la gama."},
+      {t:"📦 Versiones", c:"New Pulse Drive 1.3 MT, Drive 1.3 AT e Impetus Turbo AT."}
+    ]}
+  },
+  ram: {
+    "700": { fuente: "ram.com/cl/ram-700.html", items: [
+      {t:"💪 Work Hard Play Hard", c:"RAM 700: una pickup sin comparación, bajo el lema Work Hard Play Hard."},
+      {t:"📦 Versiones", c:"SLT Single Cab 1.3 MT, SLT Crew Cab 1.3 MT, Bighorn Crew Cab 1.3 MT, Bighorn Crew Cab 1.3 CVT y Laramie Crew Cab 1.0T CVT."}
+    ]},
+    "1500": { fuente: "ram.com/cl/ram-1500.html", items: [
+      {t:"🏆 La mejor de su clase", c:"RAM 1500: la mejor potencia y capacidad de su clase. \"El futuro es ahora\": potencia al siguiente nivel."},
+      {t:"⚙️ Motorización", c:"Bighorn Night Edition 3.6 V6 Mild Hybrid de 305 HP 4x4 AT, y Bighorn / Rebel / Laramie 3.0 SO de 420 HP 4x4 AT."},
+      {t:"🛋️ Lujo", c:"Es nuestra pickup más lujosa, con equipamiento best in class y la tecnología más avanzada de su clase."},
+      {t:"📦 Equipamiento", c:"Pisaderas, RamBox, sunroof y suspensión destacada."}
+    ]},
+    "2500": { fuente: "ram.com/cl/ram-2500.html", items: [
+      {t:"💪 Fuerza y estilo", c:"2026 RAM 2500: el poder de la capacidad. Las pickups RAM Heavy Duty más avanzadas de la historia."},
+      {t:"🛋️ Premium", c:"El trabajo duro se vuelve premium: diseño optimizado combinado con tecnología de otro nivel, para profesionales que exigen más."},
+      {t:"📦 Versiones", c:"RAM 2500 Big Horn Regular Cab 4x2 con caja de 8 pies, vehículos preparados para el trabajo y tu negocio."}
+    ]},
+    "Rampage": { fuente: "ram.com/cl/rampage.html", items: [
+      {t:"🏆 Redefinición", c:"Rampage: la redefinición de lo que una camioneta puede ser."},
+      {t:"📱 Súper pantalla", c:"El centro multimedia más grande de su categoría: 12,3\" con Android Auto y Apple CarPlay inalámbricos, y panel totalmente digital de 10,3\"."},
+      {t:"🛋️ Lujo extremo", c:"Interior sofisticado con paneles suaves al tacto y tapiz de cuero; según versión, cuero tipo Alcántara. Sonido premium Harman-Kardon, climatizador bi-zona, encendido remoto y luces ambientales."},
+      {t:"⚙️ Capacidad", c:"Tracción 4x4, carrocería robusta, pickup espacioso y control de descenso (HDC)."},
+      {t:"🛡️ Seguridad", c:"7 airbags, control crucero adaptativo, monitoreo de punto ciego y frenos de disco."},
+      {t:"📦 Versiones", c:"Bighorn, Laramie y R/T."}
+    ]}
+  },
+  omoda: {
+    "C5": { fuente: "omodajaecoo.cl/modelos/omoda-c5-2", items: [
+      {t:"🎨 Diseño", c:"Expresión de personalidad: butacas deportivas calefaccionadas con ajuste eléctrico, sunroof eléctrico, cinco colores y doble conjunto óptico con focos proyector LED de encendido automático."},
+      {t:"📱 Tecnología", c:"Panel de entretenimiento de 20\" con doble pantalla de 10,25\", audio Sony de 8 parlantes, Apple CarPlay/Android Auto inalámbricos, cargador inalámbrico y volante multimedia."},
+      {t:"⚙️ Performance", c:"Suspensión independiente Multi-Link y modos de manejo (eco, sport, normal según versión)."},
+      {t:"🛡️ Seguridad", c:"Más de 13 asistencias a la conducción: frenado automático de emergencia (AEB) con detector de peatones y ciclistas, asistente de carril (LKA) y cámara 360°. Chasis de estructura rígida con aceros de alta resistencia."},
+      {t:"💰 Precio", c:"Urban 1.5L: $12.490.000 · Comfort 1.5T: $13.990.000 · Luxury 1.5T: $16.490.000 · Prestige 1.6TGDI: $17.490.000 (con bonos de financiamiento)."}
+    ]},
+    "E5": { fuente: "omodajaecoo.cl/modelos/omoda-e5", items: [
+      {t:"🎨 Diseño", c:"Imponente grilla frontal y silueta aerodinámica que enfatizan la deportividad. Chasis reforzado con +78% de aceros de alta resistencia y zonas de deformación programada."},
+      {t:"📱 Tecnología", c:"Pantalla táctil de 12,3\" con Apple CarPlay y Android Auto inalámbricos, audio premium Sony de 8 parlantes, Head-Up Display y cargador inalámbrico rápido."},
+      {t:"🔋 Autonomía y carga", c:"Batería LFP (litio-ferrofosfato) de 60 kWh con 430 km de autonomía WLTP. Carga rápida de hasta 80 kW: de 30% a 80% en 28 minutos."},
+      {t:"🛡️ Seguridad", c:"6 airbags, frenado automático delantero y trasero (AEB+RCTAB), cámara 360° FHD, detector de punto ciego y monitoreo del conductor. Batería probada a impacto, punzadura, vadeo y temperatura."},
+      {t:"💰 Precio", c:"$25.990.000 con bono de financiamiento de $5.000.000 incluido (precio de lista $30.990.000)."}
+    ]},
+    "J7": { fuente: "omodajaecoo.cl/modelos/jaecoo-7", items: [
+      {t:"🎨 Diseño", c:"Inspirado en vehículos clásicos, con líneas elegantes y sofisticadas que resaltan su personalidad aventurera: lujo con capacidad off-road."},
+      {t:"📱 Tecnología", c:"Procesador Snapdragon Qualcomm 8155, pantalla táctil de hasta 14,8\", audio premium Sony de 8 parlantes y conectividad inalámbrica Apple CarPlay/Android Auto."},
+      {t:"⚙️ Motor", c:"Motor 1.6 TGDI con 275 Nm de torque a bajas revoluciones, transmisión DCT de 7 velocidades y consumo de hasta 16,1 km/l en carretera."},
+      {t:"🛡️ Seguridad", c:"6 airbags, asistente de frenado de emergencia (BAS), frenado automático trasero (RCTB), control de descenso (HDC) y cámara 540° con sensores perimetrales."},
+      {t:"💰 Precio", c:"Elemental: $18.490.000 con bono (lista $22.690.000) · Prime AWD: $21.990.000 con bono (lista $25.690.000)."}
+    ]},
+    "J7 SHS": { fuente: "omodajaecoo.cl/modelos/jaecoo-7-shs", items: [
+      {t:"⚡ Super Hybrid System", c:"Combina motor 1.5 TGDI con batería recargable de 90 km de autonomía eléctrica, logrando +1.200 km de autonomía total, 123,3 km/l de consumo y 525 Nm de torque."},
+      {t:"🎨 Diseño", c:"Inspirado en SUV clásicos con dimensiones armónicas, amplio despeje de suelo e innovador conjunto óptico, preparado para terrenos desafiantes."},
+      {t:"📱 Tecnología", c:"Pantalla FHD de 14,8\" con conectividad inalámbrica, audio de 6-8 parlantes según versión, asientos eléctricos, Smart Key y climatizador bi-zona."},
+      {t:"🛡️ Seguridad", c:"7 airbags, asistencias ADAS en versión superior, cámara 540° y monitoreo del conductor."},
+      {t:"💰 Precio", c:"Andes: $22.990.000 (bono $4.000.000, lista $26.990.000) · Patagonia: $26.990.000 (bono $2.000.000, lista $28.990.000)."}
+    ]},
+    "J8": { fuente: "omodajaecoo.cl/modelos/jaecoo-8", items: [
+      {t:"🎨 Diseño", c:"Líneas tradicionales inspiradas en SUV clásicas, parrilla en cascada y sistema LED con ajuste automático de intensidad. Estructura con 85% de acero de alta resistencia."},
+      {t:"📱 Tecnología", c:"Pantalla dual de 12,3\" con conectividad inalámbrica, procesador Snapdragon Qualcomm 8155, audio Sony de 12 parlantes, Head-Up Display, asientos con 12 ajustes eléctricos, climatización tri-zona y filtro PM2.5."},
+      {t:"⚙️ Motor", c:"Motor 2.0T GDI con DCT de 7 velocidades y 400 Nm de torque; capacidad para 6 pasajeros y 98% de eficiencia en la entrega de potencia."},
+      {t:"🛡️ Seguridad", c:"Frenado automático delantero y trasero (AEB+RAEB) con detección de peatones y ciclistas, asistente de carril, cámara 360° FHD, 6 airbags y detector de punto ciego."},
+      {t:"💰 Precio", c:"Versión Andes: $29.990.000 con bono de financiamiento de $1.000.000 (precio de lista $30.990.000)."}
+    ]},
+    "J6": { fuente: "omodajaecoo.cl/modelos/jaecoo-6", items: [
+      {t:"🎨 Cube-Box Design", c:"Diseño inspirado en vehículos off-road clásicos con líneas tradicionales, amplio despeje, mayor capacidad de vadeo y ángulos pronunciados para desafíos extremos."},
+      {t:"📱 Tecnología", c:"Pantalla táctil de 15,6\" y clúster de 9,2\" con procesador Snapdragon Qualcomm 8155. Audio premium Infinity de 12 parlantes, asientos eléctricos calefaccionados/ventilados y Smart Key multifunción."},
+      {t:"⚡ Performance eléctrica", c:"Motor eléctrico con batería LFP: hasta 385 Nm de torque y 364 km de autonomía WLTP. Tracción integral i-WD con 8 modos de conducción."},
+      {t:"🛡️ Seguridad", c:"6 airbags, frenado automático de emergencia (AEB), asistente de permanencia en carril (LDP), cámara 540° FHD y focos bifocales automáticos."},
+      {t:"💰 Precio", c:"Andes: $27.490.000 (bono $2.500.000) · Patagonia i-WD: $29.990.000 (bono $2.500.000)."}
+    ]}
+  }
+};
+
+// ══════════════════════════════════════════════════════════
 // SPECS REALES — extraídos de valenzueladelarze.cl / kia.cl
 // Sobrescriben los specs del DATA object cuando están disponibles
 // ══════════════════════════════════════════════════════════
@@ -1388,6 +1849,13 @@ function renderModelDetail(brandKey, modelName) {
   const hasInfo = !!model.info;
   const hasQuiz = model.preguntas && model.preguntas.length >= 5;
 
+  const atributos = ATRIBUTOS[brandKey] && ATRIBUTOS[brandKey][modelName];
+  const atrHtml = atributos
+    ? atributos.items.map(a =>
+        `<div class="info-section"><h4>${a.t}</h4><div class="info-text">${a.c}</div></div>`).join('')
+      + `<div style="font-size:12px;color:var(--text2);margin-top:1rem">Fuente oficial: ${atributos.fuente}</div>`
+    : '';
+
   const infoHtml = hasInfo ? `
     <div class="info-section">
       <h4>📋 Descripción General</h4>
@@ -1441,12 +1909,14 @@ function renderModelDetail(brandKey, modelName) {
     </div>
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab(this,'tab-specs')">📋 Ficha Técnica</button>
+      ${atributos ? `<button class="tab-btn" onclick="switchTab(this,'tab-atr')">⭐ Atributos</button>` : ''}
       <button class="tab-btn" onclick="switchTab(this,'tab-args')">💬 Argumentos</button>
       ${hasInfo ? `<button class="tab-btn" onclick="switchTab(this,'tab-info')">📖 Información</button>` : ''}
       ${hasQuiz ? `<button class="tab-btn" onclick="switchTab(this,'tab-quiz')">📝 Evaluación</button>` : ''}
       ${model.video ? `<button class="tab-btn" onclick="switchTab(this,'tab-video')">🎬 Video</button>` : ''}
     </div>
     <div class="tab-content active" id="tab-specs"><div class="specs-grid">${specs}</div></div>
+    ${atributos ? `<div class="tab-content" id="tab-atr">${atrHtml}</div>` : ''}
     <div class="tab-content" id="tab-args"><div class="arg-list">${args}</div></div>
     ${hasInfo ? `<div class="tab-content" id="tab-info">${infoHtml}</div>` : ''}
     ${hasQuiz ? `<div class="tab-content" id="tab-quiz">${quizHtml}</div>` : ''}
