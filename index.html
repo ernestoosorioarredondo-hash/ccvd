@@ -309,6 +309,11 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
 .res-nota.pass{background:#dcfce7;color:#15803d}
 .res-nota.fail{background:#fee2e2;color:#b91c1c}
 .res-empty{padding:2.5rem;text-align:center;color:var(--text2)}
+
+/* ── CONCEPTOS TÉCNICOS ── */
+.con-img{display:block;width:100%;max-width:640px;border-radius:10px;margin-top:10px;border:1px solid var(--border)}
+.con-video{margin-top:10px}
+.con-video iframe,.con-video video{width:100%;max-width:640px;aspect-ratio:16/9;border-radius:10px;border:0;background:#000}
 .role-badge.vendedor{background:#dcfce7;color:#15803d}
 .btn-del{
   background:none;border:1px solid var(--border);color:var(--text2);
@@ -1253,6 +1258,57 @@ const ATRIBUTOS = {
 };
 
 // ══════════════════════════════════════════════════════════
+// CONCEPTOS TÉCNICOS POR MARCA — imágenes y videos tomados
+// de las páginas oficiales de cada marca en Chile.
+// Se muestran en la pestaña 🎓 Tecnología de todos los
+// modelos de la marca correspondiente.
+// ══════════════════════════════════════════════════════════
+const CONCEPTOS = {
+  honda: { fuente: "autos.honda.cl", items: [
+    {t:"🛡️ Honda SENSING", c:"El exclusivo conjunto de tecnologías de seguridad avanzada de Honda: frenado con mitigación de colisiones (CMBS), mitigación de salida de carril (RDM), control crucero adaptativo (ACC) y asistencia de mantenimiento de carril (LKAS).", img:"https://autos.honda.cl/wp-content/uploads/2026/04/Sensing-300x95.png"},
+    {t:"⚡ e:HEV — Modo eléctrico", c:"Video oficial de Honda Chile: el sistema híbrido e:HEV prioriza la tracción eléctrica la mayor parte del tiempo.", videomp4:"https://autos.honda.cl/wp-content/uploads/2025/04/modo-electrico.mp4"},
+    {t:"⚡ e:HEV — Modo híbrido", c:"Video oficial de Honda Chile que explica el funcionamiento del modo híbrido del sistema e:HEV.", videomp4:"https://autos.honda.cl/wp-content/uploads/2025/04/modo-hibrido.mp4"},
+    {t:"⚡ e:HEV — Modo combustión", c:"Video oficial de Honda Chile que explica el funcionamiento del modo de combustión del sistema e:HEV.", videomp4:"https://autos.honda.cl/wp-content/uploads/2025/04/modo-combustion.mp4"},
+    {t:"🧠 e:HEV — Sistema inteligente", c:"Video oficial de Honda Chile: el sistema alterna automáticamente entre los modos eléctrico, híbrido y de combustión según la conducción.", videomp4:"https://autos.honda.cl/wp-content/uploads/2025/04/sistema-inteligente.mp4"},
+    {t:"🎬 CR-V e:HEV — Video oficial", c:"Video publicado en la página oficial del Honda CR-V e:HEV en Chile.", video:"https://www.youtube.com/embed/0KLRNdlL6YY?rel=0"}
+  ]},
+  kia: { fuente: "kia.cl/electromovilidad", items: [
+    {t:"🔋 Híbridos HEV — ¿Cómo funcionan?", c:"No se enchufan: el motor principal es el de combustión, asistido por un motor eléctrico. La batería se recarga sola, con ahorro de combustible y arranque silencioso.", img:"https://www.kia.cl/adobe/dynamicmedia/deliver/dm-aid--d4e721a2-b0f0-430b-9abe-8912ca47b58d/nuevo-sportage-hev-portada.jpg?width=1600&quality=85"},
+    {t:"⚡ Eléctricos Kia — Beneficios", c:"Menos componentes, frenada regenerativa, menos ruido y menos emisiones. Ahorro en documentación: exención del impuesto verde y del permiso de circulación por dos años (aplica también a PHEV).", img:"https://www.kia.cl/adobe/dynamicmedia/deliver/dm-aid--5655c158-6c11-4e76-a877-986fe71b1496/tita-ev-1920x822.jpg?width=1600&quality=85"},
+    {t:"🛡️ Drive Wise (ADAS)", c:"La suite de asistencias avanzadas de Kia presente en la gama: detección de colisión frontal (FCA), asistente de punto ciego (BCA), mantenimiento de carril (LKA-LFA) y control crucero inteligente (SCC)."}
+  ]},
+  ford: { fuente: "ford.cl/tecnologia", items: [
+    {t:"🛡️ Seguridad y ADAS — Ford Co-Pilot 360", c:"Avanzadas tecnologías creadas para cuidar de ti y los tuyos en cada viaje. Sistemas avanzados de asistencia al conductor (ADAS): innovaciones Ford diseñadas para maximizar la experiencia de manejo.", img:"media/ford-adas.avif"},
+    {t:"📱 Conectividad", c:"Mantente conectado y disfruta los sistemas de infoentretenimiento equipados en tu vehículo Ford.", img:"media/ford-conectividad.avif"},
+    {t:"🛋️ Comodidad", c:"Tecnologías diseñadas para mantener tu espacio cómodo y crear una atmósfera placentera en cada trayecto.", img:"media/ford-comodidad.avif"},
+    {t:"🏔️ Off-Road / Performance", c:"Desarrolladas para aprovechar al máximo el poder y capacidades de tu Ford, ya sea para el trabajo, la aventura o la vida diaria.", img:"media/ford-offroad.avif"}
+  ]},
+  peugeot: { fuente: "peugeot.cl/marca/innovacion", items: [
+    {t:"🎛️ Peugeot i-Cockpit", c:"El puesto de conducción exclusivo de Peugeot: volante compacto, panel digital a la altura de la vista y pantalla táctil.", img:"media/peugeot-icockpit.webp"},
+    {t:"⛽ Motor bencinero PureTech", c:"La familia de motores de gasolina PureTech de Peugeot.", img:"media/peugeot-puretech.webp"},
+    {t:"🛢️ Motor diésel BlueHDi", c:"La tecnología diésel BlueHDi de Peugeot.", img:"media/peugeot-bluehdi.webp"},
+    {t:"⚙️ Caja automática EAT", c:"La caja de cambios automática EAT de Peugeot, disponible hasta en 8 velocidades.", img:"media/peugeot-eat.webp"},
+    {t:"🔄 Función Stop & Start", c:"Apaga el motor automáticamente en las detenciones para ahorrar combustible y reducir emisiones.", img:"media/peugeot-stopstart.webp"}
+  ]},
+  jeep: { fuente: "jeep.com/cl", items: [
+    {t:"🏔️ Capacidad 4x4 legendaria", c:"\"Construido para aventuras sin límites\": el Wrangler más capaz de la historia, con nuevo eje trasero flotante Dana 44 HD.", img:"https://www.jeep.com/content/dam/cross-regional/stellantis/jeep/latam-rol/chile/modelos/2024/Wrangler2024/Hero/Hero-Wrangler2026-d.jpg.img.1440.jpg"},
+    {t:"⚙️ Motores Turbo y electrificación", c:"T270 1.3 Turbo: equilibrio ideal entre eficiencia y desempeño. Hurricane 2.0 Turbo: máxima potencia y torque superior. T270 1.3 Turbo PHEV: potencia electrificada de 240 CV que combina motor eléctrico y turbo (Compass)."}
+  ]},
+  fiat: { fuente: "fiat.cl", items: [
+    {t:"🚗 SUV Coupé Fastback", c:"\"El SUV coupé de Fiat, hecho para disfrutar\": diseño deportivo, tecnología de vanguardia y el maletero más grande de la categoría.", img:"https://www.fiat.cl/content/dam/fiat/chile/modelos/fastback/galeria/largo/Fastback_Impetus_006.jpg"},
+    {t:"⚡ 500e — Un ícono electrificado", c:"El 500e es el ícono de Fiat 100% eléctrico: siempre conectado, conducción sin estrés y seguridad avanzada."}
+  ]},
+  ram: { fuente: "ram.com/cl", items: [
+    {t:"📱 Súper pantalla", c:"El centro multimedia más grande de su categoría: 12,3\" con Android Auto y Apple CarPlay inalámbricos, más panel totalmente digital de 10,3\" (Rampage).", img:"https://www.ram.com/content/dam/cross-regional/stellantis/ramtrucks/latam-rol/chile/es_cl/modelos/rampage/Hero/Hero-Desk-Dic-V2.jpeg.img.1440.jpg"},
+    {t:"📦 Equipamiento best in class", c:"La RAM 1500 suma RamBox, pisaderas eléctricas, sunroof y suspensión neumática, con la tecnología más avanzada de su clase."}
+  ]},
+  omoda: { fuente: "omodajaecoo.cl", items: [
+    {t:"⚡ Super Hybrid System (SHS)", c:"El sistema súper híbrido de Omoda Jaecoo combina un motor 1.5 TGDI con una batería recargable de 90 km de autonomía eléctrica: +1.200 km de autonomía total y 525 Nm de torque. Video oficial:", video:"https://www.youtube.com/embed/ZdkmM8DJqTs?rel=0"},
+    {t:"🛡️ ADAS y cámara 540°", c:"Más de 13 asistencias a la conducción: frenado automático de emergencia con detección de peatones y ciclistas, asistente de permanencia en carril y cámara 540° con sensores perimetrales.", img:"https://www.omodajaecoo.cl/wp-content/uploads/2026/04/JAECOO-7-SHS-DESKTOP-2040x820-1-1536x617.jpg"}
+  ]}
+};
+
+// ══════════════════════════════════════════════════════════
 // SPECS REALES — extraídos de valenzueladelarze.cl / kia.cl
 // Sobrescriben los specs del DATA object cuando están disponibles
 // ══════════════════════════════════════════════════════════
@@ -1856,6 +1912,17 @@ function renderModelDetail(brandKey, modelName) {
       + `<div style="font-size:12px;color:var(--text2);margin-top:1rem">Fuente oficial: ${atributos.fuente}</div>`
     : '';
 
+  const conceptos = CONCEPTOS[brandKey];
+  const conHtml = conceptos
+    ? conceptos.items.map(cn =>
+        `<div class="info-section"><h4>${cn.t}</h4><div class="info-text">${cn.c}</div>
+          ${cn.img ? `<img class="con-img" src="${cn.img}" alt="${cn.t}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : ''}
+          ${cn.video ? `<div class="con-video"><iframe src="${cn.video}" allowfullscreen loading="lazy" referrerpolicy="no-referrer"></iframe></div>` : ''}
+          ${cn.videomp4 ? `<div class="con-video"><video src="${cn.videomp4}" controls muted playsinline preload="none" crossorigin="anonymous"></video></div>` : ''}
+        </div>`).join('')
+      + `<div style="font-size:12px;color:var(--text2);margin-top:1rem">Imágenes y videos de la página oficial: ${conceptos.fuente}</div>`
+    : '';
+
   const infoHtml = hasInfo ? `
     <div class="info-section">
       <h4>📋 Descripción General</h4>
@@ -1910,6 +1977,7 @@ function renderModelDetail(brandKey, modelName) {
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab(this,'tab-specs')">📋 Ficha Técnica</button>
       ${atributos ? `<button class="tab-btn" onclick="switchTab(this,'tab-atr')">⭐ Atributos</button>` : ''}
+      ${conceptos ? `<button class="tab-btn" onclick="switchTab(this,'tab-con')">🎓 Tecnología</button>` : ''}
       <button class="tab-btn" onclick="switchTab(this,'tab-args')">💬 Argumentos</button>
       ${hasInfo ? `<button class="tab-btn" onclick="switchTab(this,'tab-info')">📖 Información</button>` : ''}
       ${hasQuiz ? `<button class="tab-btn" onclick="switchTab(this,'tab-quiz')">📝 Evaluación</button>` : ''}
@@ -1917,6 +1985,7 @@ function renderModelDetail(brandKey, modelName) {
     </div>
     <div class="tab-content active" id="tab-specs"><div class="specs-grid">${specs}</div></div>
     ${atributos ? `<div class="tab-content" id="tab-atr">${atrHtml}</div>` : ''}
+    ${conceptos ? `<div class="tab-content" id="tab-con">${conHtml}</div>` : ''}
     <div class="tab-content" id="tab-args"><div class="arg-list">${args}</div></div>
     ${hasInfo ? `<div class="tab-content" id="tab-info">${infoHtml}</div>` : ''}
     ${hasQuiz ? `<div class="tab-content" id="tab-quiz">${quizHtml}</div>` : ''}
