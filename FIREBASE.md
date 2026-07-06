@@ -1,4 +1,15 @@
-# Activar la nube (Firebase) para ver TODOS los resultados
+# Nube de resultados (Firebase) — ✅ YA ACTIVADA
+
+> **Estado:** ACTIVA desde el 15-06-2026. Proyecto Firebase **`ccvd-capacitacion`**,
+> base de datos Firestore en `southamerica-east1`, colección `resultados_ccvd`.
+> El administrador ya ve en 📊 Resultados las evaluaciones de **todos los dispositivos**.
+> Consola del proyecto: https://console.firebase.google.com/project/ccvd-capacitacion
+>
+> Lo de abajo es el instructivo original (por si algún día hay que rehacerlo o migrarlo).
+
+---
+
+## (Referencia) Cómo se activó / cómo reactivar en otro proyecto
 
 Por defecto la plataforma guarda las notas **solo en el teléfono/PC de cada persona**.
 Para que el **administrador vea todas las evaluaciones de todos los vendedores** desde

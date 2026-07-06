@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Resultados de evaluaciones CCVD: registro append-only.
+    // Cualquiera puede leer (admin ve todo) y crear (registrar su evaluación),
+    // pero nadie puede modificar ni borrar → historial permanente y a prueba de manipulación.
+    match /resultados_ccvd/{doc} {
+      allow read: if true;
+      allow create: if true;
+      allow update, delete: if false;
+    }
+  }
+}
