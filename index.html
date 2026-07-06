@@ -1695,9 +1695,16 @@ function getResults() {
   catch(e) { return []; }
 }
 function saveResult(r) {
+  // 1) Siempre guarda una copia local (para verlo offline y en este equipo)
   const all = getResults();
   all.push(r);
   localStorage.setItem(STORAGE_RESULTS, JSON.stringify(all));
+  // 2) Además envía a la nube si está configurada (para que el admin lo vea desde cualquier lado)
+  if (window.Cloud && window.Cloud.enabled && window.Cloud.saveResult) {
+    Promise.resolve(window.Cloud.ready)
+      .then(() => window.Cloud.saveResult(r))
+      .catch(e => console.warn('No se pudo guardar en la nube:', e));
+  }
 }
 
 function loadUsers() {
@@ -2224,30 +2231,40 @@ function _fmtFecha(iso) {
     + ' ' + d.toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' });
 }
 
-function renderResultados() {
-  const isAdmin = SESSION.role === 'admin';
-  let results = getResults().slice().reverse(); // más recientes primero
-  if (!isAdmin) results = results.filter(r => r.username === SESSION.username);
+let _resCache = []; // resultados mostrados actualmente (local + nube), para exportar
 
+function _resKey(r) { return `${r.username}|${r.model}|${r.fecha}`; }
+
+function _mergeResultados(a, b) {
+  const seen = new Set(), out = [];
+  a.concat(b).forEach(r => { const k = _resKey(r); if (!seen.has(k)) { seen.add(k); out.push(r); } });
+  return out.sort((x, y) => (y.fecha || '').localeCompare(x.fecha || ''));
+}
+
+function _pintarResultados(results, isAdmin, fuente) {
+  _resCache = results;
   document.getElementById('res-sub').textContent = isAdmin
     ? `Historial de evaluaciones de todos los usuarios (${results.length} registro${results.length !== 1 ? 's' : ''})`
     : `Tu historial de evaluaciones (${results.length} registro${results.length !== 1 ? 's' : ''})`;
 
   const notice = document.getElementById('res-notice');
+  const cloud = window.Cloud && window.Cloud.enabled;
   if (isAdmin) {
     notice.style.display = 'block';
-    notice.innerHTML = '⚠️ <strong>Importante:</strong> Los resultados se guardan en el navegador de cada dispositivo. Aquí solo se ven las evaluaciones rendidas en <strong>este equipo</strong>. Pide a los vendedores exportar su CSV para consolidar.';
+    notice.innerHTML = cloud
+      ? '☁️ <strong>Conectado a la nube.</strong> Aquí ves los resultados de <strong>todos los vendedores y dispositivos</strong> en tiempo real.'
+      : '⚠️ <strong>Modo local:</strong> por ahora solo se ven las evaluaciones rendidas en <strong>este equipo</strong>. Para ver las de todos los teléfonos, activa Firebase (ver archivo FIREBASE.md).';
   } else {
     notice.style.display = 'none';
   }
 
   document.getElementById('res-toolbar').innerHTML =
     `<button class="btn-export" onclick="exportResultadosCSV()">📥 Exportar a CSV (Excel)</button>` +
-    (isAdmin ? `<button class="btn-export" onclick="clearResultados()" style="border-color:rgba(204,0,0,.4);color:#b91c1c">🗑 Borrar historial</button>` : '');
+    (isAdmin && !cloud ? `<button class="btn-export" onclick="clearResultados()" style="border-color:rgba(204,0,0,.4);color:#b91c1c">🗑 Borrar historial local</button>` : '');
 
   const table = document.getElementById('res-table');
   if (!results.length) {
-    table.innerHTML = `<tr><td><div class="res-empty">Aún no hay evaluaciones registradas.<br>Las notas aparecerán aquí al completar una evaluación.</div></td></tr>`;
+    table.innerHTML = `<tr><td><div class="res-empty">${fuente === 'cargando' ? 'Cargando resultados de la nube…' : 'Aún no hay evaluaciones registradas.<br>Las notas aparecerán aquí al completar una evaluación.'}</div></td></tr>`;
     return;
   }
   table.innerHTML =
@@ -2264,10 +2281,26 @@ function renderResultados() {
       </tr>`).join('');
 }
 
-function exportResultadosCSV() {
+async function renderResultados() {
   const isAdmin = SESSION.role === 'admin';
-  let results = getResults();
-  if (!isAdmin) results = results.filter(r => r.username === SESSION.username);
+  const filtrar = arr => isAdmin ? arr : arr.filter(r => r.username === SESSION.username);
+  // 1) Pinta de inmediato lo que hay en este equipo
+  let local = filtrar(getResults());
+  _pintarResultados(_mergeResultados(local, []), isAdmin, 'local');
+  // 2) Si la nube está activa, trae TODO y fusiona
+  if (window.Cloud && window.Cloud.enabled && window.Cloud.fetchAll) {
+    try {
+      await window.Cloud.ready;
+      const cloud = filtrar(await window.Cloud.fetchAll());
+      _pintarResultados(_mergeResultados(local, cloud), isAdmin, 'nube');
+    } catch (e) {
+      console.warn('No se pudieron leer los resultados de la nube:', e);
+    }
+  }
+}
+
+function exportResultadosCSV() {
+  const results = _resCache.slice();
   if (!results.length) { alert('No hay resultados para exportar.'); return; }
   const rows = [['Fecha','Usuario','Nombre','Marca','Modelo','Correctas','Total','Nota','Resultado']];
   results.forEach(r => rows.push([
@@ -2320,6 +2353,61 @@ if ('serviceWorker' in navigator) {
   }
   // Show login
 })();
+</script>
+
+<!-- ══════════════════════════════════════════════════════════
+     REGISTRO DE RESULTADOS EN LA NUBE (Firebase Firestore)
+     ------------------------------------------------------------
+     Mientras apiKey empiece con "TU_", la app guarda los resultados
+     SOLO en este dispositivo (modo local). Para que el administrador
+     vea TODOS los resultados de todos los teléfonos:
+       1. Entra a https://console.firebase.google.com y crea un proyecto.
+       2. Crea una base de datos "Firestore" (modo producción).
+       3. En Firestore > Reglas, pega las reglas del archivo FIREBASE.md.
+       4. Agrega una app web (</>) y copia aquí el objeto de configuración
+          (los 6 valores de abajo). Guarda y sube el cambio.
+     Listo: al detectar credenciales reales, la app pasa a la nube sola.
+     ══════════════════════════════════════════════════════════ -->
+<script>
+window.CCVD_FIREBASE = {
+  apiKey: "TU_API_KEY",
+  authDomain: "TU_PROYECTO.firebaseapp.com",
+  projectId: "TU_PROYECTO",
+  storageBucket: "TU_PROYECTO.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId: "TU_APP_ID"
+};
+</script>
+<script type="module">
+  const cfg = window.CCVD_FIREBASE || {};
+  const Cloud = { enabled: false, error: null, ready: Promise.resolve() };
+  window.Cloud = Cloud;
+  if (cfg.apiKey && !String(cfg.apiKey).startsWith("TU_")) {
+    try {
+      const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+      const { getFirestore, collection, addDoc, getDocs, query, orderBy } =
+        await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const app = initializeApp(cfg);
+      const db = getFirestore(app);
+      const COL = "resultados_ccvd";
+      Cloud.enabled = true;
+      Cloud.saveResult = async (obj) => { await addDoc(collection(db, COL), obj); };
+      Cloud.fetchAll = async () => {
+        const snap = await getDocs(query(collection(db, COL), orderBy("fecha", "desc")));
+        return snap.docs.map(d => d.data());
+      };
+    } catch (e) {
+      Cloud.enabled = false;
+      Cloud.error = (e && e.message) || String(e);
+      console.warn("CCVD nube deshabilitada:", Cloud.error);
+    }
+  }
+  window.dispatchEvent(new Event("cloud-ready"));
+  // Si el admin ya está mirando la pestaña Resultados cuando la nube termina de cargar, refresca
+  if (typeof window.renderResultados === "function" &&
+      document.getElementById("view-resultados")?.classList.contains("active")) {
+    try { window.renderResultados(); } catch (e) {}
+  }
 </script>
 </body>
 </html>
