@@ -1,6 +1,6 @@
 // Service Worker CCVD — estrategia network-first con respaldo en caché
 // (siempre intenta traer la versión nueva; sin internet usa la guardada)
-const CACHE = 'ccvd-v2';
+const CACHE = 'ccvd-v3';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -18,6 +18,10 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  // Solo interceptar recursos del mismo origen. Las imágenes externas (logos y fotos
+  // hotlinkeadas desde valenzueladelarze.cl) deben ir directo al navegador para conservar
+  // su referrer; si el SW las re-fetchea, el WordPress bloquea el hotlink y no cargan.
+  if (new URL(e.request.url).origin !== location.origin) return;
   e.respondWith(
     fetch(e.request)
       .then(r => {
