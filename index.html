@@ -1701,6 +1701,50 @@ const STORAGE_SESSION = 'ccvd_session_v2';
 const STORAGE_RESULTS = 'ccvd_results_v1';
 
 let SESSION = null;
+let CLOUD_USERS = [];   // usuarios sincronizados desde Firestore (disponibles en cualquier dispositivo)
+
+// Hash SHA-256 (con sal fija de la app) para no guardar contraseñas en claro
+async function sha256(str) {
+  const data = new TextEncoder().encode('ccvd::' + str);
+  const buf = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// Trae la lista de usuarios de la nube y refresca el panel admin si está abierto
+async function refreshCloudUsers() {
+  if (!(window.Cloud && window.Cloud.enabled && window.Cloud.fetchUsers)) return;
+  try {
+    await window.Cloud.ready;
+    CLOUD_USERS = await window.Cloud.fetchUsers();
+    if (document.getElementById('user-list')) renderAdmin();
+  } catch (e) { console.warn('No se pudieron cargar usuarios de la nube:', e); }
+}
+window.refreshCloudUsers = refreshCloudUsers;
+
+// Migra a la nube los usuarios que solo existían en localStorage (legado por dispositivo)
+async function migrateLocalUsers() {
+  if (!(window.Cloud && window.Cloud.enabled && window.Cloud.saveUser)) return;
+  const locals = getLocalUsers();
+  if (!locals.length) return;
+  try {
+    await window.Cloud.ready;
+    if (!CLOUD_USERS.length) await refreshCloudUsers();
+    for (const lu of locals) {
+      if (lu.username === 'admin') continue;
+      if (CLOUD_USERS.find(c => c.username === lu.username)) continue;
+      const nu = { username: lu.username, name: lu.name, role: lu.role, brands: lu.brands,
+                   passwordHash: await sha256(lu.password || ''), fecha: new Date().toISOString() };
+      await window.Cloud.saveUser(nu);
+      CLOUD_USERS.push(nu);
+    }
+    if (document.getElementById('user-list')) renderAdmin();
+  } catch (e) { console.warn('Migración de usuarios locales a la nube falló:', e); }
+}
+
+function getLocalUsers() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_USERS)) || []; }
+  catch (e) { return []; }
+}
 
 // ── Registro de resultados de evaluaciones ──
 function getResults() {
@@ -1721,18 +1765,16 @@ function saveResult(r) {
 }
 
 function loadUsers() {
-  // DEFAULT_USERS siempre tienen prioridad (sus credenciales no se pueden sobreescribir desde localStorage)
+  // DEFAULT_USERS siempre tienen prioridad (sus credenciales están en el código)
   const base = DEFAULT_USERS.map(u => ({ ...u }));
-  const raw = localStorage.getItem(STORAGE_USERS);
-  if (raw) {
-    try {
-      const saved = JSON.parse(raw);
-      // Agrega solo los usuarios que NO están en DEFAULT_USERS
-      saved.forEach(su => {
-        if (!base.find(b => b.username === su.username)) base.push(su);
-      });
-    } catch(e) {}
-  }
+  // Usuarios de la nube: disponibles desde cualquier computador o teléfono
+  CLOUD_USERS.forEach(cu => {
+    if (!base.find(b => b.username === cu.username)) base.push(cu);
+  });
+  // Usuarios locales heredados (respaldo offline / creados antes de la nube)
+  getLocalUsers().forEach(su => {
+    if (!base.find(b => b.username === su.username)) base.push(su);
+  });
   return base;
 }
 
@@ -1742,11 +1784,17 @@ function saveUsers(users) {
 
 function getUsers() { return loadUsers(); }
 
-function doLogin() {
+async function doLogin() {
   const u = document.getElementById('inp-user').value.trim().toLowerCase();
   const p = document.getElementById('inp-pass').value;
+  // Asegura tener la lista de usuarios de la nube antes de validar (entra desde cualquier dispositivo)
+  await refreshCloudUsers();
+  const hash = await sha256(p);
   const users = getUsers();
-  const user = users.find(x => x.username.toLowerCase() === u && x.password === p);
+  const user = users.find(x =>
+    x.username.toLowerCase() === u &&
+    ((x.passwordHash && x.passwordHash === hash) || (x.password && x.password === p))
+  );
   if (!user) {
     const el = document.getElementById('login-error');
     el.style.display = 'block';
@@ -1773,6 +1821,8 @@ function startApp() {
   document.getElementById('header-username').textContent = SESSION.name;
   if (SESSION.role === 'admin') {
     document.getElementById('btn-admin').style.display = 'block';
+    // Sube a la nube cualquier usuario que solo existía en este equipo
+    migrateLocalUsers();
   }
   goHome();
 }
@@ -2144,8 +2194,10 @@ function renderAdmin() {
   const users = getUsers();
   document.getElementById('user-count').textContent = users.length;
   // Notice
-  document.getElementById('admin-notice').innerHTML =
-    `⚠️ <strong>Importante:</strong> Los usuarios agregados aquí se guardan en este navegador. Para que funcionen en otros dispositivos, usa el botón <strong>"Exportar lista de usuarios"</strong> y comparte el código con el desarrollador para incrustar en el archivo HTML.`;
+  const cloudOn = window.Cloud && window.Cloud.enabled;
+  document.getElementById('admin-notice').innerHTML = cloudOn
+    ? `☁️ <strong>Cuentas en la nube:</strong> los usuarios que agregues quedan disponibles al instante en cualquier computador o teléfono. Las contraseñas se guardan cifradas.`
+    : `⚠️ <strong>Sin conexión con la nube:</strong> los usuarios se guardan solo en este navegador por ahora; se sincronizarán cuando haya conexión.`;
 
   // User list
   const colors = ['#4c7ae8','#4caf87','#e8c53a','#e85a4f','#9b59b6','#e67e22'];
@@ -2175,7 +2227,7 @@ function toggleBrandCheck(key) {
   el.classList.toggle('on', chk.checked);
 }
 
-function addUser() {
+async function addUser() {
   const name = document.getElementById('nu-name').value.trim();
   const username = document.getElementById('nu-user').value.trim().toLowerCase();
   const password = document.getElementById('nu-pass').value.trim();
@@ -2192,14 +2244,29 @@ function addUser() {
     showMsg(msg, 'Selecciona al menos una marca.', 'err'); return;
   }
 
+  await refreshCloudUsers();
   const users = getUsers();
   if (users.find(u => u.username === username)) {
     showMsg(msg, 'El nombre de usuario ya existe.', 'err'); return;
   }
 
-  users.push({ username, name, password, role, brands });
-  saveUsers(users);
-  showMsg(msg, `✓ Usuario "${name}" agregado correctamente.`, 'ok');
+  const nuevo = { username, name, role, brands, passwordHash: await sha256(password), fecha: new Date().toISOString() };
+  if (window.Cloud && window.Cloud.enabled && window.Cloud.saveUser) {
+    // Nube: disponible al instante en cualquier computador o teléfono
+    try {
+      await window.Cloud.ready;
+      await window.Cloud.saveUser(nuevo);
+      if (!CLOUD_USERS.find(c => c.username === username)) CLOUD_USERS.push(nuevo);
+    } catch (e) {
+      showMsg(msg, 'No se pudo guardar en la nube: ' + ((e && e.message) || e), 'err'); return;
+    }
+  } else {
+    // Respaldo local si no hay conexión con la nube
+    const locals = getLocalUsers();
+    locals.push({ username, name, password, role, brands });
+    saveUsers(locals);
+  }
+  showMsg(msg, `✓ Usuario "${name}" agregado. Ya puede entrar desde cualquier dispositivo.`, 'ok');
 
   // Reset form
   ['nu-name','nu-user','nu-pass'].forEach(id => document.getElementById(id).value = '');
@@ -2213,10 +2280,14 @@ function addUser() {
   renderAdmin();
 }
 
-function deleteUser(username) {
+async function deleteUser(username) {
   if (!confirm(`¿Eliminar al usuario "${username}"?`)) return;
-  const users = getUsers().filter(u => u.username !== username);
-  saveUsers(users);
+  if (window.Cloud && window.Cloud.enabled && window.Cloud.deleteUser) {
+    try { await window.Cloud.ready; await window.Cloud.deleteUser(username); }
+    catch (e) { console.warn('No se pudo borrar de la nube:', e); }
+  }
+  CLOUD_USERS = CLOUD_USERS.filter(u => u.username !== username);
+  saveUsers(getLocalUsers().filter(u => u.username !== username));
   renderAdmin();
 }
 
@@ -2398,17 +2469,25 @@ window.CCVD_FIREBASE = {
   if (cfg.apiKey && !String(cfg.apiKey).startsWith("TU_")) {
     try {
       const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-      const { getFirestore, collection, addDoc, getDocs, query, orderBy } =
+      const { getFirestore, collection, addDoc, getDocs, query, orderBy, doc, setDoc, deleteDoc } =
         await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
       const app = initializeApp(cfg);
       const db = getFirestore(app);
       const COL = "resultados_ccvd";
+      const UCOL = "usuarios_ccvd";
       Cloud.enabled = true;
       Cloud.saveResult = async (obj) => { await addDoc(collection(db, COL), obj); };
       Cloud.fetchAll = async () => {
         const snap = await getDocs(query(collection(db, COL), orderBy("fecha", "desc")));
         return snap.docs.map(d => d.data());
       };
+      // Usuarios en la nube (id del documento = username) → login desde cualquier dispositivo
+      Cloud.saveUser = async (u) => { await setDoc(doc(db, UCOL, u.username), u); };
+      Cloud.fetchUsers = async () => {
+        const snap = await getDocs(collection(db, UCOL));
+        return snap.docs.map(d => d.data());
+      };
+      Cloud.deleteUser = async (username) => { await deleteDoc(doc(db, UCOL, username)); };
     } catch (e) {
       Cloud.enabled = false;
       Cloud.error = (e && e.message) || String(e);
@@ -2416,6 +2495,10 @@ window.CCVD_FIREBASE = {
     }
   }
   window.dispatchEvent(new Event("cloud-ready"));
+  // Precarga la lista de usuarios de la nube (para que el login funcione en cualquier dispositivo)
+  if (typeof window.refreshCloudUsers === "function") {
+    try { window.refreshCloudUsers(); } catch (e) {}
+  }
   // Si el admin ya está mirando la pestaña Resultados cuando la nube termina de cargar, refresca
   if (typeof window.renderResultados === "function" &&
       document.getElementById("view-resultados")?.classList.contains("active")) {

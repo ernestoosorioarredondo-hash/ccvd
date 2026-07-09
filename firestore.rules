@@ -9,5 +9,13 @@ service cloud.firestore {
       allow create: if true;
       allow update, delete: if false;
     }
+
+    // Cuentas de usuario CCVD: para que el mismo login funcione en cualquier
+    // computador o teléfono. Sin Firebase Auth no se puede distinguir al admin
+    // por reglas, así que lectura/escritura quedan abiertas; las contraseñas se
+    // guardan cifradas (hash SHA-256) y nunca en texto plano.
+    match /usuarios_ccvd/{doc} {
+      allow read, write: if true;
+    }
   }
 }
