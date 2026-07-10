@@ -586,7 +586,9 @@ const DEFAULT_USERS = [
   {
     username: "admin",
     name: "Administrador CCVD",
-    password: "ccvd2024",
+    // Contraseña cifrada SHA-256 (sal 'ccvd::') — NO se guarda en texto plano.
+    // Para cambiarla: regenerar este hash, o crear otro usuario con rol admin desde el panel.
+    passwordHash: "eb52c60d1fee317f1bacdc3a913d9d1dc2db517c676e12535c5d3719e815f20b",
     role: "admin",
     brands: ["all"]
   }
