@@ -1712,6 +1712,11 @@ async function sha256(str) {
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
+// Normaliza texto para comparar usuarios sin importar acentos/ñ/mayúsculas
+function normText(s) {
+  return (s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').trim().toLowerCase();
+}
+
 // Trae la lista de usuarios de la nube y refresca el panel admin si está abierto
 async function refreshCloudUsers() {
   if (!(window.Cloud && window.Cloud.enabled && window.Cloud.fetchUsers)) return;
@@ -1787,15 +1792,17 @@ function saveUsers(users) {
 function getUsers() { return loadUsers(); }
 
 async function doLogin() {
-  const u = document.getElementById('inp-user').value.trim().toLowerCase();
+  const nu = normText(document.getElementById('inp-user').value);
   const p = document.getElementById('inp-pass').value;
   // Asegura tener la lista de usuarios de la nube antes de validar (entra desde cualquier dispositivo)
   await refreshCloudUsers();
-  const hash = await sha256(p);
+  const hashRaw = await sha256(p);                                        // admin y claves tal cual
+  const hashRut = await sha256(p.replace(/[.\-\s]/g, '').toLowerCase());  // RUT en cualquier formato
   const users = getUsers();
   const user = users.find(x =>
-    x.username.toLowerCase() === u &&
-    ((x.passwordHash && x.passwordHash === hash) || (x.password && x.password === p))
+    normText(x.username) === nu &&
+    ((x.passwordHash && (x.passwordHash === hashRaw || x.passwordHash === hashRut)) ||
+     (x.password && x.password === p))
   );
   if (!user) {
     const el = document.getElementById('login-error');
