@@ -328,6 +328,12 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
 .prog-badge.bad{background:#fee2e2;color:#b91c1c}
 .prog-badge.todo{background:var(--bg4,#e5e7eb);color:var(--text2)}
 .prog-link{color:var(--brand-color,var(--accent));text-decoration:none;font-weight:600}
+.res-filtros{display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:1.25rem;background:var(--bg3,rgba(0,0,0,.04));border:1px solid var(--border);border-radius:12px;padding:.85rem 1rem}
+.res-filtros .ff{display:flex;flex-direction:column;gap:.3rem}
+.res-filtros label{font-size:11px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;color:var(--text2)}
+.res-filtros select{padding:8px 12px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text);font-family:inherit;font-size:14px;min-width:150px}
+.res-filtros .btn-clearf{padding:8px 14px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg2);color:var(--text2);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.res-filtros .btn-clearf:hover{border-color:var(--accent);color:var(--text)}
 .res-nota{font-weight:800;padding:2px 10px;border-radius:20px;display:inline-block}
 .res-nota.pass{background:#dcfce7;color:#15803d}
 .res-nota.fail{background:#fee2e2;color:#b91c1c}
@@ -581,6 +587,7 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
       <div class="sec-title">📊 Registro de Resultados</div>
       <div class="sec-sub" id="res-sub"></div>
       <div class="notice" id="res-notice" style="display:none"></div>
+      <div id="res-filtros" class="res-filtros" style="display:none"></div>
       <div id="res-progreso" style="margin-bottom:1.75rem"></div>
       <div class="prog-h" id="res-hist-h" style="display:none">🗂 Historial detallado de intentos</div>
       <div class="res-toolbar" id="res-toolbar"></div>
@@ -2516,18 +2523,61 @@ function _pintarProgresoVendedor() {
      </div>`;
 }
 
-// Tabla del admin: avance de cada vendedor y qué evaluaciones le faltan
-async function _pintarProgresoAdmin(allResults) {
+// Estado de filtros del panel admin + cache de datos completos (para filtrar sin re-consultar la nube)
+let _fMarca = '';        // brandKey seleccionado, '' = todas
+let _fUser = '';         // username seleccionado, '' = todos
+let _ADMIN_ALL = [];     // todos los resultados (todos los usuarios), fusionados
+let _ADMIN_USERS = [];   // vendedores conocidos
+
+// Barra de filtros del admin (marca / vendedor), conservando la selección actual
+function _renderFiltrosAdmin() {
+  const cont = document.getElementById('res-filtros');
+  if (!cont) return;
+  cont.style.display = 'flex';
+  const marcas = Object.entries(DATA).map(([k, b]) =>
+    `<option value="${k}" ${_fMarca === k ? 'selected' : ''}>${b.name}</option>`).join('');
+  const usuarios = _ADMIN_USERS.slice()
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map(u => `<option value="${u.username}" ${_fUser === u.username ? 'selected' : ''}>${u.name} (${u.username})</option>`).join('');
+  cont.innerHTML =
+    `<div class="ff">
+       <label>Marca</label>
+       <select onchange="_fMarca=this.value;_aplicarFiltrosAdmin()">
+         <option value="">Todas las marcas</option>${marcas}
+       </select>
+     </div>
+     <div class="ff">
+       <label>Vendedor</label>
+       <select onchange="_fUser=this.value;_aplicarFiltrosAdmin()">
+         <option value="">Todos los vendedores</option>${usuarios}
+       </select>
+     </div>
+     ${(_fMarca || _fUser) ? `<button class="btn-clearf" onclick="_fMarca='';_fUser='';_renderFiltrosAdmin();_aplicarFiltrosAdmin()">✕ Limpiar filtros</button>` : ''}`;
+}
+
+// Aplica los filtros vigentes al historial y al avance, usando los datos ya cacheados
+function _aplicarFiltrosAdmin() {
+  const marcaName = _fMarca ? (DATA[_fMarca] && DATA[_fMarca].name) : '';
+  let hist = _ADMIN_ALL.slice();
+  if (marcaName) hist = hist.filter(r => r.brand === marcaName);
+  if (_fUser) hist = hist.filter(r => r.username === _fUser);
+  _pintarResultados(_mergeResultados(hist, []), true, 'nube');
+  let vends = _ADMIN_USERS.slice();
+  if (_fUser) vends = vends.filter(u => u.username === _fUser);
+  _pintarProgresoAdmin(_ADMIN_ALL, vends, _fMarca);
+}
+
+// Tabla del admin: avance de cada vendedor, cuántas le faltan y cuáles
+function _pintarProgresoAdmin(allResults, vendedores, filtroMarcaKey) {
   const cont = document.getElementById('res-progreso');
-  await refreshCloudUsers();
-  const vendedores = getUsers().filter(u => u.role === 'vendedor');
   if (!vendedores.length) {
-    cont.innerHTML = `<div class="prog-h">📋 Avance por vendedor</div><div class="res-empty" style="padding:1rem">No hay vendedores registrados aún.</div>`;
+    cont.innerHTML = `<div class="prog-h">📋 Avance por vendedor</div><div class="res-empty" style="padding:1rem">${_fUser ? 'El vendedor seleccionado no tiene datos.' : 'No hay vendedores registrados aún.'}</div>`;
     return;
   }
-  let alDia = 0;
+  let alDia = 0, totalFaltan = 0;
   const filas = vendedores.map(u => {
-    const asign = quizModelsForBrands(u.brands);
+    let asign = quizModelsForBrands(u.brands);
+    if (filtroMarcaKey) asign = asign.filter(a => a.brandKey === filtroMarcaKey);
     const total = asign.length;
     let aprobadas = 0; const faltan = [];
     asign.forEach(a => {
@@ -2536,24 +2586,33 @@ async function _pintarProgresoAdmin(allResults) {
       else faltan.push(a.modelName + (res.length >= MAX_INTENTOS ? ' ⚠️' : ''));
     });
     if (total && aprobadas === total) alDia++;
+    totalFaltan += faltan.length;
     const pct = total ? aprobadas / total : 1;
     return { u, total, aprobadas, faltan, pct };
-  }).sort((x, y) => x.pct - y.pct || x.u.name.localeCompare(y.u.name));
+  }).filter(f => !filtroMarcaKey || f.total > 0)   // con filtro de marca, oculta vendedores sin esa marca
+    .sort((x, y) => (y.faltan.length - x.faltan.length) || x.pct - y.pct || x.u.name.localeCompare(y.u.name));
+
+  if (!filas.length) {
+    cont.innerHTML = `<div class="prog-h">📋 Avance por vendedor</div><div class="res-empty" style="padding:1rem">Ningún vendedor tiene la marca seleccionada asignada.</div>`;
+    return;
+  }
   cont.innerHTML =
-    `<div class="prog-h">📋 Avance por vendedor</div>
+    `<div class="prog-h">📋 Avance por vendedor${filtroMarcaKey ? ' · ' + DATA[filtroMarcaKey].name : ''}</div>
      <div class="prog-summary">
-       <div class="prog-chip">👥 Vendedores: <strong>${vendedores.length}</strong></div>
+       <div class="prog-chip">👥 Vendedores: <strong>${filas.length}</strong></div>
        <div class="prog-chip ok">✅ Al día (100%): <strong>${alDia}</strong></div>
-       <div class="prog-chip warn">⏳ Con pendientes: <strong>${vendedores.length - alDia}</strong></div>
+       <div class="prog-chip warn">⏳ Con pendientes: <strong>${filas.length - alDia}</strong></div>
+       <div class="prog-chip bad">📝 Evaluaciones faltantes: <strong>${totalFaltan}</strong></div>
      </div>
      <div style="font-size:12px;color:var(--text2);margin:-.5rem 0 .75rem">⚠️ = ya usó sus ${MAX_INTENTOS} intentos sin aprobar.</div>
      <div class="admin-card" style="overflow-x:auto;padding:0">
        <table class="res-table">
-         <tr><th>Vendedor</th><th>Marcas</th><th>Aprobadas</th><th>Evaluaciones que le faltan</th></tr>
+         <tr><th>Vendedor</th><th>Marcas</th><th>Aprobadas</th><th>Faltan</th><th>Evaluaciones que le faltan</th></tr>
          ${filas.map(f => `<tr>
            <td><strong>${f.u.name}</strong><br><span style="font-size:11px;color:var(--text2)">${f.u.username}</span></td>
            <td style="font-size:12px">${f.u.brands.includes('all') ? 'Todas' : f.u.brands.map(b => DATA[b]?.name || b).join(', ')}</td>
            <td><span class="prog-badge ${f.total && f.aprobadas === f.total ? 'ok' : (f.aprobadas ? 'warn' : 'bad')}">${f.aprobadas} / ${f.total}</span></td>
+           <td><span class="prog-badge ${f.faltan.length ? 'bad' : 'ok'}">${f.faltan.length}</span></td>
            <td style="font-size:12px;color:var(--text2);max-width:360px">${f.faltan.length ? f.faltan.join(', ') : '— ninguna 🎉'}</td>
          </tr>`).join('')}
        </table>
@@ -2564,31 +2623,43 @@ async function renderResultados() {
   const isAdmin = SESSION.role === 'admin';
   const filtrar = arr => isAdmin ? arr : arr.filter(r => r.username === SESSION.username);
   document.getElementById('res-hist-h').style.display = 'block';
-  // 1) Pinta de inmediato lo que hay en este equipo
-  let local = filtrar(getResults());
-  _pintarResultados(_mergeResultados(local, []), isAdmin, 'local');
-  if (isAdmin) {
-    _pintarProgresoAdmin(_mergeResultados(getResults(), []));
-  } else {
+
+  if (!isAdmin) {
+    // ── Vista de vendedor: solo lo suyo, sin filtros ──
+    document.getElementById('res-filtros').style.display = 'none';
+    let local = filtrar(getResults());
+    _pintarResultados(_mergeResultados(local, []), false, 'local');
     MY_RESULTS = _mergeResultados(local, []);
     _pintarProgresoVendedor();
+    if (window.Cloud && window.Cloud.enabled && window.Cloud.fetchAll) {
+      try {
+        await window.Cloud.ready;
+        const cloudAll = await window.Cloud.fetchAll();
+        MY_RESULTS = _mergeResultados(local, filtrar(cloudAll));
+        _pintarResultados(MY_RESULTS, false, 'nube');
+        _pintarProgresoVendedor();
+      } catch (e) { console.warn('No se pudieron leer los resultados de la nube:', e); }
+    }
+    return;
   }
-  // 2) Si la nube está activa, trae TODO y fusiona
+
+  // ── Vista de admin: cachea todo y aplica filtros de marca / vendedor ──
+  _ADMIN_ALL = _mergeResultados(getResults(), []);
+  _ADMIN_USERS = getUsers().filter(u => u.role === 'vendedor');
+  _renderFiltrosAdmin();
+  _aplicarFiltrosAdmin();
+  // Trae datos completos de la nube y vuelve a aplicar
+  await refreshCloudUsers();
+  _ADMIN_USERS = getUsers().filter(u => u.role === 'vendedor');
   if (window.Cloud && window.Cloud.enabled && window.Cloud.fetchAll) {
     try {
       await window.Cloud.ready;
       const cloudAll = await window.Cloud.fetchAll();
-      _pintarResultados(_mergeResultados(local, filtrar(cloudAll)), isAdmin, 'nube');
-      if (isAdmin) {
-        _pintarProgresoAdmin(_mergeResultados(getResults(), cloudAll));
-      } else {
-        MY_RESULTS = _mergeResultados(local, filtrar(cloudAll));
-        _pintarProgresoVendedor();
-      }
-    } catch (e) {
-      console.warn('No se pudieron leer los resultados de la nube:', e);
-    }
+      _ADMIN_ALL = _mergeResultados(getResults(), cloudAll);
+    } catch (e) { console.warn('No se pudieron leer los resultados de la nube:', e); }
   }
+  _renderFiltrosAdmin();
+  _aplicarFiltrosAdmin();
 }
 
 function exportResultadosCSV() {

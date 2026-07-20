@@ -1,6 +1,6 @@
 // Service Worker CCVD — estrategia network-first con respaldo en caché
 // (siempre intenta traer la versión nueva; sin internet usa la guardada)
-const CACHE = 'ccvd-v9';
+const CACHE = 'ccvd-v10';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
