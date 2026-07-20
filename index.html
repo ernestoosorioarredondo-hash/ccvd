@@ -316,6 +316,18 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
 .res-table th{text-align:left;padding:10px 14px;background:var(--bg3,rgba(0,0,0,.04));font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);border-bottom:2px solid var(--border)}
 .res-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
 .res-table tr:last-child td{border-bottom:none}
+.prog-h{font-size:15px;font-weight:800;margin:.25rem 0 .75rem;color:var(--text)}
+.prog-summary{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:1rem}
+.prog-chip{background:var(--bg3,rgba(0,0,0,.04));border:1px solid var(--border);border-radius:20px;padding:6px 14px;font-size:13px;color:var(--text2)}
+.prog-chip.ok{background:#dcfce7;border-color:#16a34a55;color:#15803d}
+.prog-chip.warn{background:#fef9c3;border-color:#eab30855;color:#a16207}
+.prog-chip.bad{background:#fee2e2;border-color:#dc262655;color:#b91c1c}
+.prog-badge{display:inline-block;padding:3px 10px;border-radius:14px;font-size:12px;font-weight:700;white-space:nowrap}
+.prog-badge.ok{background:#dcfce7;color:#15803d}
+.prog-badge.warn{background:#fef9c3;color:#a16207}
+.prog-badge.bad{background:#fee2e2;color:#b91c1c}
+.prog-badge.todo{background:var(--bg4,#e5e7eb);color:var(--text2)}
+.prog-link{color:var(--brand-color,var(--accent));text-decoration:none;font-weight:600}
 .res-nota{font-weight:800;padding:2px 10px;border-radius:20px;display:inline-block}
 .res-nota.pass{background:#dcfce7;color:#15803d}
 .res-nota.fail{background:#fee2e2;color:#b91c1c}
@@ -569,6 +581,8 @@ main{max-width:1200px;margin:0 auto;padding:1.5rem}
       <div class="sec-title">📊 Registro de Resultados</div>
       <div class="sec-sub" id="res-sub"></div>
       <div class="notice" id="res-notice" style="display:none"></div>
+      <div id="res-progreso" style="margin-bottom:1.75rem"></div>
+      <div class="prog-h" id="res-hist-h" style="display:none">🗂 Historial detallado de intentos</div>
       <div class="res-toolbar" id="res-toolbar"></div>
       <div class="admin-card" style="overflow-x:auto;padding:0">
         <table class="res-table" id="res-table"></table>
@@ -1771,6 +1785,49 @@ function saveResult(r) {
   }
 }
 
+// ── Control de intentos y avance de evaluaciones ──
+const MAX_INTENTOS = 2;    // intentos máximos por vendedor y por modelo
+let MY_RESULTS = [];        // resultados del usuario actual (local + nube), para contar intentos y avance
+
+// Modelos con evaluación (quiz de 5+ preguntas) que le corresponden a un conjunto de marcas
+function quizModelsForBrands(brandsArr) {
+  const all = !brandsArr || brandsArr.includes('all');
+  const out = [];
+  Object.entries(DATA).forEach(([bk, brand]) => {
+    if (!all && !brandsArr.includes(bk)) return;
+    Object.entries(brand.models).forEach(([name, m]) => {
+      if (m.preguntas && m.preguntas.length >= 5)
+        out.push({ brandKey: bk, brandName: brand.name, modelName: name });
+    });
+  });
+  return out;
+}
+
+// Trae todos los resultados (este equipo + nube) ya deduplicados
+async function fetchAllResultsMerged() {
+  const local = getResults();
+  if (window.Cloud && window.Cloud.enabled && window.Cloud.fetchAll) {
+    try { await window.Cloud.ready; return _mergeResultados(local, await window.Cloud.fetchAll()); }
+    catch (e) { console.warn('No se pudieron leer resultados de la nube:', e); }
+  }
+  return _mergeResultados(local, []);
+}
+
+// Refresca el cache de resultados del usuario actual (usado para contar intentos)
+async function refreshMyResults() {
+  const all = await fetchAllResultsMerged();
+  MY_RESULTS = SESSION ? all.filter(r => r.username === SESSION.username) : [];
+  return MY_RESULTS;
+}
+
+// Intentos que lleva el usuario actual en un modelo, y si ya lo aprobó
+function myAttempts(brandName, modelName) {
+  return MY_RESULTS.filter(r => r.brand === brandName && r.model === modelName).length;
+}
+function myApproved(brandName, modelName) {
+  return MY_RESULTS.some(r => r.brand === brandName && r.model === modelName && r.pass);
+}
+
 function loadUsers() {
   // DEFAULT_USERS siempre tienen prioridad (sus credenciales están en el código)
   const base = DEFAULT_USERS.map(u => ({ ...u }));
@@ -1833,6 +1890,8 @@ function startApp() {
     // Sube a la nube cualquier usuario que solo existía en este equipo
     migrateLocalUsers();
   }
+  // Carga los intentos previos del usuario (para el límite de 2 y el avance)
+  refreshMyResults();
   goHome();
 }
 
@@ -1873,12 +1932,18 @@ function goToBrand(key) {
   updateBreadcrumb();
 }
 
-function goToModel(brandKey, modelName) {
+async function goToModel(brandKey, modelName) {
   currentBrand = brandKey; currentModel = modelName;
   renderModelDetail(brandKey, modelName);
   showView('model');
   updateBreadcrumb();
   document.getElementById('model-back-btn').onclick = () => goToBrand(brandKey);
+  // Refresca los intentos desde la nube y, si cambió el conteo, vuelve a pintar la pestaña de evaluación
+  const antes = myAttempts(DATA[brandKey].name, modelName);
+  await refreshMyResults();
+  if (currentBrand === brandKey && currentModel === modelName &&
+      myAttempts(DATA[brandKey].name, modelName) !== antes)
+    renderModelDetail(brandKey, modelName);
 }
 
 function goAdmin() {
@@ -2035,13 +2100,32 @@ function renderModelDetail(brandKey, modelName) {
     </div>` : ''}
   ` : `<div class="empty"><div class="e-icon">📖</div><p>Información detallada no disponible aún para este modelo.</p></div>`;
 
-  const quizHtml = hasQuiz
-    ? `<div class="quiz-start" id="quiz-content">
+  // Control de intentos: máximo MAX_INTENTOS por vendedor y por modelo (el admin no tiene tope, para pruebas)
+  const esAdmin = SESSION && SESSION.role === 'admin';
+  const intentos = hasQuiz ? myAttempts(brand.name, modelName) : 0;
+  const aprobado = hasQuiz && myApproved(brand.name, modelName);
+  const bloqueado = hasQuiz && !esAdmin && intentos >= MAX_INTENTOS;
+
+  let quizHtml;
+  if (!hasQuiz) {
+    quizHtml = `<div class="quiz-no-content"><div style="font-size:48px;margin-bottom:.75rem">📝</div>Evaluación no disponible para este modelo aún.</div>`;
+  } else if (bloqueado) {
+    const notas = MY_RESULTS.filter(r => r.brand === brand.name && r.model === modelName).map(r => parseFloat(r.nota));
+    const mejor = notas.length ? Math.max(...notas).toFixed(1).replace('.', ',') : '—';
+    quizHtml = `<div class="quiz-start" id="quiz-content">
+        <div style="font-size:48px;margin-bottom:.75rem">${aprobado ? '✅' : '🔒'}</div>
+        <p><strong>Intentos agotados.</strong> Ya usaste tus ${MAX_INTENTOS} intentos para el <strong>${modelName}</strong>.<br>
+        ${aprobado ? 'Evaluación <strong>aprobada</strong>. 🎉' : `Tu mejor nota fue <strong>${mejor}</strong>. Si necesitas reintentar, contacta al administrador.`}</p>
+      </div>`;
+  } else {
+    const restantes = MAX_INTENTOS - intentos;
+    quizHtml = `<div class="quiz-start" id="quiz-content">
         <div style="font-size:48px;margin-bottom:.75rem">📝</div>
         <p>Demuestra que conoces el <strong>${modelName}</strong>.<br>${model.preguntas.length} preguntas · Escala 1,0–7,0 · Se aprueba con 4,0</p>
-        <button class="btn-start-quiz" onclick="startQuiz('${brandKey}','${esc(modelName)}')">Iniciar Evaluación</button>
-      </div>`
-    : `<div class="quiz-no-content"><div style="font-size:48px;margin-bottom:.75rem">📝</div>Evaluación no disponible para este modelo aún.</div>`;
+        <p style="font-size:13px;color:var(--text2);margin-top:-.4rem">Intento ${intentos + 1} de ${MAX_INTENTOS}${esAdmin ? ' (admin: sin tope)' : ` · te queda${restantes === 1 ? '' : 'n'} ${restantes} intento${restantes === 1 ? '' : 's'}`}${aprobado ? ' · ya aprobaste este modelo' : ''}</p>
+        <button class="btn-start-quiz" onclick="startQuiz('${brandKey}','${esc(modelName)}')">${intentos ? 'Reintentar evaluación' : 'Iniciar Evaluación'}</button>
+      </div>`;
+  }
 
   const headerImg = IMAGES[brandKey]?.[modelName];
   document.getElementById('model-detail').innerHTML =
@@ -2082,6 +2166,12 @@ let _quiz = null;
 
 function startQuiz(brandKey, modelName) {
   const model = DATA[brandKey].models[modelName];
+  // Corta cualquier intento por sobre el máximo (aunque el vendedor manipule el DOM)
+  const esAdmin = SESSION && SESSION.role === 'admin';
+  if (!esAdmin && myAttempts(DATA[brandKey].name, modelName) >= MAX_INTENTOS) {
+    renderModelDetail(brandKey, modelName);
+    return;
+  }
   const pool = (model.preguntas || []).slice().sort(() => Math.random() - 0.5);
   const questions = pool.slice();
   _quiz = { brandKey, modelName, questions, current: 0, score: 0 };
@@ -2130,7 +2220,7 @@ function _renderQuizResult() {
   const total = questions.length;
   const nota = (1 + (score / total) * 6).toFixed(1);
   const pass = score >= Math.ceil(total * 0.6);
-  saveResult({
+  const r = {
     username: SESSION ? SESSION.username : '?',
     name: SESSION ? SESSION.name : 'Desconocido',
     brand: DATA[brandKey].name,
@@ -2138,7 +2228,18 @@ function _renderQuizResult() {
     score, total,
     nota, pass,
     fecha: new Date().toISOString()
-  });
+  };
+  saveResult(r);
+  MY_RESULTS.push(r);   // cuenta este intento de inmediato para el límite
+
+  const esAdmin = SESSION && SESSION.role === 'admin';
+  const intentos = myAttempts(DATA[brandKey].name, modelName);
+  const restantes = MAX_INTENTOS - intentos;
+  const puedeReintentar = esAdmin || (!pass && restantes > 0);
+  const pie = puedeReintentar
+    ? `<button class="btn-quiz-retry" onclick="startQuiz('${brandKey}','${esc(modelName)}')">🔄 ${esAdmin ? 'Intentar de nuevo' : `Reintentar (te queda${restantes === 1 ? '' : 'n'} ${restantes})`}</button>`
+    : `<div style="font-size:13px;color:var(--text2);margin-top:10px">${pass ? '✅ Evaluación aprobada. ¡Bien hecho!' : `🔒 Sin más intentos (usaste ${MAX_INTENTOS} de ${MAX_INTENTOS}). Contacta al administrador si necesitas reintentar.`}</div>`;
+
   document.getElementById('quiz-content').innerHTML =
     `<div class="quiz-result">
        <div class="nota-badge ${pass?'pass':'fail'}">${nota}</div>
@@ -2146,7 +2247,7 @@ function _renderQuizResult() {
        <div class="quiz-verdict ${pass?'pass-text':'fail-text'}">${pass ? '✓ Aprobado' : '✗ Reprobado'}</div>
        <div class="quiz-percent">${Math.round(score/total*100)}% de respuestas correctas</div>
        <div style="font-size:12px;color:var(--text2);margin-top:8px">✓ Resultado registrado — puedes verlo en 📊 Resultados</div>
-       <button class="btn-quiz-retry" onclick="startQuiz('${brandKey}','${esc(modelName)}')">🔄 Intentar de nuevo</button>
+       ${pie}
      </div>`;
 }
 
@@ -2374,18 +2475,116 @@ function _pintarResultados(results, isAdmin, fuente) {
       </tr>`).join('');
 }
 
+// ── Avance / "cuáles evaluaciones faltan" ──
+
+// Tabla del vendedor: cada modelo que le corresponde con su estado
+function _pintarProgresoVendedor() {
+  const cont = document.getElementById('res-progreso');
+  const asign = quizModelsForBrands(SESSION.brands);
+  if (!asign.length) { cont.innerHTML = ''; return; }
+  let aprobadas = 0, rendidas = 0;
+  const filas = asign.map(a => {
+    const intentos = myAttempts(a.brandName, a.modelName);
+    const aprob = myApproved(a.brandName, a.modelName);
+    if (intentos > 0) rendidas++;
+    if (aprob) aprobadas++;
+    let estado, cls, orden;
+    if (aprob) { estado = '✅ Aprobada'; cls = 'ok'; orden = 3; }
+    else if (intentos >= MAX_INTENTOS) { estado = '❌ Sin aprobar · intentos agotados'; cls = 'bad'; orden = 2; }
+    else if (intentos > 0) { estado = `🔸 Pendiente · te queda ${MAX_INTENTOS - intentos} intento`; cls = 'warn'; orden = 0; }
+    else { estado = '⬜ Sin rendir'; cls = 'todo'; orden = 1; }
+    return { a, intentos, estado, cls, orden };
+  }).sort((x, y) => x.orden - y.orden || x.a.brandName.localeCompare(y.a.brandName) || x.a.modelName.localeCompare(y.a.modelName));
+  const total = asign.length;
+  cont.innerHTML =
+    `<div class="prog-h">📋 Mis evaluaciones (${aprobadas} de ${total} aprobadas)</div>
+     <div class="prog-summary">
+       <div class="prog-chip">📚 Asignadas: <strong>${total}</strong></div>
+       <div class="prog-chip ok">✅ Aprobadas: <strong>${aprobadas}</strong></div>
+       <div class="prog-chip warn">⏳ Faltan: <strong>${total - aprobadas}</strong></div>
+     </div>
+     <div class="admin-card" style="overflow-x:auto;padding:0">
+       <table class="res-table">
+         <tr><th>Marca</th><th>Modelo</th><th>Intentos</th><th>Estado</th></tr>
+         ${filas.map(f => `<tr>
+           <td>${f.a.brandName}</td>
+           <td><a class="prog-link" href="#" onclick="goToModel('${f.a.brandKey}','${esc(f.a.modelName)}');return false">${f.a.modelName}</a></td>
+           <td>${f.intentos} / ${MAX_INTENTOS}</td>
+           <td><span class="prog-badge ${f.cls}">${f.estado}</span></td>
+         </tr>`).join('')}
+       </table>
+     </div>`;
+}
+
+// Tabla del admin: avance de cada vendedor y qué evaluaciones le faltan
+async function _pintarProgresoAdmin(allResults) {
+  const cont = document.getElementById('res-progreso');
+  await refreshCloudUsers();
+  const vendedores = getUsers().filter(u => u.role === 'vendedor');
+  if (!vendedores.length) {
+    cont.innerHTML = `<div class="prog-h">📋 Avance por vendedor</div><div class="res-empty" style="padding:1rem">No hay vendedores registrados aún.</div>`;
+    return;
+  }
+  let alDia = 0;
+  const filas = vendedores.map(u => {
+    const asign = quizModelsForBrands(u.brands);
+    const total = asign.length;
+    let aprobadas = 0; const faltan = [];
+    asign.forEach(a => {
+      const res = allResults.filter(r => r.username === u.username && r.brand === a.brandName && r.model === a.modelName);
+      if (res.some(r => r.pass)) aprobadas++;
+      else faltan.push(a.modelName + (res.length >= MAX_INTENTOS ? ' ⚠️' : ''));
+    });
+    if (total && aprobadas === total) alDia++;
+    const pct = total ? aprobadas / total : 1;
+    return { u, total, aprobadas, faltan, pct };
+  }).sort((x, y) => x.pct - y.pct || x.u.name.localeCompare(y.u.name));
+  cont.innerHTML =
+    `<div class="prog-h">📋 Avance por vendedor</div>
+     <div class="prog-summary">
+       <div class="prog-chip">👥 Vendedores: <strong>${vendedores.length}</strong></div>
+       <div class="prog-chip ok">✅ Al día (100%): <strong>${alDia}</strong></div>
+       <div class="prog-chip warn">⏳ Con pendientes: <strong>${vendedores.length - alDia}</strong></div>
+     </div>
+     <div style="font-size:12px;color:var(--text2);margin:-.5rem 0 .75rem">⚠️ = ya usó sus ${MAX_INTENTOS} intentos sin aprobar.</div>
+     <div class="admin-card" style="overflow-x:auto;padding:0">
+       <table class="res-table">
+         <tr><th>Vendedor</th><th>Marcas</th><th>Aprobadas</th><th>Evaluaciones que le faltan</th></tr>
+         ${filas.map(f => `<tr>
+           <td><strong>${f.u.name}</strong><br><span style="font-size:11px;color:var(--text2)">${f.u.username}</span></td>
+           <td style="font-size:12px">${f.u.brands.includes('all') ? 'Todas' : f.u.brands.map(b => DATA[b]?.name || b).join(', ')}</td>
+           <td><span class="prog-badge ${f.total && f.aprobadas === f.total ? 'ok' : (f.aprobadas ? 'warn' : 'bad')}">${f.aprobadas} / ${f.total}</span></td>
+           <td style="font-size:12px;color:var(--text2);max-width:360px">${f.faltan.length ? f.faltan.join(', ') : '— ninguna 🎉'}</td>
+         </tr>`).join('')}
+       </table>
+     </div>`;
+}
+
 async function renderResultados() {
   const isAdmin = SESSION.role === 'admin';
   const filtrar = arr => isAdmin ? arr : arr.filter(r => r.username === SESSION.username);
+  document.getElementById('res-hist-h').style.display = 'block';
   // 1) Pinta de inmediato lo que hay en este equipo
   let local = filtrar(getResults());
   _pintarResultados(_mergeResultados(local, []), isAdmin, 'local');
+  if (isAdmin) {
+    _pintarProgresoAdmin(_mergeResultados(getResults(), []));
+  } else {
+    MY_RESULTS = _mergeResultados(local, []);
+    _pintarProgresoVendedor();
+  }
   // 2) Si la nube está activa, trae TODO y fusiona
   if (window.Cloud && window.Cloud.enabled && window.Cloud.fetchAll) {
     try {
       await window.Cloud.ready;
-      const cloud = filtrar(await window.Cloud.fetchAll());
-      _pintarResultados(_mergeResultados(local, cloud), isAdmin, 'nube');
+      const cloudAll = await window.Cloud.fetchAll();
+      _pintarResultados(_mergeResultados(local, filtrar(cloudAll)), isAdmin, 'nube');
+      if (isAdmin) {
+        _pintarProgresoAdmin(_mergeResultados(getResults(), cloudAll));
+      } else {
+        MY_RESULTS = _mergeResultados(local, filtrar(cloudAll));
+        _pintarProgresoVendedor();
+      }
     } catch (e) {
       console.warn('No se pudieron leer los resultados de la nube:', e);
     }
